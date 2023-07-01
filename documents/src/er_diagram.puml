@@ -1,0 +1,82 @@
+@startuml
+
+entity users {
+    id : BIGINT <<PK>>
+    --
+    name : VARCHAR(255) <<U>>
+    password_digest : VARCHAR(255)
+}
+
+entity search_histories {
+    id : BIGINT <<PK>>
+    --
+    keyword : VARCHAR(255)
+    created_at: DATETIME
+    user_id : BIGINT <<FK>>
+}
+
+entity browsing_histories {
+    id : BIGINT <<PK>>
+    --
+    post_id : VARCHAR(255)
+    created_at: DATETIME
+    user_id : BIGINT <<FK>>
+}
+
+entity favorites {
+    id : BIGINT <<PK>>
+    --
+    post_id : VARCHAR(255)
+    user_id : BIGINT <<FK>>
+}
+
+entity folders {
+    id : BIGINT <<PK>>
+    --
+    name : VARCHAR(255)
+    parent_id : BIGINT <<FK>>
+    user_id : BIGINT <<FK>>
+}
+
+entity folder_favorites {
+    id : BIGINT <<PK>>
+    --
+    favorite_id : BIGINT <<FK>>
+    folder_id : BIGINT <<FK>>
+}
+
+entity custom_feeds {
+    id : BIGINT <<PK>>
+    --
+    name : VARCHAR(255)
+    keyword : VARCHAR(255)
+    user_id : BIGINT <<FK>>
+}
+
+entity services {
+    id : BIGINT <<PK>>
+    --
+    name : VARCHAR(255)
+}
+
+entity custom_feed_services {
+    id : BIGINT <<PK>>
+    --
+    custom_feed_id : BIGINT <<FK>>
+    service_id : BIGINT <<FK>>
+}
+
+
+users ||..o{ search_histories
+users ||..o{ browsing_histories
+users ||..o{ favorites
+users ||..o{ folders
+users ||..o{ custom_feeds
+
+favorites ||..o{ folder_favorites
+folders ||..o{ folder_favorites
+
+custom_feeds ||..o{ custom_feed_services
+services ||..o{ custom_feed_services
+
+@enduml
