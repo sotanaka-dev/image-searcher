@@ -74,3 +74,9 @@
 
   ![ER図](images/er_diagram.png)
 </details>
+
+<details>
+  <summary><h2>システム構成図</h2></summary>
+
+  ![システム構成図](images/infrastructure.drawio.png)
+</details>
