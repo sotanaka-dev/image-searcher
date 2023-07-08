@@ -1,0 +1,29 @@
+{
+  "name": "api-container",
+  "dockerComposeFile": ["../docker-compose-dev.yml"],
+  "service": "api",
+  "workspaceFolder": "/rails-api",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "streetsidesoftware.code-spell-checker",
+        "EditorConfig.EditorConfig",
+        "oderwat.indent-rainbow",
+        "esbenp.prettier-vscode",
+
+        "misogi.ruby-rubocop",
+        "kaiwood.endwise",
+        "KoichiSasada.vscode-rdbg",
+        "rebornix.Ruby",
+        "wingrunr21.vscode-ruby",
+        "castwide.solargraph"
+      ],
+
+      "settings": {
+        "[ruby]": {
+          "editor.defaultFormatter": "misogi.ruby-rubocop"
+        }
+      }
+    }
+  }
+}

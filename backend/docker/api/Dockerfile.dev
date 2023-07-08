@@ -1,0 +1,13 @@
+FROM ruby:3.2.2
+
+WORKDIR /rails-api
+
+COPY rails-api/Gemfile* ./
+
+RUN bundle install
+
+COPY docker/api/entrypoint.sh /usr/bin/
+RUN chmod +x /usr/bin/entrypoint.sh
+ENTRYPOINT ["entrypoint.sh"]
+
+CMD ["rails", "server", "-b", "0.0.0.0"]
