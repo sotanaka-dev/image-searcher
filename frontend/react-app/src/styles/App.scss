@@ -1,0 +1,14 @@
+@import "utilities";
+
+html {
+  font-size: 62.5%;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  color: $dark_gray;
+  font-size: 1.4rem;
+  letter-spacing: 0.2rem;
+  word-break: break-all;
+}

@@ -1,0 +1,19 @@
+$white: #fff;
+$light: #f5f5f5;
+$light_gray: #ccc;
+$gray: #888;
+$dark_gray: #333;
+$black: #000;
+$header_height: 100px;
+$radius_value_circle: 9999px;
+
+$breakpoints: (
+  "md": "(max-width: 56.25em)" /* 900px */,
+  "sm": "(max-width: 37.5em)" /* 600px */,
+) !default;
+
+@mixin mediaQuery($breakpoint) {
+  @media #{map-get($breakpoints, $breakpoint)} {
+    @content;
+  }
+}
