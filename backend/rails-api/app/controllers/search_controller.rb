@@ -1,15 +1,15 @@
 class SearchController < ApplicationController
   def search
-    keyword = params[:keyword] || 'test'
-    youtube_service = YoutubeService.new(keyword)
-    flickr_service = FlickrService.new(keyword)
-    giphy_service = GiphyService.new(keyword)
+    keyword = params[:keyword]
+    youtube = YoutubeService.new(keyword)
+    flickr = FlickrService.new(keyword)
+    giphy = GiphyService.new(keyword)
 
-    response = {
-      youtube: youtube_service.search,
-      flickr: flickr_service.search,
-      giphy: giphy_service.search
-    }
+    response = [
+      *youtube.search,
+      *flickr.search,
+      *giphy.search
+    ].sort_by! { |post| post[:posted_at] }.reverse!
 
     render json: response
   end

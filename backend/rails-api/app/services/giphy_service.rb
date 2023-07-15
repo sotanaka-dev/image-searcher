@@ -18,7 +18,9 @@ class GiphyService
       {
         title: gif['title'],
         url: gif['url'],
-        image: gif['images']['downsized']['url']
+        image: gif['images']['downsized']['url'],
+        posted_at: DateTime.parse(gif['import_datetime']).iso8601,
+        source: 'GIPHY'
       }
     end
   end

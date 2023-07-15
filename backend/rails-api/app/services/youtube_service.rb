@@ -8,8 +8,9 @@ class YoutubeService
         key: ENV['YOUTUBE_API_KEY'],
         type: 'video',
         part: 'snippet',
+        q: keyword,
         maxResults: 50,
-        q: keyword
+        order: 'viewCount'
       }
     }
   end
@@ -20,7 +21,9 @@ class YoutubeService
       {
         title: item['snippet']['title'],
         url: "https://www.youtube.com/watch?v=#{item['id']['videoId']}",
-        image: item['snippet']['thumbnails']['high']['url']
+        image: item['snippet']['thumbnails']['high']['url'],
+        posted_at: item['snippet']['publishTime'],
+        source: 'YouTube'
       }
     end
   end
