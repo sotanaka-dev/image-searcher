@@ -1,0 +1,18 @@
+{
+  "name": "app-container",
+  "dockerComposeFile": ["../compose.yml"],
+  "service": "app",
+  "workspaceFolder": "/usr/src/react-app",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "streetsidesoftware.code-spell-checker",
+        "EditorConfig.EditorConfig",
+        "oderwat.indent-rainbow",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "CelianRiboulet.webvalidator"
+      ]
+    }
+  }
+}
