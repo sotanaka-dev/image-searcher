@@ -5,7 +5,8 @@ import styles from "../styles/pages/Search.module.scss";
 const BASE_URL = "http://localhost:3000/search?keyword=";
 
 export default function Search() {
-  const [data, setData] = useState([]);
+  const [posts, setPosts] = useState([]);
+  const [unavailableServices, setUnavailableServices] = useState([]);
 
   const fetchData = async (keyword) => {
     if (keyword !== "") {
@@ -14,7 +15,8 @@ export default function Search() {
         const res = await fetch(apiEndpoint);
         if (!res.ok) throw new Error(res.statusText);
         const data = await res.json();
-        setData(data);
+        setPosts(data.posts);
+        setUnavailableServices(data.unavailable_services);
       } catch (error) {
         console.error("Error:", error);
       }
@@ -24,7 +26,7 @@ export default function Search() {
   return (
     <div className={styles.container}>
       <SearchInput onKeywordSubmit={fetchData} />
-      <SearchResult data={data} />
+      <SearchResult posts={posts} />
     </div>
   );
 }
@@ -56,15 +58,15 @@ function SearchInput({ onKeywordSubmit }) {
   );
 }
 
-function SearchResult({ data }) {
+function SearchResult({ posts }) {
   return (
     <Masonry columnsCount={4} gutter="12px">
-      {data.map((result) => (
+      {posts.map((post) => (
         <img
           className={styles.postImage}
-          key={result.url}
-          src={result.image}
-          alt={result.title}
+          key={post.url}
+          src={post.image}
+          alt={post.title}
         />
       ))}
     </Masonry>

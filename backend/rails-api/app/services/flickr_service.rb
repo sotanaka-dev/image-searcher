@@ -1,19 +1,17 @@
-class FlickrService
-  include HTTParty
+class FlickrService < BaseService
+  SERVICE_NAME = 'Flickr'
   base_uri 'https://api.flickr.com/services/rest'
 
-  def initialize(keyword)
-    @options = {
-      query: {
-        api_key: ENV['FLICKR_API_KEY'],
-        method: 'flickr.photos.search',
-        format: 'json',
-        nojsoncallback: 1,
-        text: keyword,
-        per_page: 50,
-        sort: 'interestingness-desc',
-        extras: 'date_upload'
-      }
+  def build_query(keyword)
+    {
+      api_key: ENV['FLICKR_API_KEY'],
+      method: 'flickr.photos.search',
+      format: 'json',
+      nojsoncallback: 1,
+      text: keyword,
+      per_page: 50,
+      sort: 'interestingness-desc',
+      extras: 'date_upload'
     }
   end
 
@@ -30,8 +28,7 @@ class FlickrService
     end
   end
 
-  def search
-    response = self.class.get('/', @options)
-    parse_data(response)
+  def search_endpoint
+    '/'
   end
 end

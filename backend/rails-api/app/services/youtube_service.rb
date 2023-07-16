@@ -1,17 +1,15 @@
-class YoutubeService
-  include HTTParty
+class YoutubeService < BaseService
+  SERVICE_NAME = 'YouTube'
   base_uri 'https://www.googleapis.com/youtube/v3'
 
-  def initialize(keyword)
-    @options = {
-      query: {
-        key: ENV['YOUTUBE_API_KEY'],
-        type: 'video',
-        part: 'snippet',
-        q: keyword,
-        maxResults: 50,
-        order: 'viewCount'
-      }
+  def build_query(keyword)
+    {
+      key: ENV['YOUTUBE_API_KEY'],
+      type: 'video',
+      part: 'snippet',
+      q: keyword,
+      maxResults: 50,
+      order: 'viewCount'
     }
   end
 
@@ -28,8 +26,7 @@ class YoutubeService
     end
   end
 
-  def search
-    response = self.class.get('/search', @options)
-    parse_data(response)
+  def search_endpoint
+    '/search'
   end
 end

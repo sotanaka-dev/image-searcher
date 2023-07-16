@@ -1,14 +1,12 @@
-class GiphyService
-  include HTTParty
+class GiphyService < BaseService
+  SERVICE_NAME = 'GIPHY'
   base_uri 'https://api.giphy.com/v1/gifs'
 
-  def initialize(keyword)
-    @options = {
-      query: {
-        api_key: ENV['GIPHY_API_KEY'],
-        q: keyword,
-        limit: 50
-      }
+  def build_query(keyword)
+    {
+      api_key: ENV['GIPHY_API_KEY'],
+      q: keyword,
+      limit: 50
     }
   end
 
@@ -25,8 +23,7 @@ class GiphyService
     end
   end
 
-  def search
-    response = self.class.get('/search', @options)
-    parse_data(response)
+  def search_endpoint
+    '/search'
   end
 end
