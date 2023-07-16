@@ -14,6 +14,7 @@ class GiphyService < BaseService
     data = response['data']
     data.map do |gif|
       {
+        id: gif['id'],
         title: gif['title'],
         url: gif['url'],
         image: gif['images']['downsized']['url'],

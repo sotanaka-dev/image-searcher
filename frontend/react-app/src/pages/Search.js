@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import styles from "../styles/pages/Search.module.scss";
+import PostDetails from "../components/PostDetails";
 
 const BASE_URL = "http://localhost:3000/search?keyword=";
 
 export default function Search() {
   const [posts, setPosts] = useState([]);
   const [unavailableServices, setUnavailableServices] = useState([]);
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [modalIsOpen, setIsOpen] = useState(false);
 
   const fetchData = async (keyword) => {
     if (keyword !== "") {
@@ -26,7 +29,21 @@ export default function Search() {
   return (
     <div className={styles.container}>
       <SearchInput onKeywordSubmit={fetchData} />
-      <SearchResult posts={posts} />
+      <SearchResult
+        posts={posts}
+        selectPost={(post) => {
+          setSelectedPost(post);
+          setIsOpen(true);
+        }}
+      />
+      <PostDetails
+        post={selectedPost}
+        modalIsOpen={modalIsOpen}
+        closeModal={() => {
+          setIsOpen(false);
+          setSelectedPost(null);
+        }}
+      />
     </div>
   );
 }
@@ -58,7 +75,7 @@ function SearchInput({ onKeywordSubmit }) {
   );
 }
 
-function SearchResult({ posts }) {
+function SearchResult({ posts, selectPost }) {
   return (
     <Masonry columnsCount={4} gutter="12px">
       {posts.map((post) => (
@@ -67,6 +84,7 @@ function SearchResult({ posts }) {
           key={post.url}
           src={post.image}
           alt={post.title}
+          onClick={() => selectPost(post)}
         />
       ))}
     </Masonry>

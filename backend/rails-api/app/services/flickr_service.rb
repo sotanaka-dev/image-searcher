@@ -19,6 +19,7 @@ class FlickrService < BaseService
     photos = response['photos']['photo']
     photos.map do |photo|
       {
+        id: photo['id'],
         title: photo['title'],
         url: "https://www.flickr.com/photos/#{photo['owner']}/#{photo['id']}",
         image: "https://live.staticflickr.com/#{photo['server']}/#{photo['id']}_#{photo['secret']}.jpg",

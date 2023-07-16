@@ -17,6 +17,7 @@ class YoutubeService < BaseService
     items = response['items']
     items.map do |item|
       {
+        id: item['id']['videoId'],
         title: item['snippet']['title'],
         url: "https://www.youtube.com/watch?v=#{item['id']['videoId']}",
         image: item['snippet']['thumbnails']['high']['url'],
