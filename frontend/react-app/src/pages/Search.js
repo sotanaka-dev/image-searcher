@@ -5,7 +5,7 @@ import PostDetails from "../components/PostDetails";
 
 import { RiYoutubeLine, RiFlickrLine, SiGiphy } from "../components/Icon";
 
-const BASE_URL = "http://localhost:3000/search?keyword=";
+const BASE_URL = "http://localhost:3000/api/search?keyword=";
 
 export default function Search() {
   const [posts, setPosts] = useState([]);
