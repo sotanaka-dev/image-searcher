@@ -27,7 +27,7 @@ export default function Search() {
   };
 
   return (
-    <div className={styles.container}>
+    <main className="container-lg">
       <SearchInput onKeywordSubmit={fetchData} />
       <SearchResult
         posts={posts}
@@ -44,7 +44,7 @@ export default function Search() {
           setSelectedPost(null);
         }}
       />
-    </div>
+    </main>
   );
 }
 
@@ -77,16 +77,18 @@ function SearchInput({ onKeywordSubmit }) {
 
 function SearchResult({ posts, selectPost }) {
   return (
-    <Masonry columnsCount={4} gutter="12px">
-      {posts.map((post) => (
-        <img
-          className={styles.postImage}
-          key={post.url}
-          src={post.image}
-          alt={post.title}
-          onClick={() => selectPost(post)}
-        />
-      ))}
-    </Masonry>
+    <ResponsiveMasonry columnsCountBreakPoints={{ 768: 4, 0: 2 }}>
+      <Masonry gutter="12px">
+        {posts.map((post) => (
+          <img
+            className={styles.image}
+            key={post.id}
+            src={post.image}
+            alt={post.title}
+            onClick={() => selectPost(post)}
+          />
+        ))}
+      </Masonry>
+    </ResponsiveMasonry>
   );
 }

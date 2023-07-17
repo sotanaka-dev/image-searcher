@@ -1,35 +1,36 @@
 @import "../utilities";
 
-img {
-  width: 100%;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 96px 24px 144px;
-}
-
 .textboxWrap {
+  position: relative;
   display: flex;
   justify-content: center;
   padding: 0 24px;
   margin-bottom: 84px;
-}
 
-.textbox {
-  width: 500px;
-  padding: 12px 24px;
-  outline: solid 1px $gray;
-  border-radius: $radius_value_circle;
-  background-color: $white;
-  letter-spacing: 0.2rem;
+  @include mediaQuery(md) {
+    margin-bottom: 48px;
+  }
 
-  &:focus {
-    outline: solid 2px $dark_gray;
+  .textbox {
+    width: 100%;
+    max-width: 750px;
+    padding: 18px 36px;
+    outline: solid 2px $gray;
+    border-radius: $radius_value_circle;
+    background-color: white;
+    letter-spacing: 0.2rem;
+
+    &:focus {
+      outline: solid 4px $dark_gray;
+    }
+
+    @include mediaQuery(md) {
+      padding: 12px 24px;
+    }
   }
 }
 
-.postImage {
+.image {
+  width: 100%;
   border-radius: 12px;
 }

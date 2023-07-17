@@ -5,21 +5,15 @@ import {
   faLink,
   faHeart,
   faShareFromSquare,
-  // faCircleXmark,
   faArrowLeft,
 } from "@fortawesome/free-solid-svg-icons";
-
-import {} from "@fortawesome/free-regular-svg-icons";
 
 Modal.setAppElement("#root");
 
 export default function PostDetails({ post, modalIsOpen, closeModal }) {
-  // function afterOpenModal() {}
-
   return (
     <Modal
       isOpen={modalIsOpen}
-      // onAfterOpen={afterOpenModal}
       onRequestClose={closeModal}
       contentLabel="Post Details"
       className={styles.modal}

@@ -8,12 +8,23 @@ $header_height: 100px;
 $radius_value_circle: 9999px;
 
 $breakpoints: (
-  "md": "(max-width: 56.25em)" /* 900px */,
-  "sm": "(max-width: 37.5em)" /* 600px */,
+  "md": "(max-width: 48em)" /* 768px */,
 ) !default;
 
 @mixin mediaQuery($breakpoint) {
   @media #{map-get($breakpoints, $breakpoint)} {
     @content;
+  }
+}
+
+$container-sizes: (
+  "lg": 1200px,
+);
+
+@each $name, $size in $container-sizes {
+  .container-#{$name} {
+    max-width: $size;
+    margin: 0 auto;
+    padding: 96px 24px 144px;
   }
 }
