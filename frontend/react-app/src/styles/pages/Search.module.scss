@@ -1,0 +1,48 @@
+@import "../utilities";
+
+.textboxWrap {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: 0 24px;
+  margin-bottom: 84px;
+
+  @include mediaQuery(md) {
+    margin-bottom: 48px;
+  }
+
+  .textbox {
+    width: 100%;
+    max-width: 750px;
+    padding: 18px 36px;
+    outline: solid 2px $gray;
+    border-radius: $radius_value_circle;
+    background-color: white;
+    letter-spacing: 0.2rem;
+
+    &:focus {
+      outline: solid 4px $dark_gray;
+    }
+
+    @include mediaQuery(md) {
+      padding: 12px 24px;
+    }
+  }
+}
+
+.postWrap {
+  position: relative;
+
+  .image {
+    width: 100%;
+    border-radius: 12px;
+  }
+
+  .icon {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    font-size: 2rem;
+    color: white;
+  }
+}
