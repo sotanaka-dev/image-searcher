@@ -3,6 +3,8 @@ import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import styles from "../styles/pages/Search.module.scss";
 import PostDetails from "../components/PostDetails";
 
+import { RiYoutubeLine, RiFlickrLine, SiGiphy } from "../components/Icon";
+
 const BASE_URL = "http://localhost:3000/search?keyword=";
 
 export default function Search() {
@@ -76,18 +78,34 @@ function SearchInput({ onKeywordSubmit }) {
 }
 
 function SearchResult({ posts, selectPost }) {
+  function setIcon(source) {
+    switch (source) {
+      case "YouTube":
+        return RiYoutubeLine;
+      case "Flickr":
+        return RiFlickrLine;
+      case "GIPHY":
+        return SiGiphy;
+    }
+  }
+
   return (
     <ResponsiveMasonry columnsCountBreakPoints={{ 768: 4, 0: 2 }}>
       <Masonry gutter="12px">
-        {posts.map((post) => (
-          <img
-            className={styles.image}
-            key={post.id}
-            src={post.image}
-            alt={post.title}
-            onClick={() => selectPost(post)}
-          />
-        ))}
+        {posts.map((post) => {
+          const Icon = setIcon(post.source);
+          return (
+            <div className={styles.postWrap} key={post.id}>
+              <Icon className={styles.icon} />
+              <img
+                className={styles.image}
+                src={post.image}
+                alt={post.title}
+                onClick={() => selectPost(post)}
+              />
+            </div>
+          );
+        })}
       </Masonry>
     </ResponsiveMasonry>
   );

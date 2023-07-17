@@ -1,12 +1,6 @@
 import Modal from "react-modal";
 import styles from "../styles/components/PostDetails.module.scss";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faLink,
-  faHeart,
-  faShareFromSquare,
-  faArrowLeft,
-} from "@fortawesome/free-solid-svg-icons";
+import { MdLink, MdFavoriteBorder, MdOutlineShare, MdArrowBack } from "./Icon";
 
 Modal.setAppElement("#root");
 
@@ -25,19 +19,14 @@ export default function PostDetails({ post, modalIsOpen, closeModal }) {
           <div className={styles.footGroup}>
             <h2>{post.title}</h2>
             <div className={styles.actions}>
-              <FontAwesomeIcon
-                icon={faArrowLeft}
-                size="xl"
-                className={styles.closeBtn}
-                onClick={closeModal}
-              />
+              <MdArrowBack className={styles.icon} onClick={closeModal} />
 
               <div className={styles.rightGroup}>
                 <a href={post.url} target="_blank" rel="noopener noreferrer">
-                  <FontAwesomeIcon icon={faLink} size="xl" />
+                  <MdLink className={styles.icon} />
                 </a>
-                <FontAwesomeIcon icon={faHeart} size="xl" />
-                <FontAwesomeIcon icon={faShareFromSquare} size="xl" />
+                <MdFavoriteBorder className={styles.icon} />
+                <MdOutlineShare className={styles.icon} />
               </div>
             </div>
           </div>

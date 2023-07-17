@@ -41,12 +41,21 @@
         display: flex;
         justify-content: space-between;
 
-        .rightGroup {
-          display: flex;
-          column-gap: 24px;
+        .icon {
+          font-size: 3rem;
+          cursor: pointer;
 
           @include mediaQuery(md) {
-            column-gap: 12px;
+            font-size: 2.4rem;
+          }
+        }
+
+        .rightGroup {
+          display: flex;
+          column-gap: 15px;
+
+          @include mediaQuery(md) {
+            column-gap: 10px;
           }
         }
       }
