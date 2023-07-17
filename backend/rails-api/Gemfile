@@ -54,3 +54,5 @@ group :development do
 end
 
 gem 'httparty'
+gem 'jwt'
+gem 'bcrypt'
