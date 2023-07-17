@@ -5,6 +5,9 @@ Rails.application.routes.draw do
   # root "articles#index"
 
   scope :api do
+    post '/users', to: 'users#create'
+    post '/users/signin', to: 'authentication#sign_in'
+
     get '/search', to: 'search#search'
   end
 end
