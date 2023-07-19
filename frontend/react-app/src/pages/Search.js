@@ -29,7 +29,7 @@ export default function Search() {
   };
 
   return (
-    <main className="container-lg">
+    <>
       <SearchInput onKeywordSubmit={fetchData} />
       <SearchResult
         posts={posts}
@@ -46,7 +46,7 @@ export default function Search() {
           setSelectedPost(null);
         }}
       />
-    </main>
+    </>
   );
 }
 
@@ -66,13 +66,15 @@ function SearchInput({ onKeywordSubmit }) {
 
   return (
     <div className={styles.textboxWrap}>
-      <input
-        className={styles.textbox}
-        type="text"
-        onChange={handleKeywordChange}
-        onKeyDown={handleKeywordSubmitInternal}
-        value={keyword}
-      />
+      <div className={styles.textboxInnerWrap}>
+        <input
+          className={styles.textbox}
+          type="text"
+          onChange={handleKeywordChange}
+          onKeyDown={handleKeywordSubmitInternal}
+          value={keyword}
+        />
+      </div>
     </div>
   );
 }
