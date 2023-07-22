@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import styles from "../styles/pages/Search.module.scss";
 import PostDetails from "../components/PostDetails";
+import { AuthContext } from "../contexts/AuthContext";
 
 import { RiYoutubeLine, RiFlickrLine, SiGiphy } from "../components/Icon";
 
@@ -12,12 +14,26 @@ export default function Search() {
   const [unavailableServices, setUnavailableServices] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
   const [modalIsOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const { token } = useContext(AuthContext);
 
   const fetchData = async (keyword) => {
     if (keyword !== "") {
-      let apiEndpoint = BASE_URL + encodeURIComponent(keyword);
+      const apiEndpoint = BASE_URL + encodeURIComponent(keyword);
+
+      if (!token) {
+        navigate("/users/signin");
+        return;
+      }
+
       try {
-        const res = await fetch(apiEndpoint);
+        const res = await fetch(apiEndpoint, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
         if (!res.ok) throw new Error(res.statusText);
         const data = await res.json();
         setPosts(data.posts);
