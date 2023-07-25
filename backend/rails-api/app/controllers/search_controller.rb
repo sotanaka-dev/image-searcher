@@ -1,4 +1,6 @@
 class SearchController < ApplicationController
+  before_action :authenticate_request
+
   def search
     keyword = params[:keyword]
     youtube_data = YoutubeService.new(keyword).search
