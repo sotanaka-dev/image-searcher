@@ -4,10 +4,9 @@ import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import styles from "../styles/pages/Search.module.scss";
 import PostDetails from "../components/PostDetails";
 import { AuthContext } from "../contexts/AuthContext";
+import { BASE_URL } from "../config/environment";
 
 import { RiYoutubeLine, RiFlickrLine, SiGiphy } from "../components/Icon";
-
-const BASE_URL = "http://localhost:3000/api/search?keyword=";
 
 export default function Search() {
   const [posts, setPosts] = useState([]);
@@ -20,7 +19,9 @@ export default function Search() {
 
   const fetchData = async (keyword) => {
     if (keyword !== "") {
-      const apiEndpoint = BASE_URL + encodeURIComponent(keyword);
+      const apiEndpoint = `${BASE_URL}search?keyword=${encodeURIComponent(
+        keyword
+      )}`;
 
       if (!token) {
         navigate("/users/signin");
