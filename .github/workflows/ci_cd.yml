@@ -27,7 +27,7 @@ jobs:
         working-directory: backend/rails-api
 
   deploy:
-    if: github.event_name == 'push'
+    # if: github.event_name == 'push'
     needs: test
     runs-on: ubuntu-latest
     env:

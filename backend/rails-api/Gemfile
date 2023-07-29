@@ -61,3 +61,5 @@ end
 gem 'httparty'
 gem 'jwt'
 gem 'bcrypt'
+gem "sentry-ruby"
+gem "sentry-rails"
