@@ -10,6 +10,15 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
     steps:
       - uses: actions/checkout@v3
 
@@ -24,6 +33,14 @@ jobs:
 
       - name: Run RuboCop
         run: bundle exec rubocop
+        working-directory: backend/rails-api
+
+      - name: Set up database
+        run: bundle exec rails db:setup RAILS_ENV=test
+        working-directory: backend/rails-api
+
+      - name: Run tests
+        run: bundle exec rails test
         working-directory: backend/rails-api
 
   deploy:
