@@ -8,10 +8,11 @@ def get_secret(secret_id)
   client = Aws::SecretsManager::Client.new(region: 'ap-northeast-1')
 
   begin
-    get_secret_value_response = client.get_secret_value(secret_id: secret_id)
+    get_secret_value_response = client.get_secret_value(secret_id:)
   rescue StandardError => e
     # For a list of exceptions thrown, see
     # https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
+    Rails.logger.error("An error occurred while getting the secret: #{e.message}")
     raise e
   end
 

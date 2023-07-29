@@ -1,10 +1,10 @@
 class GiphyService < BaseService
-  SERVICE_NAME = 'GIPHY'
+  SERVICE_NAME = 'GIPHY'.freeze
   base_uri 'https://api.giphy.com/v1/gifs'
 
   def build_query(keyword)
     {
-      api_key: ENV['GIPHY_API_KEY'],
+      api_key: ENV.fetch('GIPHY_API_KEY', nil),
       q: keyword,
       limit: 50
     }
