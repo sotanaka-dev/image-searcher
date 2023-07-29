@@ -1,10 +1,10 @@
 class FlickrService < BaseService
-  SERVICE_NAME = 'Flickr'
+  SERVICE_NAME = 'Flickr'.freeze
   base_uri 'https://api.flickr.com/services/rest'
 
   def build_query(keyword)
     {
-      api_key: ENV['FLICKR_API_KEY'],
+      api_key: ENV.fetch('FLICKR_API_KEY', nil),
       method: 'flickr.photos.search',
       format: 'json',
       nojsoncallback: 1,

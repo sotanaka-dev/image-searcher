@@ -1,10 +1,10 @@
 class YoutubeService < BaseService
-  SERVICE_NAME = 'YouTube'
+  SERVICE_NAME = 'YouTube'.freeze
   base_uri 'https://www.googleapis.com/youtube/v3'
 
   def build_query(keyword)
     {
-      key: ENV['YOUTUBE_API_KEY'],
+      key: ENV.fetch('YOUTUBE_API_KEY', nil),
       type: 'video',
       part: 'snippet',
       q: keyword,

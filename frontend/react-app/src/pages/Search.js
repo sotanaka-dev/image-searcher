@@ -10,6 +10,7 @@ import { RiYoutubeLine, RiFlickrLine, SiGiphy } from "../components/Icon";
 
 export default function Search() {
   const [posts, setPosts] = useState([]);
+  // eslint-disable-next-line
   const [unavailableServices, setUnavailableServices] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
   const [modalIsOpen, setIsOpen] = useState(false);
@@ -105,6 +106,8 @@ function SearchResult({ posts, selectPost }) {
         return RiFlickrLine;
       case "GIPHY":
         return SiGiphy;
+      default:
+        throw new Error(`Unknown source: ${source}`);
     }
   }
 
