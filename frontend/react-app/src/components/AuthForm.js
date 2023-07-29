@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "../styles/pages/AuthForm.module.scss";
 import { AuthContext } from "../contexts/AuthContext";
+import { BASE_URL } from "../config/environment";
 
 export default function AuthForm({
   endpoint,
@@ -24,7 +25,7 @@ export default function AuthForm({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const url = `http://localhost:3000/api/users/${endpoint}`;
+    const apiEndpoint = `${BASE_URL}users${endpoint ? "/" + endpoint : ""}`;
     const data = {
       user: {
         username: username,
@@ -33,7 +34,7 @@ export default function AuthForm({
     };
 
     try {
-      const response = await fetch(url, {
+      const response = await fetch(apiEndpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

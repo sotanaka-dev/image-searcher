@@ -4,10 +4,10 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "articles#index"
 
-  scope :api do
-    post '/users', to: 'users#create'
-    post '/users/signin', to: 'authentication#sign_in'
+  get '/healthcheck', to: proc { [200, {}, ['']] }
 
-    get '/search', to: 'search#search'
-  end
+  post '/users', to: 'users#create'
+  post '/users/signin', to: 'authentication#sign_in'
+
+  get '/search', to: 'search#search'
 end
