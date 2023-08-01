@@ -6,7 +6,14 @@ Rails.application.routes.draw do
 
   get '/healthcheck', to: proc { [200, {}, ['']] }
 
-  post '/users', to: 'users#create'
+  resources :users, except: [:update, :destroy] do
+    collection do
+      patch 'username', to: 'users#update_username'
+      patch 'password', to: 'users#update_password'
+      delete '', to: 'users#destroy'
+    end
+  end
+
   post '/users/signin', to: 'authentication#sign_in'
 
   get '/search', to: 'search#search'
