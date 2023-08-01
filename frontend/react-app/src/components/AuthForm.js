@@ -15,7 +15,7 @@ export default function AuthForm({
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
   const navigate = useNavigate();
-  const { token, saveToken } = useContext(AuthContext);
+  const { token, saveToken, saveUsername } = useContext(AuthContext);
 
   useEffect(() => {
     if (token) {
@@ -51,6 +51,7 @@ export default function AuthForm({
       }
 
       saveToken(result.user.token);
+      saveUsername(result.user.username);
       navigate("/search");
     } catch (error) {
       console.log("Error:", error);
