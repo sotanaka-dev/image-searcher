@@ -5,8 +5,7 @@ import styles from "../styles/pages/Search.module.scss";
 import PostDetails from "../components/PostDetails";
 import { AuthContext } from "../contexts/AuthContext";
 import { BASE_URL } from "../config/environment";
-
-import { RiYoutubeLine, RiFlickrLine, SiGiphy } from "../components/Icon";
+import { serviceIcons, MdHelpOutline } from "../components/Icon";
 
 export default function Search() {
   const [posts, setPosts] = useState([]);
@@ -99,16 +98,7 @@ function SearchInput({ onKeywordSubmit }) {
 
 function SearchResult({ posts, selectPost }) {
   function setIcon(service_name) {
-    switch (service_name) {
-      case "YouTube":
-        return RiYoutubeLine;
-      case "Flickr":
-        return RiFlickrLine;
-      case "GIPHY":
-        return SiGiphy;
-      default:
-        throw new Error(`Unknown source: ${service_name}`);
-    }
+    return serviceIcons[service_name] || MdHelpOutline;
   }
 
   return (
