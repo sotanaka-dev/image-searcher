@@ -1,6 +1,7 @@
 import {
   MdLink,
   MdFavoriteBorder,
+  MdFavorite,
   MdOutlineShare,
   MdArrowBack,
 } from "react-icons/md";
@@ -10,6 +11,7 @@ import { SiGiphy } from "react-icons/si";
 export {
   MdLink,
   MdFavoriteBorder,
+  MdFavorite,
   MdOutlineShare,
   MdArrowBack,
   RiYoutubeLine,

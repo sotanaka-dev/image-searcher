@@ -10,7 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_17_085859) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_02_042845) do
+  create_table "favorites", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "post_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "service_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["service_id"], name: "index_favorites_on_service_id"
+    t.index ["user_id"], name: "index_favorites_on_user_id"
+  end
+
+  create_table "services", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_services_on_name", unique: true
+  end
+
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "username", null: false
     t.string "password_digest"
@@ -19,4 +36,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_17_085859) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "favorites", "services"
+  add_foreign_key "favorites", "users"
 end
