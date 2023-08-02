@@ -1,0 +1,14 @@
+@import "../utilities";
+
+.icon {
+  font-size: 3rem;
+  cursor: pointer;
+
+  @include mediaQuery(md) {
+    font-size: 2.4rem;
+  }
+}
+
+.favorite {
+  color: $pink;
+}

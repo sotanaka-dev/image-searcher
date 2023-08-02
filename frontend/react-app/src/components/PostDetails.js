@@ -1,15 +1,8 @@
-import React, { useState, useContext, useEffect } from "react";
 import Modal from "react-modal";
 import styles from "../styles/components/PostDetails.module.scss";
-import {
-  MdLink,
-  MdFavoriteBorder,
-  MdFavorite,
-  MdOutlineShare,
-  MdArrowBack,
-} from "./Icon";
-import { BASE_URL } from "../config/environment";
-import { AuthContext } from "../contexts/AuthContext";
+import { MdLink, MdOutlineShare, MdArrowBack } from "./Icon";
+
+import FavoriteToggle from "./FavoriteToggle";
 
 Modal.setAppElement("#root");
 
@@ -34,7 +27,7 @@ export default function PostDetails({ post, modalIsOpen, closeModal }) {
                 <a href={post.url} target="_blank" rel="noopener noreferrer">
                   <MdLink className={styles.icon} />
                 </a>
-                <Favorite post={post} />
+                <FavoriteToggle post={post} />
                 <MdOutlineShare className={styles.icon} />
               </div>
             </div>
@@ -44,64 +37,5 @@ export default function PostDetails({ post, modalIsOpen, closeModal }) {
         "No post selected"
       )}
     </Modal>
-  );
-}
-
-function Favorite({ post }) {
-  const { token } = useContext(AuthContext);
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [favoriteId, setFavoriteId] = useState(null);
-  const apiEndpoint = `${BASE_URL}favorites`;
-
-  const fetchFavoriteStatus = async () => {
-    const res = await fetch(`${apiEndpoint}/exists?post_id=${post.id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    const { exists, favoriteId } = await res.json();
-    setIsFavorite(exists);
-    setFavoriteId(favoriteId);
-  };
-
-  useEffect(() => {
-    fetchFavoriteStatus();
-  }, []);
-
-  const handleFavorite = async () => {
-    try {
-      const res = await fetch(
-        `${apiEndpoint}${isFavorite ? `/${favoriteId}` : ""}`,
-        {
-          method: isFavorite ? "DELETE" : "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            favorite: { post_id: post.id, service_id: post.service_id },
-          }),
-        }
-      );
-
-      if (!res.ok) {
-        console.error(`Failed to favorite: ${res.statusText}`);
-        return;
-      }
-
-      fetchFavoriteStatus();
-    } catch (error) {
-      console.error("Unexpected error:", error);
-    }
-  };
-
-  return isFavorite ? (
-    <MdFavorite
-      onClick={handleFavorite}
-      className={`${styles.icon} ${styles.favorite}`}
-    />
-  ) : (
-    <MdFavoriteBorder onClick={handleFavorite} className={styles.icon} />
   );
 }

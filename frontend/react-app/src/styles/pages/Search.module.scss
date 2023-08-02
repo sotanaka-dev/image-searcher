@@ -32,20 +32,3 @@
     }
   }
 }
-
-.postWrap {
-  position: relative;
-
-  .image {
-    width: 100%;
-    border-radius: 12px;
-  }
-
-  .icon {
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    font-size: 2rem;
-    color: white;
-  }
-}
