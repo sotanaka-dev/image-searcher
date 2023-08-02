@@ -34,7 +34,7 @@ export default function PostDetails({ post, modalIsOpen, closeModal }) {
                 <a href={post.url} target="_blank" rel="noopener noreferrer">
                   <MdLink className={styles.icon} />
                 </a>
-                <Favorite postId={post.id} postSource={post.source} />
+                <Favorite post={post} />
                 <MdOutlineShare className={styles.icon} />
               </div>
             </div>
@@ -47,14 +47,14 @@ export default function PostDetails({ post, modalIsOpen, closeModal }) {
   );
 }
 
-function Favorite({ postId, postSource }) {
+function Favorite({ post }) {
   const { token } = useContext(AuthContext);
   const [isFavorite, setIsFavorite] = useState(false);
   const [favoriteId, setFavoriteId] = useState(null);
   const apiEndpoint = `${BASE_URL}favorites`;
 
   const fetchFavoriteStatus = async () => {
-    const res = await fetch(`${apiEndpoint}/exists?post_id=${postId}`, {
+    const res = await fetch(`${apiEndpoint}/exists?post_id=${post.id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -80,7 +80,7 @@ function Favorite({ postId, postSource }) {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            favorite: { post_id: postId, service_name: postSource },
+            favorite: { post_id: post.id, service_id: post.service_id },
           }),
         }
       );

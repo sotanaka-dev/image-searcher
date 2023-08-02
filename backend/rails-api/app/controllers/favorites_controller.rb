@@ -7,17 +7,10 @@ class FavoritesController < ApplicationController
   end
 
   def create
-    service = Service.find_by(name: favorite_params[:service_name])
-
-    unless service
-      render json: { error: 'Service not found' }, status: :unprocessable_entity
-      return
-    end
-
     favorite = Favorite.new(
       user_id: @current_user.id,
       post_id: favorite_params[:post_id],
-      service_id: service.id
+      service_id: favorite_params[:service_id]
     )
 
     if favorite.save
@@ -39,6 +32,6 @@ class FavoritesController < ApplicationController
   private
 
   def favorite_params
-    params.require(:favorite).permit(:post_id, :service_name)
+    params.require(:favorite).permit(:post_id, :service_id)
   end
 end

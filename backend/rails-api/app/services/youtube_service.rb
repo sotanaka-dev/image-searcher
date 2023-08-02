@@ -22,7 +22,8 @@ class YoutubeService < BaseService
         url: "https://www.youtube.com/watch?v=#{item['id']['videoId']}",
         image: item['snippet']['thumbnails']['high']['url'],
         posted_at: item['snippet']['publishTime'],
-        source: 'YouTube'
+        service_id: self.class.service_id,
+        service_name: 'YouTube'
       }
     end
   end

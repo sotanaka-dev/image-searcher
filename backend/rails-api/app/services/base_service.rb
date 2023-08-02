@@ -26,4 +26,8 @@ class BaseService
   def search_endpoint
     raise NotImplementedError
   end
+
+  def self.service_id
+    @service_id ||= Service.find_by(name: self::SERVICE_NAME)&.id
+  end
 end

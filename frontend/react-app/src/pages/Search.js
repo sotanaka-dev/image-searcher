@@ -98,8 +98,8 @@ function SearchInput({ onKeywordSubmit }) {
 }
 
 function SearchResult({ posts, selectPost }) {
-  function setIcon(source) {
-    switch (source) {
+  function setIcon(service_name) {
+    switch (service_name) {
       case "YouTube":
         return RiYoutubeLine;
       case "Flickr":
@@ -107,7 +107,7 @@ function SearchResult({ posts, selectPost }) {
       case "GIPHY":
         return SiGiphy;
       default:
-        throw new Error(`Unknown source: ${source}`);
+        throw new Error(`Unknown source: ${service_name}`);
     }
   }
 
@@ -115,7 +115,7 @@ function SearchResult({ posts, selectPost }) {
     <ResponsiveMasonry columnsCountBreakPoints={{ 768: 4, 0: 2 }}>
       <Masonry gutter="12px">
         {posts.map((post) => {
-          const Icon = setIcon(post.source);
+          const Icon = setIcon(post.service_name);
           return (
             <div className={styles.postWrap} key={post.id}>
               <Icon className={styles.icon} />

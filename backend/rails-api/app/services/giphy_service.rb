@@ -19,7 +19,8 @@ class GiphyService < BaseService
         url: gif['url'],
         image: gif['images']['downsized']['url'],
         posted_at: DateTime.parse(gif['import_datetime']).iso8601,
-        source: 'GIPHY'
+        service_id: self.class.service_id,
+        service_name: 'GIPHY'
       }
     end
   end
