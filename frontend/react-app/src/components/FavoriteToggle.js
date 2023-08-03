@@ -4,7 +4,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import styles from "../styles/components/FavoriteToggle.module.scss";
 import { MdFavoriteBorder, MdFavorite } from "./Icon";
 
-export default function FavoriteToggle({ post }) {
+export default function FavoriteToggle({ post, onFavoriteRemoved }) {
   const { token } = useContext(AuthContext);
   const [isFavorite, setIsFavorite] = useState(false);
   const [favoriteId, setFavoriteId] = useState(null);
@@ -48,6 +48,10 @@ export default function FavoriteToggle({ post }) {
       }
 
       fetchFavoriteStatus();
+
+      if (isFavorite && onFavoriteRemoved) {
+        onFavoriteRemoved(post.id);
+      }
     } catch (error) {
       console.error("Unexpected error:", error);
     }

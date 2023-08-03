@@ -6,7 +6,12 @@ import FavoriteToggle from "./FavoriteToggle";
 
 Modal.setAppElement("#root");
 
-export default function PostDetails({ post, modalIsOpen, closeModal }) {
+export default function PostDetails({
+  post,
+  modalIsOpen,
+  closeModal,
+  onFavoriteRemoved,
+}) {
   return (
     <Modal
       isOpen={modalIsOpen}
@@ -27,7 +32,10 @@ export default function PostDetails({ post, modalIsOpen, closeModal }) {
                 <a href={post.url} target="_blank" rel="noopener noreferrer">
                   <MdLink className={styles.icon} />
                 </a>
-                <FavoriteToggle post={post} />
+                <FavoriteToggle
+                  post={post}
+                  onFavoriteRemoved={onFavoriteRemoved}
+                />
                 <MdOutlineShare className={styles.icon} />
               </div>
             </div>

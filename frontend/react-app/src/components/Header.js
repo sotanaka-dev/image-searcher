@@ -7,6 +7,8 @@ function Header() {
       <Link to="/mypage">My Page</Link>
       <br />
       <Link to="/search">Search Page</Link>
+      <br />
+      <Link to="/favorites">Favorites</Link>
     </header>
   );
 }

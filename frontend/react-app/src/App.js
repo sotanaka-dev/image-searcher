@@ -8,6 +8,9 @@ import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 import MyPage from "./pages/MyPage";
 import Search from "./pages/Search";
+import Favorites from "./pages/Favorites";
+import AllFavorites from "./pages/AllFavorites";
+import FolderFavorites from "./pages/FolderFavorites";
 
 function App() {
   return (
@@ -37,6 +40,30 @@ function App() {
                   </PrivateRoute>
                 }
               />
+              <Route
+                path="/favorites"
+                element={
+                  <PrivateRoute>
+                    <Favorites />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/favorites/all"
+                element={
+                  <PrivateRoute>
+                    <AllFavorites />
+                  </PrivateRoute>
+                }
+              />
+              {/* <Route
+                path="/favorites/folders/:id"
+                element={
+                  <PrivateRoute>
+                    <FolderFavorites />
+                  </PrivateRoute>
+                }
+              /> */}
             </Routes>
           </main>
           <Footer />

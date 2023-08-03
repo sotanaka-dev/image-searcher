@@ -53,8 +53,8 @@ class FlickrService < BaseService
     {
       id: photo['id'],
       title: photo['title']['_content'],
-      url: "https://www.flickr.com/photos/#{photo['owner']['username']}/#{photo['id']}",
-      image: "https://live.staticflickr.com/#{photo['id']}/#{photo['secret']}.jpg",
+      url: "https://www.flickr.com/photos/#{photo['owner']['path_alias']}/#{photo['id']}",
+      image: "https://live.staticflickr.com/#{photo['server']}/#{photo['id']}_#{photo['secret']}.jpg",
       posted_at: Time.at(photo['dates']['posted'].to_i).utc.iso8601,
       service_id: self.class.service_id,
       service_name: SERVICE_NAME
