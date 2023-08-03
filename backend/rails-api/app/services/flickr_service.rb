@@ -2,7 +2,7 @@ class FlickrService < BaseService
   SERVICE_NAME = 'Flickr'.freeze
   base_uri 'https://api.flickr.com/services/rest'
 
-  def build_query(keyword)
+  def search_build_query(keyword)
     {
       api_key: ENV.fetch('FLICKR_API_KEY', nil),
       method: 'flickr.photos.search',
@@ -15,7 +15,25 @@ class FlickrService < BaseService
     }
   end
 
-  def parse_data(response)
+  def get_build_query(post_id)
+    {
+      api_key: ENV.fetch('FLICKR_API_KEY', nil),
+      method: 'flickr.photos.getInfo',
+      format: 'json',
+      nojsoncallback: 1,
+      photo_id: post_id
+    }
+  end
+
+  def search_endpoint
+    '/'
+  end
+
+  def get_endpoint(_post_id)
+    '/'
+  end
+
+  def parse_search_results(response)
     photos = response['photos']['photo']
     photos.map do |photo|
       {
@@ -25,12 +43,21 @@ class FlickrService < BaseService
         image: "https://live.staticflickr.com/#{photo['server']}/#{photo['id']}_#{photo['secret']}.jpg",
         posted_at: Time.at(photo['dateupload'].to_i).utc.iso8601,
         service_id: self.class.service_id,
-        service_name: 'Flickr'
+        service_name: SERVICE_NAME
       }
     end
   end
 
-  def search_endpoint
-    '/'
+  def parse_single_post(response)
+    photo = response['photo']
+    {
+      id: photo['id'],
+      title: photo['title']['_content'],
+      url: "https://www.flickr.com/photos/#{photo['owner']['username']}/#{photo['id']}",
+      image: "https://live.staticflickr.com/#{photo['id']}/#{photo['secret']}.jpg",
+      posted_at: Time.at(photo['dates']['posted'].to_i).utc.iso8601,
+      service_id: self.class.service_id,
+      service_name: SERVICE_NAME
+    }
   end
 end
