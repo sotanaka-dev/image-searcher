@@ -1,0 +1,27 @@
+@import "../utilities";
+
+.foldersWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.folderWrap {
+  display: flex;
+  flex-direction: column;
+  row-gap: 6px;
+  width: calc(100% / 4 - 12px);
+  text-align: center;
+  cursor: pointer;
+
+  @include mediaQuery(md) {
+    width: calc(100% / 2 - 8px);
+  }
+
+  .folder {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 12px;
+    background-color: $light-gray;
+  }
+}

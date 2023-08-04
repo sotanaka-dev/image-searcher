@@ -3,5 +3,7 @@ class Folder < ApplicationRecord
   has_many :favorites, through: :folder_favorites
   belongs_to :user
 
-  validates :name, uniqueness: true
+  validates :name,
+            uniqueness: true,
+            length: { in: 1..10 }
 end

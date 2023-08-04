@@ -1,10 +1,9 @@
-import { Link } from "react-router-dom";
+import Folders from "../components/Folders";
 
 export default function Favorites() {
   return (
     <>
-      <Link to="/favorites/all">全てのお気に入り</Link>
-      {/* <Link to="/favorites/folders">全てのお気に入り</Link> */}
+      <Folders />
     </>
   );
 }
