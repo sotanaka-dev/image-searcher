@@ -51,7 +51,6 @@ class FlickrService < BaseService
   def parse_single_post(response)
     photo = response['photo']
     {
-      id: photo['id'],
       title: photo['title']['_content'],
       url: "https://www.flickr.com/photos/#{photo['owner']['path_alias']}/#{photo['id']}",
       image: "https://live.staticflickr.com/#{photo['server']}/#{photo['id']}_#{photo['secret']}.jpg",

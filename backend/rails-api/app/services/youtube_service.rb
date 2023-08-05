@@ -47,7 +47,6 @@ class YoutubeService < BaseService
   def parse_single_post(response)
     item = response['items'].first
     {
-      id: item['id'],
       title: item['snippet']['title'],
       url: "https://www.youtube.com/watch?v=#{item['id']}",
       image: item['snippet']['thumbnails']['high']['url'],

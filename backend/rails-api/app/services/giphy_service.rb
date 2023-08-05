@@ -42,7 +42,6 @@ class GiphyService < BaseService
   def parse_single_post(response)
     gif = response['data']
     {
-      id: gif['id'],
       title: gif['title'],
       url: gif['url'],
       image: gif['images']['downsized']['url'],
