@@ -5,6 +5,7 @@ import {
   MdOutlineShare,
   MdArrowBack,
   MdHelpOutline,
+  MdCheck,
 } from "react-icons/md";
 import { RiYoutubeLine, RiFlickrLine } from "react-icons/ri";
 import { SiGiphy } from "react-icons/si";
@@ -19,6 +20,7 @@ export {
   RiFlickrLine,
   SiGiphy,
   MdHelpOutline,
+  MdCheck,
 };
 
 export const serviceIcons = {
