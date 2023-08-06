@@ -1,6 +1,6 @@
 class FoldersController < ApplicationController
   before_action :authenticate_request
-  before_action :set_folder, except: [:index, :create]
+  before_action :set_folder, except: [:index, :create, :add_favorites]
 
   def index
     folders = if params[:parent_id].present?
@@ -36,7 +36,25 @@ class FoldersController < ApplicationController
     if @folder.destroy
       head :no_content
     else
-      render json: { error: 'Failed to delete folder' }, status: :unprocessable_entity
+      render json: {}, status: :unprocessable_entity
+    end
+  end
+
+  def add_favorites
+    folder_ids = add_favorites_params[:folder_ids]
+    favorite_ids = add_favorites_params[:favorite_ids]
+
+    begin
+      ActiveRecord::Base.transaction do
+        folder_ids.each do |folder_id|
+          favorite_ids.each do |favorite_id|
+            FolderFavorite.find_or_create_by!(folder_id:, favorite_id:)
+          end
+        end
+      end
+      render json: {}, status: :ok
+    rescue ActiveRecord::RecordInvalid
+      render json: {}, status: :unprocessable_entity
     end
   end
 
@@ -48,5 +66,9 @@ class FoldersController < ApplicationController
 
   def folder_params
     params.require(:folder).permit(:name, :parent_id)
+  end
+
+  def add_favorites_params
+    params.permit(folder_ids: [], favorite_ids: [])
   end
 end

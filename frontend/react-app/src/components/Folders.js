@@ -39,8 +39,6 @@ export default function Folders({
   };
 
   const handleComplete = () => {
-    console.log("Folder > handleComplete");
-
     onAddToFolder(selectedIds);
 
     setIsSelectMode(false);

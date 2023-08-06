@@ -20,7 +20,12 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :folders
+  resources :folders do
+    collection do
+      post 'add_favorites'
+    end
+    # resources :favorites, module: :folders
+  end
 
   post '/users/signin', to: 'authentication#sign_in'
 

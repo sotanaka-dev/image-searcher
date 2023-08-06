@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Modal from "react-modal";
 import Folders from "../components/Folders";
-
+import { BASE_URL } from "../config/environment";
+import { AuthContext } from "../contexts/AuthContext";
+import { addFavoritesToFolders } from "../utils/apiClient";
 import styles from "../styles/components/PostList.module.scss";
 import formModalStyles from "../styles/components/FormModal.module.scss";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
@@ -10,6 +12,7 @@ import { serviceIcons, MdHelpOutline, MdCheck } from "../components/Icon";
 export default function PostList({ posts, selectPost }) {
   const [isSelectMode, setIsSelectMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
+  const { token } = useContext(AuthContext);
 
   const toggleSelect = (id) => {
     if (selectedIds.includes(id)) {
@@ -24,15 +27,19 @@ export default function PostList({ posts, selectPost }) {
     handleComplete();
   };
 
-  const handleAddToFolder = (folderIds) => {
-    console.log("フォルダに一括追加");
-    console.log(folderIds);
-    console.log(selectedIds);
-    handleComplete();
+  const handleAddToFolder = async (folderIds) => {
+    const apiEndpoint = `${BASE_URL}folders/add_favorites`;
+
+    addFavoritesToFolders(
+      apiEndpoint,
+      token,
+      selectedIds,
+      folderIds,
+      handleComplete
+    );
   };
 
   const handleComplete = () => {
-    console.log("選択モード終了");
     setIsSelectMode(false);
     setSelectedIds([]);
   };
