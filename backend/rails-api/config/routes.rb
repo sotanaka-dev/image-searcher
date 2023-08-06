@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   resources :favorites do
     collection do
       get 'exists'
+      get 'folder/:id', to: 'favorites#favorites_by_folder'
     end
   end
 
@@ -24,7 +25,6 @@ Rails.application.routes.draw do
     collection do
       post 'add_favorites'
     end
-    # resources :favorites, module: :folders
   end
 
   post '/users/signin', to: 'authentication#sign_in'

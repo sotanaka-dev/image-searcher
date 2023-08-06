@@ -8,16 +8,14 @@ class FavoritesController < ApplicationController
 
   def index
     favorites = @current_user.favorites.includes(:service).order(created_at: :desc)
+    posts = fetch_sns_posts_from_favorites(favorites)
+    render json: posts, status: :ok
+  end
 
-    posts = favorites.map do |favorite|
-      service = service_name_to_class(favorite.service.name).new
-      post_data = service.get_single_post(favorite.post_id)
-
-      post_data[:post] = post_data[:post].merge({ id: favorite.id }) if post_data[:post]
-
-      post_data[:post] || nil
-    end.compact
-
+  def favorites_by_folder
+    favorite_ids = FolderFavorite.where(folder_id: params[:id]).pluck(:favorite_id)
+    favorites = @current_user.favorites.includes(:service).where(id: favorite_ids).order(created_at: :desc)
+    posts = fetch_sns_posts_from_favorites(favorites)
     render json: posts, status: :ok
   end
 
@@ -52,5 +50,14 @@ class FavoritesController < ApplicationController
 
   def service_name_to_class(service_name)
     "#{service_name.downcase.capitalize}Service".constantize
+  end
+
+  def fetch_sns_posts_from_favorites(favorites)
+    favorites.map do |favorite|
+      service = service_name_to_class(favorite.service.name).new
+      post_data = service.get_single_post(favorite.post_id)
+      post_data[:post] = post_data[:post].merge({ id: favorite.id }) if post_data[:post]
+      post_data[:post] || nil
+    end.compact
   end
 end

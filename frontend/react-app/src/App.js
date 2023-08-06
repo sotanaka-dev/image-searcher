@@ -56,14 +56,14 @@ function App() {
                   </PrivateRoute>
                 }
               />
-              {/* <Route
+              <Route
                 path="/favorites/folders/:id"
                 element={
                   <PrivateRoute>
                     <FolderFavorites />
                   </PrivateRoute>
                 }
-              /> */}
+              />
             </Routes>
           </main>
           <Footer />

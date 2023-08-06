@@ -48,3 +48,18 @@ export const addFavoritesToFolders = async (
     console.error("Error:", error);
   }
 };
+
+export const fetchFavoritesByFolder = async (apiEndpoint, token, setPosts) => {
+  try {
+    const res = await fetch(apiEndpoint, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await res.json();
+    setPosts(data);
+  } catch (error) {
+    console.error("Error fetching the posts:", error);
+  }
+};

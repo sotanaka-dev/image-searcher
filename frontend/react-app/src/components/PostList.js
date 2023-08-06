@@ -120,7 +120,12 @@ function AddToFolderModal({ onAddToFolder }) {
         overlayClassName={formModalStyles.overlay}
       >
         <div className={formModalStyles.form}>
-          <Folders onAddToFolder={onAddToFolder} />
+          <Folders
+            onAddToFolder={(folderIds) => {
+              onAddToFolder(folderIds);
+              closeModal();
+            }}
+          />
         </div>
       </Modal>
     </>
