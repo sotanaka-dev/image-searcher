@@ -3,61 +3,93 @@ import { Link } from "react-router-dom";
 import { BASE_URL } from "../config/environment";
 import { AuthContext } from "../contexts/AuthContext";
 import Modal from "react-modal";
-
+import { fetchFolders } from "../utils/apiClient";
 import styles from "../styles/components/Folders.module.scss";
 import formModalStyles from "../styles/components/FormModal.module.scss";
+import { MdCheck } from "../components/Icon";
 
-export default function Folders({ parentId = null }) {
+export default function Folders({
+  parentId = null,
+  isCalledFromFavorites = false,
+  onAddToFolder = () => {},
+}) {
   const [folders, setFolders] = useState([]);
   const { token } = useContext(AuthContext);
   const apiEndpoint = `${BASE_URL}folders?parentId=${parentId}`;
+  const [isSelectMode, setIsSelectMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState([]);
 
   useEffect(() => {
-    fetchFolders();
+    if (!isCalledFromFavorites) {
+      setIsSelectMode(true);
+    }
+    fetchFolders(apiEndpoint, token, setFolders);
   }, []);
 
-  const fetchFolders = async () => {
-    try {
-      const res = await fetch(apiEndpoint, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+  const handleNewFolder = () => {
+    fetchFolders(apiEndpoint, token, setFolders);
+  };
 
-      if (!res.ok) {
-        console.error(`Failed to get folder: ${res.statusText}`);
-        return;
-      }
-
-      const data = await res.json();
-      setFolders(data.folders);
-    } catch (error) {
-      console.error("Error:", error);
+  const toggleSelect = (id) => {
+    if (selectedIds.includes(id)) {
+      setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
+    } else {
+      setSelectedIds([...selectedIds, id]);
     }
   };
 
-  const handleNewFolder = () => {
-    fetchFolders();
+  const handleComplete = () => {
+    console.log("Folder > handleComplete");
+
+    onAddToFolder(selectedIds);
+
+    setIsSelectMode(false);
+    setSelectedIds([]);
   };
 
   return (
     <div className={styles.foldersWrap}>
-      <Link to="/favorites/all" className={styles.folderWrap}>
-        <div className={styles.folder}></div>
-        <p>全てのお気に入り</p>
-      </Link>
-
-      {folders.map((folder) => (
-        <Link
-          key={folder.id}
-          to={`/favorites/folders/${folder.id}`}
-          className={styles.folderWrap}
-        >
+      {isCalledFromFavorites && (
+        <Link to="/favorites/all" className={styles.folderWrap}>
           <div className={styles.folder}></div>
-          <p>{folder.name}</p>
+          <p>全てのお気に入り</p>
         </Link>
-      ))}
+      )}
+
+      {folders.map((folder) =>
+        isCalledFromFavorites ? (
+          <Link
+            key={folder.id}
+            to={`/favorites/folders/${folder.id}`}
+            className={styles.folderWrap}
+          >
+            <div className={styles.folder}></div>
+            <p>{folder.name}</p>
+          </Link>
+        ) : (
+          <div
+            key={folder.id}
+            onClick={() => {
+              if (isSelectMode) toggleSelect(folder.id);
+            }}
+            className={styles.folderWrap}
+          >
+            <div
+              className={`${styles.folder} ${
+                selectedIds.includes(folder.id) ? styles.selected : ""
+              }`}
+            >
+              {isSelectMode && selectedIds.includes(folder.id) && (
+                <MdCheck className={styles.selectIcon} />
+              )}
+            </div>
+            <p>{folder.name}</p>
+          </div>
+        )
+      )}
       <AddFolder onNewFolder={handleNewFolder} />
+
+      {isSelectMode && <button onClick={handleComplete}>選択完了</button>}
     </div>
   );
 }

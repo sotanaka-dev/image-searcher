@@ -1,5 +1,9 @@
 import React, { useState } from "react";
+import Modal from "react-modal";
+import Folders from "../components/Folders";
+
 import styles from "../styles/components/PostList.module.scss";
+import formModalStyles from "../styles/components/FormModal.module.scss";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { serviceIcons, MdHelpOutline, MdCheck } from "../components/Icon";
 
@@ -20,13 +24,14 @@ export default function PostList({ posts, selectPost }) {
     handleComplete();
   };
 
-  const handleAddToFolder = () => {
+  const handleAddToFolder = (folderIds) => {
     console.log("フォルダに一括追加");
+    console.log(folderIds);
+    console.log(selectedIds);
     handleComplete();
   };
 
   const handleComplete = () => {
-    console.log(selectedIds);
     console.log("選択モード終了");
     setIsSelectMode(false);
     setSelectedIds([]);
@@ -47,7 +52,7 @@ export default function PostList({ posts, selectPost }) {
       {isSelectMode && selectedIds.length > 0 && (
         <>
           <button onClick={handleRemoveFavorites}>お気に入りから削除</button>
-          <button onClick={handleAddToFolder}>フォルダに追加</button>
+          <AddToFolderModal onAddToFolder={handleAddToFolder} />
         </>
       )}
 
@@ -86,5 +91,31 @@ export default function PostList({ posts, selectPost }) {
         </Masonry>
       </ResponsiveMasonry>
     </div>
+  );
+}
+
+function AddToFolderModal({ onAddToFolder }) {
+  const [modalIsOpen, setIsOpen] = useState(false);
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
+  return (
+    <>
+      <button onClick={() => setIsOpen(true)}>フォルダに追加</button>
+
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="Add To Folder"
+        className={formModalStyles.modal}
+        overlayClassName={formModalStyles.overlay}
+      >
+        <div className={formModalStyles.form}>
+          <Folders onAddToFolder={onAddToFolder} />
+        </div>
+      </Modal>
+    </>
   );
 }
