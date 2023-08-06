@@ -18,16 +18,39 @@
     width: calc(100% / 2 - 8px);
   }
 
-  .folder {
+  .folderInnerWrap {
     position: relative;
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    border-radius: 12px;
-    background-color: $light-gray;
+
+    .folder {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 12px;
+      background-color: $light-gray;
+    }
+
+    .iconWrap {
+      background-color: white;
+
+      .addIcon {
+        position: absolute;
+        inset: 0;
+        margin: auto;
+        font-size: clamp(10px, 8vw, 60px);
+        color: $dark-gray;
+        cursor: pointer;
+
+        @include mediaQuery(md) {
+          font-size: 16vw;
+        }
+      }
+    }
+
+    .selected {
+      filter: brightness(0.3);
+    }
 
     .selectIcon {
       position: absolute;
-      z-index: 1;
       inset: 0;
       margin: auto;
 
@@ -40,7 +63,9 @@
     }
   }
 
-  .selected {
-    filter: brightness(0.3);
+  .folderName {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }

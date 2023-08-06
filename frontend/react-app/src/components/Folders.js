@@ -6,7 +6,7 @@ import Modal from "react-modal";
 import { fetchFolders } from "../utils/apiClient";
 import styles from "../styles/components/Folders.module.scss";
 import formModalStyles from "../styles/components/FormModal.module.scss";
-import { MdCheck } from "../components/Icon";
+import { MdCheck, MdAdd } from "../components/Icon";
 
 export default function Folders({
   parentId = null,
@@ -48,49 +48,61 @@ export default function Folders({
   };
 
   return (
-    <div className={styles.foldersWrap}>
-      {isCalledFromFavorites && (
-        <Link to="/favorites/all" className={styles.folderWrap}>
-          <div className={styles.folder}></div>
-          <p>全てのお気に入り</p>
-        </Link>
-      )}
-
-      {folders.map((folder) =>
-        isCalledFromFavorites ? (
-          <Link
-            key={folder.id}
-            to={`/favorites/folders/${folder.id}`}
-            className={styles.folderWrap}
-          >
-            <div className={styles.folder}></div>
-            <p>{folder.name}</p>
-          </Link>
-        ) : (
-          <div
-            key={folder.id}
-            onClick={() => {
-              if (isSelectMode) toggleSelect(folder.id);
-            }}
-            className={styles.folderWrap}
-          >
-            <div
-              className={`${styles.folder} ${
-                selectedIds.includes(folder.id) ? styles.selected : ""
-              }`}
-            >
-              {isSelectMode && selectedIds.includes(folder.id) && (
-                <MdCheck className={styles.selectIcon} />
-              )}
+    <>
+      <div className={styles.foldersWrap}>
+        {isCalledFromFavorites && (
+          <Link to="/favorites/all" className={styles.folderWrap}>
+            <div className={styles.folderInnerWrap}>
+              <div className={styles.folder}></div>
             </div>
-            <p>{folder.name}</p>
-          </div>
-        )
-      )}
-      <AddFolder onNewFolder={handleNewFolder} />
-
+            <p>全てのお気に入り</p>
+          </Link>
+        )}
+        {folders.map((folder) =>
+          isCalledFromFavorites ? (
+            <Link
+              key={folder.id}
+              to={`/favorites/folders/${folder.id}`}
+              className={styles.folderWrap}
+            >
+              <div className={styles.folderInnerWrap}>
+                <div
+                  className={`${styles.folder} ${
+                    selectedIds.includes(folder.id) ? styles.selected : ""
+                  }`}
+                ></div>
+                {isSelectMode && selectedIds.includes(folder.id) && (
+                  <MdCheck className={styles.selectIcon} />
+                )}
+              </div>
+              <p className={styles.folderName}>{folder.name}</p>
+            </Link>
+          ) : (
+            <div
+              key={folder.id}
+              onClick={() => {
+                if (isSelectMode) toggleSelect(folder.id);
+              }}
+              className={styles.folderWrap}
+            >
+              <div className={styles.folderInnerWrap}>
+                <div
+                  className={`${styles.folder} ${
+                    selectedIds.includes(folder.id) ? styles.selected : ""
+                  }`}
+                ></div>
+                {isSelectMode && selectedIds.includes(folder.id) && (
+                  <MdCheck className={styles.selectIcon} />
+                )}
+              </div>
+              <p className={styles.folderName}>{folder.name}</p>
+            </div>
+          )
+        )}
+        <AddFolder onNewFolder={handleNewFolder} />
+      </div>
       {isSelectMode && <button onClick={handleComplete}>選択完了</button>}
-    </div>
+    </>
   );
 }
 
@@ -137,9 +149,12 @@ function AddFolder({ onNewFolder }) {
 
   return (
     <>
-      <div onClick={() => setIsOpen(true)} className={styles.folderWrap}>
-        <div className={styles.folder}></div>
-        <p>フォルダを追加</p>
+      <div className={styles.folderWrap}>
+        <div className={styles.folderInnerWrap}>
+          <div className={`${styles.folder} ${styles.iconWrap}`}>
+            <MdAdd onClick={() => setIsOpen(true)} className={styles.addIcon} />
+          </div>
+        </div>
       </div>
 
       <Modal
