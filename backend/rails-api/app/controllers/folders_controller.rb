@@ -41,8 +41,8 @@ class FoldersController < ApplicationController
   end
 
   def add_favorites
-    folder_ids = add_favorites_params[:folder_ids]
-    favorite_ids = add_favorites_params[:favorite_ids]
+    folder_ids = favorites_params[:folder_ids]
+    favorite_ids = favorites_params[:favorite_ids]
 
     begin
       ActiveRecord::Base.transaction do
@@ -50,6 +50,22 @@ class FoldersController < ApplicationController
           favorite_ids.each do |favorite_id|
             FolderFavorite.find_or_create_by!(folder_id:, favorite_id:)
           end
+        end
+      end
+      render json: {}, status: :ok
+    rescue ActiveRecord::RecordInvalid
+      render json: {}, status: :unprocessable_entity
+    end
+  end
+
+  def remove_favorites
+    favorite_ids = favorites_params[:favorite_ids]
+
+    begin
+      ActiveRecord::Base.transaction do
+        favorite_ids.each do |favorite_id|
+          relation = FolderFavorite.find_by(folder_id: @folder.id, favorite_id:)
+          relation&.destroy!
         end
       end
       render json: {}, status: :ok
@@ -68,7 +84,7 @@ class FoldersController < ApplicationController
     params.require(:folder).permit(:name, :parent_id)
   end
 
-  def add_favorites_params
+  def favorites_params
     params.permit(folder_ids: [], favorite_ids: [])
   end
 end

@@ -1,15 +1,24 @@
 import React, { useState, useContext } from "react";
 import Modal from "react-modal";
 import Folders from "../components/Folders";
+import ConfirmationModal from "../components/ConfirmationModal";
 import { BASE_URL } from "../config/environment";
 import { AuthContext } from "../contexts/AuthContext";
-import { addFavoritesToFolders } from "../utils/apiClient";
+import {
+  addFavoritesToFolders,
+  removeFavoritesToFolders,
+} from "../utils/apiClient";
 import styles from "../styles/components/PostList.module.scss";
 import formModalStyles from "../styles/components/FormModal.module.scss";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { serviceIcons, MdHelpOutline, MdCheck } from "../components/Icon";
 
-export default function PostList({ posts, selectPost }) {
+export default function PostList({
+  posts,
+  folderId = false,
+  selectPost,
+  fetchPosts,
+}) {
   const [isSelectMode, setIsSelectMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const { token } = useContext(AuthContext);
@@ -20,11 +29,6 @@ export default function PostList({ posts, selectPost }) {
     } else {
       setSelectedIds([...selectedIds, id]);
     }
-  };
-
-  const handleRemoveFavorites = () => {
-    console.log("お気に入りから一括削除");
-    handleComplete();
   };
 
   const handleAddToFolder = async (folderIds) => {
@@ -39,6 +43,23 @@ export default function PostList({ posts, selectPost }) {
     );
   };
 
+  const handleRemoveToFolder = async () => {
+    const apiEndpoint = `${BASE_URL}folders/${folderId}/remove_favorites`;
+
+    removeFavoritesToFolders(
+      apiEndpoint,
+      token,
+      selectedIds,
+      handleComplete,
+      fetchPosts
+    );
+  };
+
+  const handleRemoveFavorites = () => {
+    console.log("お気に入りから一括削除");
+    handleComplete();
+  };
+
   const handleComplete = () => {
     setIsSelectMode(false);
     setSelectedIds([]);
@@ -50,17 +71,25 @@ export default function PostList({ posts, selectPost }) {
 
   return (
     <div>
-      {!isSelectMode && (
-        <button onClick={() => setIsSelectMode(true)}>お気に入りを選択</button>
-      )}
-
-      {isSelectMode && <button onClick={handleComplete}>キャンセル</button>}
-
-      {isSelectMode && selectedIds.length > 0 && (
+      {isSelectMode ? (
         <>
-          <button onClick={handleRemoveFavorites}>お気に入りから削除</button>
-          <AddToFolderModal onAddToFolder={handleAddToFolder} />
+          <button onClick={handleComplete}>キャンセル</button>
+          {selectedIds.length > 0 && (
+            <>
+              <AddToFolderActions onAddToFolder={handleAddToFolder} />
+              {folderId && (
+                <RemoveToFolderActions
+                  onRemoveToFolder={handleRemoveToFolder}
+                />
+              )}
+              <button onClick={handleRemoveFavorites}>
+                お気に入りから削除
+              </button>
+            </>
+          )}
         </>
+      ) : (
+        <button onClick={() => setIsSelectMode(true)}>お気に入りを選択</button>
       )}
 
       <ResponsiveMasonry columnsCountBreakPoints={{ 768: 4, 0: 2 }}>
@@ -101,7 +130,25 @@ export default function PostList({ posts, selectPost }) {
   );
 }
 
-function AddToFolderModal({ onAddToFolder }) {
+function RemoveToFolderActions({ onRemoveToFolder }) {
+  const [modalIsOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      <button onClick={() => setIsOpen(true)}>フォルダから削除</button>
+      <ConfirmationModal
+        isOpen={modalIsOpen}
+        handleClose={() => setIsOpen(false)}
+        handleConfirm={onRemoveToFolder}
+        message="選択したお気に入りをこのフォルダから削除します。"
+        confirmText="削除"
+        cancelText="キャンセル"
+      />
+    </>
+  );
+}
+
+function AddToFolderActions({ onAddToFolder }) {
   const [modalIsOpen, setIsOpen] = useState(false);
 
   const closeModal = () => {

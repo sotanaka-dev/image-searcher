@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   resources :folders do
     collection do
       post 'add_favorites'
+      delete ':id/remove_favorites', to: 'folders#remove_favorites'
     end
   end
 
