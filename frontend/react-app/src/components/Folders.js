@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { BASE_URL } from "../config/environment";
 import { AuthContext } from "../contexts/AuthContext";
 import Modal from "react-modal";
-import { fetchFolders } from "../utils/apiClient";
+import { createNewFolder, fetchFolders } from "../utils/apiClient";
 import styles from "../styles/components/Folders.module.scss";
 import formModalStyles from "../styles/components/FormModal.module.scss";
 import { MdCheck, MdAdd } from "../components/Icon";
@@ -11,20 +11,25 @@ import { MdCheck, MdAdd } from "../components/Icon";
 export default function Folders({
   parentId = null,
   isCalledFromFavorites = false,
+  defaultSelectMode = false,
   onAddToFolder = () => {},
 }) {
   const [folders, setFolders] = useState([]);
   const { token } = useContext(AuthContext);
-  const apiEndpoint = `${BASE_URL}folders?parentId=${parentId}`;
-  const [isSelectMode, setIsSelectMode] = useState(false);
+  // TODO: 関数化
+  let apiEndpoint = `${BASE_URL}folders`;
+  if (parentId !== null) {
+    apiEndpoint += `?parent_id=${parentId}`;
+  } else if (defaultSelectMode) {
+    apiEndpoint += "?all=true";
+  }
+
+  const [isSelectMode, setIsSelectMode] = useState(defaultSelectMode);
   const [selectedIds, setSelectedIds] = useState([]);
 
   useEffect(() => {
-    if (!isCalledFromFavorites) {
-      setIsSelectMode(true);
-    }
     fetchFolders(apiEndpoint, token, setFolders);
-  }, []);
+  }, [parentId]);
 
   const handleNewFolder = () => {
     fetchFolders(apiEndpoint, token, setFolders);
@@ -57,25 +62,8 @@ export default function Folders({
           </Link>
         )}
         {folders.map((folder) =>
-          isCalledFromFavorites ? (
-            <Link
-              key={folder.id}
-              to={`/favorites/folders/${folder.id}`}
-              className={styles.folderWrap}
-            >
-              <div className={styles.folderInnerWrap}>
-                <div
-                  className={`${styles.folder} ${
-                    selectedIds.includes(folder.id) ? styles.selected : ""
-                  }`}
-                ></div>
-                {isSelectMode && selectedIds.includes(folder.id) && (
-                  <MdCheck className={styles.selectIcon} />
-                )}
-              </div>
-              <p className={styles.folderName}>{folder.name}</p>
-            </Link>
-          ) : (
+          // TODO: 同じコンテンツを2回記述していて冗長なのでリファクタリング
+          isSelectMode ? (
             <div
               key={folder.id}
               onClick={() => {
@@ -95,16 +83,36 @@ export default function Folders({
               </div>
               <p className={styles.folderName}>{folder.name}</p>
             </div>
+          ) : (
+            <Link
+              key={folder.id}
+              to={`/favorites/folders/${folder.id}`}
+              className={styles.folderWrap}
+            >
+              <div className={styles.folderInnerWrap}>
+                <div
+                  className={`${styles.folder} ${
+                    selectedIds.includes(folder.id) ? styles.selected : ""
+                  }`}
+                ></div>
+                {isSelectMode && selectedIds.includes(folder.id) && (
+                  <MdCheck className={styles.selectIcon} />
+                )}
+              </div>
+              <p className={styles.folderName}>{folder.name}</p>
+            </Link>
           )
         )}
-        <AddFolder onNewFolder={handleNewFolder} />
+        {!defaultSelectMode && (
+          <AddFolder onNewFolder={handleNewFolder} parentId={parentId} />
+        )}
       </div>
       {isSelectMode && <button onClick={handleComplete}>選択完了</button>}
     </>
   );
 }
 
-function AddFolder({ onNewFolder }) {
+function AddFolder({ onNewFolder, parentId }) {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [folderName, setFolderName] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
@@ -120,29 +128,15 @@ function AddFolder({ onNewFolder }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      const res = await fetch(apiEndpoint, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name: folderName }),
-      });
-
-      const result = await res.json();
-
-      if (!res.ok) {
-        const errorMessages = Object.values(result.errors).flat();
-        setErrorMessage(errorMessages);
-        return;
-      }
-
-      onNewFolder();
-      closeModal();
-    } catch (error) {
-      console.error("Unexpected error:", error);
-    }
+    createNewFolder(
+      apiEndpoint,
+      token,
+      folderName,
+      parentId,
+      setErrorMessage,
+      onNewFolder,
+      closeModal
+    );
   };
 
   return (

@@ -5,6 +5,8 @@ class FoldersController < ApplicationController
   def index
     folders = if params[:parent_id].present?
                 @current_user.folders.where(parent_id: params[:parent_id])
+              elsif params[:all] == 'true'
+                @current_user.folders
               else
                 @current_user.folders.where(parent_id: nil)
               end

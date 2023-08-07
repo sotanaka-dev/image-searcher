@@ -168,6 +168,7 @@ function AddToFolderActions({ onAddToFolder }) {
       >
         <div className={formModalStyles.form}>
           <Folders
+            defaultSelectMode={true}
             onAddToFolder={(folderIds) => {
               onAddToFolder(folderIds);
               closeModal();

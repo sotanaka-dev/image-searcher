@@ -3,6 +3,7 @@ import { BASE_URL } from "../config/environment";
 import { AuthContext } from "../contexts/AuthContext";
 import PostList from "../components/PostList";
 import PostDetails from "../components/PostDetails";
+import Folders from "../components/Folders";
 import { useParams } from "react-router-dom";
 import { fetchFavoritesByFolder } from "../utils/apiClient";
 
@@ -20,7 +21,7 @@ export default function FolderFavorites() {
 
   useEffect(() => {
     fetchPosts();
-  }, []);
+  }, [id]);
 
   const handleFavoriteRemoved = (postId) => {
     setPosts((posts) => posts.filter((post) => post.id !== postId));
@@ -47,6 +48,7 @@ export default function FolderFavorites() {
         }}
         onFavoriteRemoved={handleFavoriteRemoved}
       />
+      <Folders parentId={id} />
     </>
   );
 }

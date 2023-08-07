@@ -18,6 +18,40 @@ export const fetchFolders = async (apiEndpoint, token, setFolders) => {
   }
 };
 
+export const createNewFolder = async (
+  apiEndpoint,
+  token,
+  folderName,
+  parentId,
+  setErrorMessage,
+  onNewFolder,
+  closeModal
+) => {
+  try {
+    const res = await fetch(apiEndpoint, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name: folderName, parent_id: parentId }),
+    });
+
+    const result = await res.json();
+
+    if (!res.ok) {
+      const errorMessages = Object.values(result.errors).flat();
+      setErrorMessage(errorMessages);
+      return;
+    }
+
+    onNewFolder();
+    closeModal();
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
+
 export const addFavoritesToFolders = async (
   apiEndpoint,
   token,
