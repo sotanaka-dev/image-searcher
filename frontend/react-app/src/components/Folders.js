@@ -6,12 +6,18 @@ import Modal from "react-modal";
 import ConfirmationModal from "../components/ConfirmationModal";
 import {
   createNewFolder,
+  updateFolderName,
   deleteFolder,
   fetchFolders,
 } from "../utils/apiClient";
 import styles from "../styles/components/Folders.module.scss";
 import formModalStyles from "../styles/components/FormModal.module.scss";
-import { MdCheck, MdAdd, MdDeleteOutline } from "../components/Icon";
+import {
+  MdCheck,
+  MdAdd,
+  MdDeleteOutline,
+  MdOutlineEdit,
+} from "../components/Icon";
 
 export default function Folders({
   parentId = null,
@@ -108,6 +114,11 @@ export default function Folders({
                 <p className={styles.folderName}>{folder.name}</p>
               </Link>
               <DeleteFolder reloadFolders={reloadFolders} id={folder.id} />
+              <UpdateFolderName
+                reloadFolders={reloadFolders}
+                id={folder.id}
+                folderName={folder.name}
+              />
             </>
           )
         )}
@@ -184,6 +195,69 @@ function AddFolder({ reloadFolders, parentId }) {
           />
           <button type="submit" className={formModalStyles.btn}>
             追加
+          </button>
+        </form>
+      </Modal>
+    </>
+  );
+}
+
+function UpdateFolderName({ reloadFolders, id, folderName }) {
+  const { token } = useContext(AuthContext);
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const apiEndpoint = `${BASE_URL}folders/${id}`;
+  const [newFolderName, setNewFolderName] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    updateFolderName(
+      apiEndpoint,
+      token,
+      newFolderName,
+      setErrorMessage,
+      reloadFolders,
+      closeModal
+    );
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+    setNewFolderName("");
+    setErrorMessage(null);
+  };
+
+  return (
+    <>
+      <MdOutlineEdit onClick={() => setIsOpen(true)} />
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="Update Folder Name"
+        className={formModalStyles.modal}
+        overlayClassName={formModalStyles.overlay}
+      >
+        <form onSubmit={handleSubmit} className={formModalStyles.form}>
+          <h1 className={formModalStyles.heading}>フォルダ名を更新</h1>
+          {errorMessage && (
+            <div className={formModalStyles.errorMessageWrap}>
+              {errorMessage.map((message, index) => (
+                <p key={index} className={formModalStyles.errorMessage}>
+                  {message}
+                </p>
+              ))}
+            </div>
+          )}
+          <p>現在のフォルダ: {folderName}</p>
+          <input
+            type="text"
+            value={newFolderName}
+            onChange={(e) => setNewFolderName(e.target.value)}
+            className={formModalStyles.textbox}
+            placeholder="新しいフォルダ名"
+          />
+          <button type="submit" className={formModalStyles.btn}>
+            更新
           </button>
         </form>
       </Modal>

@@ -52,6 +52,39 @@ export const createNewFolder = async (
   }
 };
 
+export const updateFolderName = async (
+  apiEndpoint,
+  token,
+  newFolderName,
+  setErrorMessage,
+  reloadFolders,
+  closeModal
+) => {
+  try {
+    const res = await fetch(apiEndpoint, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name: newFolderName }),
+    });
+
+    const result = await res.json();
+
+    if (!res.ok) {
+      const errorMessages = Object.values(result.errors).flat();
+      setErrorMessage(errorMessages);
+      return;
+    }
+
+    reloadFolders();
+    closeModal();
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
+
 export const deleteFolder = async (apiEndpoint, token, reloadFolders) => {
   try {
     const res = await fetch(apiEndpoint, {
