@@ -24,7 +24,7 @@ export const createNewFolder = async (
   folderName,
   parentId,
   setErrorMessage,
-  onNewFolder,
+  reloadFolders,
   closeModal
 ) => {
   try {
@@ -45,8 +45,27 @@ export const createNewFolder = async (
       return;
     }
 
-    onNewFolder();
+    reloadFolders();
     closeModal();
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
+
+export const deleteFolder = async (apiEndpoint, token, reloadFolders) => {
+  try {
+    const res = await fetch(apiEndpoint, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      console.error(`Failed to delete folder: ${res.statusText}`);
+      return;
+    }
+    reloadFolders();
   } catch (error) {
     console.error("Error:", error);
   }

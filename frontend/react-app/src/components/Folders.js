@@ -3,10 +3,15 @@ import { Link } from "react-router-dom";
 import { BASE_URL } from "../config/environment";
 import { AuthContext } from "../contexts/AuthContext";
 import Modal from "react-modal";
-import { createNewFolder, fetchFolders } from "../utils/apiClient";
+import ConfirmationModal from "../components/ConfirmationModal";
+import {
+  createNewFolder,
+  deleteFolder,
+  fetchFolders,
+} from "../utils/apiClient";
 import styles from "../styles/components/Folders.module.scss";
 import formModalStyles from "../styles/components/FormModal.module.scss";
-import { MdCheck, MdAdd } from "../components/Icon";
+import { MdCheck, MdAdd, MdDeleteOutline } from "../components/Icon";
 
 export default function Folders({
   parentId = null,
@@ -31,7 +36,7 @@ export default function Folders({
     fetchFolders(apiEndpoint, token, setFolders);
   }, [parentId]);
 
-  const handleNewFolder = () => {
+  const reloadFolders = () => {
     fetchFolders(apiEndpoint, token, setFolders);
   };
 
@@ -84,27 +89,30 @@ export default function Folders({
               <p className={styles.folderName}>{folder.name}</p>
             </div>
           ) : (
-            <Link
-              key={folder.id}
-              to={`/favorites/folders/${folder.id}`}
-              className={styles.folderWrap}
-            >
-              <div className={styles.folderInnerWrap}>
-                <div
-                  className={`${styles.folder} ${
-                    selectedIds.includes(folder.id) ? styles.selected : ""
-                  }`}
-                ></div>
-                {isSelectMode && selectedIds.includes(folder.id) && (
-                  <MdCheck className={styles.selectIcon} />
-                )}
-              </div>
-              <p className={styles.folderName}>{folder.name}</p>
-            </Link>
+            <>
+              <Link
+                key={folder.id}
+                to={`/favorites/folders/${folder.id}`}
+                className={styles.folderWrap}
+              >
+                <div className={styles.folderInnerWrap}>
+                  <div
+                    className={`${styles.folder} ${
+                      selectedIds.includes(folder.id) ? styles.selected : ""
+                    }`}
+                  ></div>
+                  {isSelectMode && selectedIds.includes(folder.id) && (
+                    <MdCheck className={styles.selectIcon} />
+                  )}
+                </div>
+                <p className={styles.folderName}>{folder.name}</p>
+              </Link>
+              <DeleteFolder reloadFolders={reloadFolders} id={folder.id} />
+            </>
           )
         )}
         {!defaultSelectMode && (
-          <AddFolder onNewFolder={handleNewFolder} parentId={parentId} />
+          <AddFolder reloadFolders={reloadFolders} parentId={parentId} />
         )}
       </div>
       {isSelectMode && <button onClick={handleComplete}>選択完了</button>}
@@ -112,7 +120,7 @@ export default function Folders({
   );
 }
 
-function AddFolder({ onNewFolder, parentId }) {
+function AddFolder({ reloadFolders, parentId }) {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [folderName, setFolderName] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
@@ -134,7 +142,7 @@ function AddFolder({ onNewFolder, parentId }) {
       folderName,
       parentId,
       setErrorMessage,
-      onNewFolder,
+      reloadFolders,
       closeModal
     );
   };
@@ -179,6 +187,30 @@ function AddFolder({ onNewFolder, parentId }) {
           </button>
         </form>
       </Modal>
+    </>
+  );
+}
+
+function DeleteFolder({ reloadFolders, id }) {
+  const { token } = useContext(AuthContext);
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const apiEndpoint = `${BASE_URL}folders/${id}`;
+
+  const handleDeleteFolder = async () => {
+    deleteFolder(apiEndpoint, token, reloadFolders);
+  };
+
+  return (
+    <>
+      <MdDeleteOutline onClick={() => setIsOpen(true)} />
+      <ConfirmationModal
+        isOpen={modalIsOpen}
+        handleClose={() => setIsOpen(false)}
+        handleConfirm={handleDeleteFolder}
+        message="フォルダを削除します。"
+        confirmText="削除"
+        cancelText="キャンセル"
+      />
     </>
   );
 }
