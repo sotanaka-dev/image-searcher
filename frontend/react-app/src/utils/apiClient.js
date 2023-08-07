@@ -109,7 +109,7 @@ export const addFavoritesToFolders = async (
   token,
   selectedIds,
   folderIds,
-  handleComplete
+  onComplete
 ) => {
   try {
     const res = await fetch(apiEndpoint, {
@@ -129,7 +129,7 @@ export const addFavoritesToFolders = async (
       return;
     }
 
-    handleComplete();
+    onComplete();
   } catch (error) {
     console.error("Error:", error);
   }
@@ -139,7 +139,7 @@ export const removeFavoritesToFolders = async (
   apiEndpoint,
   token,
   selectedIds,
-  handleComplete,
+  onComplete,
   reloadFavorites
 ) => {
   try {
@@ -159,7 +159,7 @@ export const removeFavoritesToFolders = async (
       return;
     }
 
-    handleComplete();
+    onComplete();
     reloadFavorites();
   } catch (error) {
     console.error("Error:", error);
@@ -196,7 +196,7 @@ export const removeFavorites = async (
   apiEndpoint,
   token,
   selectedIds,
-  handleComplete,
+  onComplete,
   reloadFavorites
 ) => {
   try {
@@ -216,7 +216,7 @@ export const removeFavorites = async (
       return;
     }
 
-    handleComplete();
+    onComplete();
     reloadFavorites();
   } catch (error) {
     console.error("Error:", error);

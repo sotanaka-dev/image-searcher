@@ -22,7 +22,6 @@ export default function PostList({
 }) {
   const [isSelectMode, setIsSelectMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
-  const { token } = useContext(AuthContext);
 
   const toggleSelect = (id) => {
     if (selectedIds.includes(id)) {
@@ -30,30 +29,6 @@ export default function PostList({
     } else {
       setSelectedIds([...selectedIds, id]);
     }
-  };
-
-  const handleAddToFolder = async (folderIds) => {
-    const apiEndpoint = `${BASE_URL}folders/add_favorites`;
-
-    addFavoritesToFolders(
-      apiEndpoint,
-      token,
-      selectedIds,
-      folderIds,
-      handleComplete
-    );
-  };
-
-  const handleRemoveToFolder = async () => {
-    const apiEndpoint = `${BASE_URL}folders/${folderId}/remove_favorites`;
-
-    removeFavoritesToFolders(
-      apiEndpoint,
-      token,
-      selectedIds,
-      handleComplete,
-      reloadFavorites
-    );
   };
 
   const handleComplete = () => {
@@ -72,10 +47,16 @@ export default function PostList({
           <button onClick={handleComplete}>キャンセル</button>
           {selectedIds.length > 0 && (
             <>
-              <AddToFolderActions onAddToFolder={handleAddToFolder} />
+              <AddToFolder
+                selectedIds={selectedIds}
+                onComplete={handleComplete}
+              />
               {folderId && (
-                <RemoveToFolderActions
-                  onRemoveToFolder={handleRemoveToFolder}
+                <RemoveToFolder
+                  folderId={folderId}
+                  selectedIds={selectedIds}
+                  onComplete={handleComplete}
+                  reloadFavorites={reloadFavorites}
                 />
               )}
               <RemoveFavorites
@@ -158,8 +139,25 @@ function RemoveFavorites({ selectedIds, onComplete, reloadFavorites }) {
   );
 }
 
-function RemoveToFolderActions({ onRemoveToFolder }) {
+function RemoveToFolder({
+  folderId,
+  selectedIds,
+  onComplete,
+  reloadFavorites,
+}) {
   const [modalIsOpen, setIsOpen] = useState(false);
+  const { token } = useContext(AuthContext);
+  const apiEndpoint = `${BASE_URL}folders/${folderId}/remove_favorites`;
+
+  const handleRemoveToFolder = async () => {
+    removeFavoritesToFolders(
+      apiEndpoint,
+      token,
+      selectedIds,
+      onComplete,
+      reloadFavorites
+    );
+  };
 
   return (
     <>
@@ -167,7 +165,7 @@ function RemoveToFolderActions({ onRemoveToFolder }) {
       <ConfirmationModal
         isOpen={modalIsOpen}
         handleClose={() => setIsOpen(false)}
-        handleConfirm={onRemoveToFolder}
+        handleConfirm={handleRemoveToFolder}
         message="選択したお気に入りをこのフォルダから削除します。"
         confirmText="削除"
         cancelText="キャンセル"
@@ -176,11 +174,23 @@ function RemoveToFolderActions({ onRemoveToFolder }) {
   );
 }
 
-function AddToFolderActions({ onAddToFolder }) {
+function AddToFolder({ selectedIds, onComplete }) {
   const [modalIsOpen, setIsOpen] = useState(false);
+  const { token } = useContext(AuthContext);
+  const apiEndpoint = `${BASE_URL}folders/add_favorites`;
 
   const closeModal = () => {
     setIsOpen(false);
+  };
+
+  const handleAddToFolder = async (folderIds) => {
+    addFavoritesToFolders(
+      apiEndpoint,
+      token,
+      selectedIds,
+      folderIds,
+      onComplete
+    );
   };
 
   return (
@@ -198,7 +208,7 @@ function AddToFolderActions({ onAddToFolder }) {
           <Folders
             defaultSelectMode={true}
             onAddToFolder={(folderIds) => {
-              onAddToFolder(folderIds);
+              handleAddToFolder(folderIds);
               closeModal();
             }}
           />
