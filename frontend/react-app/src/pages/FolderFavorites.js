@@ -15,12 +15,12 @@ export default function FolderFavorites() {
   const { token } = useContext(AuthContext);
   const apiEndpoint = `${BASE_URL}favorites/folder/${id}`;
 
-  const fetchPosts = () => {
+  const reloadFavorites = () => {
     fetchFavoritesByFolder(apiEndpoint, token, setPosts);
   };
 
   useEffect(() => {
-    fetchPosts();
+    reloadFavorites();
   }, [id]);
 
   const handleFavoriteRemoved = (postId) => {
@@ -37,7 +37,7 @@ export default function FolderFavorites() {
           setSelectedPost(post);
           setIsOpen(true);
         }}
-        fetchPosts={fetchPosts}
+        reloadFavorites={reloadFavorites}
       />
       <PostDetails
         post={selectedPost}

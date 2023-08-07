@@ -18,6 +18,7 @@ Rails.application.routes.draw do
     collection do
       get 'exists'
       get 'folder/:id', to: 'favorites#favorites_by_folder'
+      delete 'destroy_multiple', to: 'favorites#destroy_multiple'
     end
   end
 

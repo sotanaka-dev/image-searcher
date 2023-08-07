@@ -140,7 +140,7 @@ export const removeFavoritesToFolders = async (
   token,
   selectedIds,
   handleComplete,
-  fetchPosts
+  reloadFavorites
 ) => {
   try {
     const res = await fetch(apiEndpoint, {
@@ -160,7 +160,7 @@ export const removeFavoritesToFolders = async (
     }
 
     handleComplete();
-    fetchPosts();
+    reloadFavorites();
   } catch (error) {
     console.error("Error:", error);
   }
@@ -178,5 +178,47 @@ export const fetchFavoritesByFolder = async (apiEndpoint, token, setPosts) => {
     setPosts(data);
   } catch (error) {
     console.error("Error fetching the posts:", error);
+  }
+};
+
+export const fetchFavorites = async (apiEndpoint, token, setPosts) => {
+  const res = await fetch(apiEndpoint, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await res.json();
+  setPosts(data);
+};
+
+export const removeFavorites = async (
+  apiEndpoint,
+  token,
+  selectedIds,
+  handleComplete,
+  reloadFavorites
+) => {
+  try {
+    const res = await fetch(apiEndpoint, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        favorite_ids: selectedIds,
+      }),
+    });
+
+    if (!res.ok) {
+      console.error("Failed to add favorites to folder");
+      return;
+    }
+
+    handleComplete();
+    reloadFavorites();
+  } catch (error) {
+    console.error("Error:", error);
   }
 };

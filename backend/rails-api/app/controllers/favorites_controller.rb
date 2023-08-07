@@ -42,10 +42,24 @@ class FavoritesController < ApplicationController
     end
   end
 
+  def destroy_multiple
+    favorite_ids = destroy_multiple_params
+    favorites = Favorite.where(id: favorite_ids)
+    if favorites.destroy_all
+      render json: {}, status: :no_content
+    else
+      render json: {}, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def favorite_params
     params.require(:favorite).permit(:post_id, :service_id)
+  end
+
+  def destroy_multiple_params
+    params.require(:favorite_ids)
   end
 
   def service_name_to_class(service_name)

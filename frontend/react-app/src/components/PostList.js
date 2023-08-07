@@ -7,6 +7,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import {
   addFavoritesToFolders,
   removeFavoritesToFolders,
+  removeFavorites,
 } from "../utils/apiClient";
 import styles from "../styles/components/PostList.module.scss";
 import formModalStyles from "../styles/components/FormModal.module.scss";
@@ -17,7 +18,7 @@ export default function PostList({
   posts,
   folderId = false,
   selectPost,
-  fetchPosts,
+  reloadFavorites,
 }) {
   const [isSelectMode, setIsSelectMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
@@ -51,13 +52,8 @@ export default function PostList({
       token,
       selectedIds,
       handleComplete,
-      fetchPosts
+      reloadFavorites
     );
-  };
-
-  const handleRemoveFavorites = () => {
-    console.log("お気に入りから一括削除");
-    handleComplete();
   };
 
   const handleComplete = () => {
@@ -82,9 +78,11 @@ export default function PostList({
                   onRemoveToFolder={handleRemoveToFolder}
                 />
               )}
-              <button onClick={handleRemoveFavorites}>
-                お気に入りから削除
-              </button>
+              <RemoveFavorites
+                selectedIds={selectedIds}
+                onComplete={handleComplete}
+                reloadFavorites={reloadFavorites}
+              />
             </>
           )}
         </>
@@ -127,6 +125,36 @@ export default function PostList({
         </Masonry>
       </ResponsiveMasonry>
     </div>
+  );
+}
+
+function RemoveFavorites({ selectedIds, onComplete, reloadFavorites }) {
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const { token } = useContext(AuthContext);
+  const apiEndpoint = `${BASE_URL}favorites/destroy_multiple`;
+
+  const handleRemoveFavorites = () => {
+    removeFavorites(
+      apiEndpoint,
+      token,
+      selectedIds,
+      onComplete,
+      reloadFavorites
+    );
+  };
+
+  return (
+    <>
+      <button onClick={() => setIsOpen(true)}>お気に入りから削除</button>
+      <ConfirmationModal
+        isOpen={modalIsOpen}
+        handleClose={() => setIsOpen(false)}
+        handleConfirm={handleRemoveFavorites}
+        message="お気に入りから削除します。"
+        confirmText="削除"
+        cancelText="キャンセル"
+      />
+    </>
   );
 }
 

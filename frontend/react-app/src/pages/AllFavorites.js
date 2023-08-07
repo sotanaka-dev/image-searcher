@@ -3,28 +3,21 @@ import { BASE_URL } from "../config/environment";
 import { AuthContext } from "../contexts/AuthContext";
 import PostList from "../components/PostList";
 import PostDetails from "../components/PostDetails";
+import { fetchFavorites } from "../utils/apiClient";
 
 export default function AllFavorites() {
   const [posts, setPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
   const [modalIsOpen, setIsOpen] = useState(false);
   const { token } = useContext(AuthContext);
+  const apiEndpoint = `${BASE_URL}favorites`;
+
+  const reloadFavorites = () => {
+    fetchFavorites(apiEndpoint, token, setPosts);
+  };
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      const apiEndpoint = `${BASE_URL}favorites`;
-
-      const res = await fetch(apiEndpoint, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const data = await res.json();
-      setPosts(data);
-    };
-
-    fetchPosts();
+    reloadFavorites();
   }, []);
 
   const handleFavoriteRemoved = (postId) => {
@@ -40,6 +33,7 @@ export default function AllFavorites() {
           setSelectedPost(post);
           setIsOpen(true);
         }}
+        reloadFavorites={reloadFavorites}
       />
       <PostDetails
         post={selectedPost}
