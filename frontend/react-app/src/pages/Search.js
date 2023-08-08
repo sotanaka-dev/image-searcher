@@ -55,7 +55,10 @@ export default function Search() {
           selectedServices={selectedServices}
           setSelectedServices={setSelectedServices}
         />
-        <SearchInput onKeywordSubmit={fetchData} />
+        <SearchInput
+          onKeywordSubmit={fetchData}
+          selectedServices={selectedServices}
+        />
       </div>
       <PostList
         posts={posts}
@@ -102,7 +105,7 @@ function SelectSns({ selectedServices, setSelectedServices }) {
   );
 }
 
-function SearchInput({ onKeywordSubmit }) {
+function SearchInput({ onKeywordSubmit, selectedServices }) {
   const [keyword, setKeyword] = useState("");
 
   const handleKeywordChange = (e) => {
@@ -111,8 +114,12 @@ function SearchInput({ onKeywordSubmit }) {
 
   const handleKeywordSubmitInternal = (e) => {
     if (e.key === "Enter") {
-      e.preventDefault();
-      onKeywordSubmit(keyword);
+      if (selectedServices.length > 0) {
+        e.preventDefault();
+        onKeywordSubmit(keyword);
+        return;
+      }
+      console.log("SNS未選択");
     }
   };
 
