@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 import { BASE_URL } from "../config/environment";
 import { AuthContext } from "../contexts/AuthContext";
 import PostList from "../components/PostList";
@@ -12,13 +12,13 @@ export default function AllFavorites() {
   const { token } = useContext(AuthContext);
   const apiEndpoint = `${BASE_URL}favorites`;
 
-  const reloadFavorites = () => {
+  const reloadFavorites = useCallback(() => {
     fetchFavorites(apiEndpoint, token, setPosts);
-  };
+  }, [apiEndpoint, token, setPosts]);
 
   useEffect(() => {
     reloadFavorites();
-  }, []);
+  }, [reloadFavorites]);
 
   const handleFavoriteRemoved = (postId) => {
     setPosts((posts) => posts.filter((post) => post.id !== postId));
