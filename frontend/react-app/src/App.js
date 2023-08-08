@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute";
 import Header from "./components/Header";
 import Breadcrumbs from "./components/Breadcrumbs";
@@ -22,6 +27,10 @@ function App() {
 
           <main className="container">
             <Routes>
+              <Route
+                path="/"
+                element={<Navigate to="/users/signin" replace />}
+              />
               <Route path="/users" element={<SignUp />} />
               <Route path="/users/signin" element={<SignIn />} />
               <Route
