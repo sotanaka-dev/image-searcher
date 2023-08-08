@@ -78,7 +78,7 @@ export default function PostList({
             return (
               <div
                 className={styles.wrap}
-                key={post.id}
+                key={post.post_id}
                 onClick={() => {
                   if (isSelectMode) toggleSelect(post.id);
                 }}

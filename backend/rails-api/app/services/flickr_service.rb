@@ -37,7 +37,7 @@ class FlickrService < BaseService
     photos = response['photos']['photo']
     photos.map do |photo|
       {
-        id: photo['id'],
+        post_id: photo['id'],
         title: photo['title'],
         url: "https://www.flickr.com/photos/#{photo['owner']}/#{photo['id']}",
         image: "https://live.staticflickr.com/#{photo['server']}/#{photo['id']}_#{photo['secret']}.jpg",
@@ -51,6 +51,7 @@ class FlickrService < BaseService
   def parse_single_post(response)
     photo = response['photo']
     {
+      post_id: photo['id'],
       title: photo['title']['_content'],
       url: "https://www.flickr.com/photos/#{photo['owner']['path_alias']}/#{photo['id']}",
       image: "https://live.staticflickr.com/#{photo['server']}/#{photo['id']}_#{photo['secret']}.jpg",
