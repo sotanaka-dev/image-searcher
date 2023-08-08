@@ -1,10 +1,17 @@
 import Modal from "react-modal";
 import styles from "../styles/components/PostDetails.module.scss";
-import { MdLink, MdFavoriteBorder, MdOutlineShare, MdArrowBack } from "./Icon";
+import { MdLink, MdOutlineShare, MdArrowBack } from "./Icon";
+
+import FavoriteToggle from "./FavoriteToggle";
 
 Modal.setAppElement("#root");
 
-export default function PostDetails({ post, modalIsOpen, closeModal }) {
+export default function PostDetails({
+  post,
+  modalIsOpen,
+  closeModal,
+  onFavoriteRemoved,
+}) {
   return (
     <Modal
       isOpen={modalIsOpen}
@@ -25,7 +32,10 @@ export default function PostDetails({ post, modalIsOpen, closeModal }) {
                 <a href={post.url} target="_blank" rel="noopener noreferrer">
                   <MdLink className={styles.icon} />
                 </a>
-                <MdFavoriteBorder className={styles.icon} />
+                <FavoriteToggle
+                  post={post}
+                  onFavoriteRemoved={onFavoriteRemoved}
+                />
                 <MdOutlineShare className={styles.icon} />
               </div>
             </div>

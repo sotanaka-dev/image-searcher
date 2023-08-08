@@ -1,12 +1,10 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import styles from "../styles/pages/Search.module.scss";
 import PostDetails from "../components/PostDetails";
 import { AuthContext } from "../contexts/AuthContext";
 import { BASE_URL } from "../config/environment";
-
-import { RiYoutubeLine, RiFlickrLine, SiGiphy } from "../components/Icon";
+import PostList from "../components/PostList";
 
 export default function Search() {
   const [posts, setPosts] = useState([]);
@@ -49,7 +47,7 @@ export default function Search() {
   return (
     <>
       <SearchInput onKeywordSubmit={fetchData} />
-      <SearchResult
+      <PostList
         posts={posts}
         selectPost={(post) => {
           setSelectedPost(post);
@@ -94,41 +92,5 @@ function SearchInput({ onKeywordSubmit }) {
         />
       </div>
     </div>
-  );
-}
-
-function SearchResult({ posts, selectPost }) {
-  function setIcon(source) {
-    switch (source) {
-      case "YouTube":
-        return RiYoutubeLine;
-      case "Flickr":
-        return RiFlickrLine;
-      case "GIPHY":
-        return SiGiphy;
-      default:
-        throw new Error(`Unknown source: ${source}`);
-    }
-  }
-
-  return (
-    <ResponsiveMasonry columnsCountBreakPoints={{ 768: 4, 0: 2 }}>
-      <Masonry gutter="12px">
-        {posts.map((post) => {
-          const Icon = setIcon(post.source);
-          return (
-            <div className={styles.postWrap} key={post.id}>
-              <Icon className={styles.icon} />
-              <img
-                className={styles.image}
-                src={post.image}
-                alt={post.title}
-                onClick={() => selectPost(post)}
-              />
-            </div>
-          );
-        })}
-      </Masonry>
-    </ResponsiveMasonry>
   );
 }

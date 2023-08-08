@@ -1,0 +1,71 @@
+@import "../utilities";
+
+.foldersWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.folderWrap {
+  display: flex;
+  flex-direction: column;
+  row-gap: 6px;
+  width: calc(100% / 4 - 12px);
+  text-align: center;
+  cursor: pointer;
+
+  @include mediaQuery(md) {
+    width: calc(100% / 2 - 8px);
+  }
+
+  .folderInnerWrap {
+    position: relative;
+
+    .folder {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 12px;
+      background-color: $light-gray;
+    }
+
+    .iconWrap {
+      background-color: white;
+
+      .addIcon {
+        position: absolute;
+        inset: 0;
+        margin: auto;
+        font-size: clamp(10px, 8vw, 60px);
+        color: $dark-gray;
+        cursor: pointer;
+
+        @include mediaQuery(md) {
+          font-size: 16vw;
+        }
+      }
+    }
+
+    .selected {
+      filter: brightness(0.3);
+    }
+
+    .selectIcon {
+      position: absolute;
+      inset: 0;
+      margin: auto;
+
+      font-size: 3vw;
+      color: white;
+
+      @include mediaQuery(md) {
+        font-size: 6vw;
+      }
+    }
+  }
+
+  .folderName {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

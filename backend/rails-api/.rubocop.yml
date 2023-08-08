@@ -64,3 +64,11 @@ Rails/I18nLocaleTexts:
 
 Rails/LexicallyScopedActionFilter:
   Enabled: false
+
+Layout/TrailingWhitespace:
+  Exclude:
+    - "test/factories/*"
+
+Lint/EmptyBlock:
+  Exclude:
+    - "test/factories/*"

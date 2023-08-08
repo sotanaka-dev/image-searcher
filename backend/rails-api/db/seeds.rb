@@ -5,3 +5,9 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
+
+service_names = ['YouTube', 'GIPHY', 'Flickr']
+
+service_names.each do |name|
+  Service.create!(name: name)
+end

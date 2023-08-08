@@ -14,6 +14,21 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :favorites do
+    collection do
+      get 'exists'
+      get 'folder/:id', to: 'favorites#favorites_by_folder'
+      delete 'destroy_multiple', to: 'favorites#destroy_multiple'
+    end
+  end
+
+  resources :folders do
+    collection do
+      post 'add_favorites'
+      delete ':id/remove_favorites', to: 'folders#remove_favorites'
+    end
+  end
+
   post '/users/signin', to: 'authentication#sign_in'
 
   get '/search', to: 'search#search'

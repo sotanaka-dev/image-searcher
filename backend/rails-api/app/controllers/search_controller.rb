@@ -3,9 +3,9 @@ class SearchController < ApplicationController
 
   def search
     keyword = params[:keyword]
-    youtube_data = YoutubeService.new(keyword).search
-    flickr_data = FlickrService.new(keyword).search
-    giphy_data = GiphyService.new(keyword).search
+    youtube_data = YoutubeService.new(keyword).search_posts
+    flickr_data = FlickrService.new(keyword).search_posts
+    giphy_data = GiphyService.new(keyword).search_posts
 
     posts = [
       *youtube_data[:posts],
