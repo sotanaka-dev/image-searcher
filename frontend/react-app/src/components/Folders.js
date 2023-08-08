@@ -40,7 +40,7 @@ export default function Folders({
 
   useEffect(() => {
     fetchFolders(apiEndpoint, token, setFolders);
-  }, [parentId]);
+  }, [parentId, apiEndpoint, token]);
 
   const reloadFolders = () => {
     fetchFolders(apiEndpoint, token, setFolders);
