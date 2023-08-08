@@ -28,7 +28,7 @@ class GiphyService < BaseService
     data = response['data']
     data.map do |gif|
       {
-        id: gif['id'],
+        post_id: gif['id'],
         title: gif['title'],
         url: gif['url'],
         image: gif['images']['downsized']['url'],
@@ -42,6 +42,7 @@ class GiphyService < BaseService
   def parse_single_post(response)
     gif = response['data']
     {
+      post_id: gif['id'],
       title: gif['title'],
       url: gif['url'],
       image: gif['images']['downsized']['url'],

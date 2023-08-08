@@ -11,7 +11,7 @@ export default function FavoriteToggle({ post, onFavoriteRemoved }) {
   const apiEndpoint = `${BASE_URL}favorites`;
 
   const fetchFavoriteStatus = useCallback(async () => {
-    const res = await fetch(`${apiEndpoint}/exists?post_id=${post.id}`, {
+    const res = await fetch(`${apiEndpoint}/exists?post_id=${post.post_id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -20,7 +20,7 @@ export default function FavoriteToggle({ post, onFavoriteRemoved }) {
     const { exists, favoriteId } = await res.json();
     setIsFavorite(exists);
     setFavoriteId(favoriteId);
-  }, [post.id, token, apiEndpoint]);
+  }, [post.post_id, token, apiEndpoint]);
 
   useEffect(() => {
     fetchFavoriteStatus();
@@ -37,7 +37,7 @@ export default function FavoriteToggle({ post, onFavoriteRemoved }) {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            favorite: { post_id: post.id, service_id: post.service_id },
+            favorite: { post_id: post.post_id, service_id: post.service_id },
           }),
         }
       );
