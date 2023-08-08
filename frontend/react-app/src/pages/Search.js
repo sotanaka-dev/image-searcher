@@ -5,6 +5,7 @@ import PostDetails from "../components/PostDetails";
 import { AuthContext } from "../contexts/AuthContext";
 import { BASE_URL } from "../config/environment";
 import PostList from "../components/PostList";
+import { serviceIcons } from "../components/Icon";
 
 export default function Search() {
   const [posts, setPosts] = useState([]);
@@ -12,6 +13,9 @@ export default function Search() {
   const [unavailableServices, setUnavailableServices] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [selectedServices, setSelectedServices] = useState(
+    Object.keys(serviceIcons).map((serviceName) => serviceName.toLowerCase())
+  );
   const navigate = useNavigate();
 
   const { token } = useContext(AuthContext);
@@ -20,7 +24,7 @@ export default function Search() {
     if (keyword !== "") {
       const apiEndpoint = `${BASE_URL}search?keyword=${encodeURIComponent(
         keyword
-      )}`;
+      )}&services=${selectedServices.join(",")}`;
 
       if (!token) {
         navigate("/users/signin");
@@ -46,7 +50,16 @@ export default function Search() {
 
   return (
     <>
-      <SearchInput onKeywordSubmit={fetchData} />
+      <div className={styles.headGroup}>
+        <SelectSns
+          selectedServices={selectedServices}
+          setSelectedServices={setSelectedServices}
+        />
+        <SearchInput
+          onKeywordSubmit={fetchData}
+          selectedServices={selectedServices}
+        />
+      </div>
       <PostList
         posts={posts}
         selectPost={(post) => {
@@ -66,7 +79,33 @@ export default function Search() {
   );
 }
 
-function SearchInput({ onKeywordSubmit }) {
+function SelectSns({ selectedServices, setSelectedServices }) {
+  const handleServiceClick = (service) => {
+    if (selectedServices.includes(service)) {
+      setSelectedServices(selectedServices.filter((s) => s !== service));
+      return;
+    }
+    setSelectedServices([...selectedServices, service]);
+  };
+
+  return (
+    <div className={styles.iconsWrap}>
+      {Object.entries(serviceIcons).map(([serviceName, Icon]) => (
+        <Icon
+          key={serviceName}
+          onClick={() => handleServiceClick(serviceName.toLowerCase())}
+          className={
+            selectedServices.includes(serviceName.toLowerCase())
+              ? styles.selected
+              : ""
+          }
+        />
+      ))}
+    </div>
+  );
+}
+
+function SearchInput({ onKeywordSubmit, selectedServices }) {
   const [keyword, setKeyword] = useState("");
 
   const handleKeywordChange = (e) => {
@@ -75,22 +114,24 @@ function SearchInput({ onKeywordSubmit }) {
 
   const handleKeywordSubmitInternal = (e) => {
     if (e.key === "Enter") {
-      e.preventDefault();
-      onKeywordSubmit(keyword);
+      if (selectedServices.length > 0) {
+        e.preventDefault();
+        onKeywordSubmit(keyword);
+        return;
+      }
+      console.log("SNS未選択");
     }
   };
 
   return (
     <div className={styles.textboxWrap}>
-      <div className={styles.textboxInnerWrap}>
-        <input
-          className={styles.textbox}
-          type="text"
-          onChange={handleKeywordChange}
-          onKeyDown={handleKeywordSubmitInternal}
-          value={keyword}
-        />
-      </div>
+      <input
+        className={styles.textbox}
+        type="text"
+        onChange={handleKeywordChange}
+        onKeyDown={handleKeywordSubmitInternal}
+        value={keyword}
+      />
     </div>
   );
 }
