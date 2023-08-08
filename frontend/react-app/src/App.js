@@ -16,6 +16,7 @@ import Search from "./pages/Search";
 import Favorites from "./pages/Favorites";
 import AllFavorites from "./pages/AllFavorites";
 import FolderFavorites from "./pages/FolderFavorites";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -73,6 +74,7 @@ function App() {
                   </PrivateRoute>
                 }
               />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </main>
           <Footer />
