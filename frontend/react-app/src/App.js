@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute";
 import Header from "./components/Header";
 import Breadcrumbs from "./components/Breadcrumbs";
@@ -11,6 +16,7 @@ import Search from "./pages/Search";
 import Favorites from "./pages/Favorites";
 import AllFavorites from "./pages/AllFavorites";
 import FolderFavorites from "./pages/FolderFavorites";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -22,6 +28,10 @@ function App() {
 
           <main className="container">
             <Routes>
+              <Route
+                path="/"
+                element={<Navigate to="/users/signin" replace />}
+              />
               <Route path="/users" element={<SignUp />} />
               <Route path="/users/signin" element={<SignIn />} />
               <Route
@@ -64,6 +74,7 @@ function App() {
                   </PrivateRoute>
                 }
               />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </main>
           <Footer />
