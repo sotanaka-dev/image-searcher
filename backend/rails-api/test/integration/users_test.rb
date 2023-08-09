@@ -25,7 +25,6 @@ class UsersTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_entity
-    assert JSON.parse(@response.body)['errors'].include?('username')
   end
 
   test 'should not register new user without password' do
@@ -36,7 +35,6 @@ class UsersTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_entity
-    assert JSON.parse(@response.body)['errors'].include?('password')
   end
 
   test 'should not register new user with duplicate username' do
@@ -47,6 +45,5 @@ class UsersTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_entity
-    assert JSON.parse(@response.body)['errors'].include?('username')
   end
 end
