@@ -50,8 +50,7 @@ function UpdateUsername() {
       const result = await res.json();
 
       if (!res.ok) {
-        const errorMessages = Object.values(result.errors).flat();
-        setErrorMessage(errorMessages);
+        setErrorMessage(result.errors);
         return;
       }
 
@@ -132,8 +131,7 @@ function UpdatePassword() {
       const result = await res.json();
 
       if (!res.ok) {
-        const errorMessages = Object.values(result.errors).flat();
-        setErrorMessage(errorMessages);
+        setErrorMessage(result.errors);
         return;
       }
 

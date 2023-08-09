@@ -40,8 +40,7 @@ export const createNewFolder = async (
     const result = await res.json();
 
     if (!res.ok) {
-      const errorMessages = Object.values(result.errors).flat();
-      setErrorMessage(errorMessages);
+      setErrorMessage(result.errors);
       return;
     }
 
@@ -73,8 +72,7 @@ export const updateFolderName = async (
     const result = await res.json();
 
     if (!res.ok) {
-      const errorMessages = Object.values(result.errors).flat();
-      setErrorMessage(errorMessages);
+      setErrorMessage(result.errors);
       return;
     }
 

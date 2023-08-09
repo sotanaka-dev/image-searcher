@@ -44,8 +44,7 @@ export default function AuthForm({
       const result = await response.json();
 
       if (!response.ok) {
-        const errorMessages = result.errors;
-        setErrorMessage(errorMessages);
+        setErrorMessage(result.errors);
         return;
       }
 
