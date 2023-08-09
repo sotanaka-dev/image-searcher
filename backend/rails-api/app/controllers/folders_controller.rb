@@ -22,7 +22,7 @@ class FoldersController < ApplicationController
     if folder.save
       render json: { folder: }, status: :created
     else
-      render json: { errors: folder.errors }, status: :unprocessable_entity
+      render json: { errors: folder.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
@@ -30,7 +30,7 @@ class FoldersController < ApplicationController
     if @folder.update(folder_params)
       render json: { folder: @folder }, status: :ok
     else
-      render json: { errors: @folder.errors }, status: :unprocessable_entity
+      render json: { errors: @folder.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
