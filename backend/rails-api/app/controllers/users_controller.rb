@@ -11,7 +11,7 @@ class UsersController < ApplicationController
       token = encode_token({ user_id: user.id })
       render json: { user: user.as_json_response(token) }, status: :created
     else
-      render json: { errors: user.errors }, status: :unprocessable_entity
+      render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
@@ -19,7 +19,7 @@ class UsersController < ApplicationController
     if @current_user.update(username: params[:username])
       render json: { username: @current_user.username }, status: :ok
     else
-      render json: { errors: @current_user.errors }, status: :unprocessable_entity
+      render json: { errors: @current_user.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
@@ -29,7 +29,7 @@ class UsersController < ApplicationController
     if @current_user.update(password: params[:password])
       render json: {}, status: :ok
     else
-      render json: { errors: @current_user.errors }, status: :unprocessable_entity
+      render json: { errors: @current_user.errors.full_messages }, status: :unprocessable_entity
     end
   end
 

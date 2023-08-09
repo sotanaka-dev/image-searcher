@@ -9,7 +9,6 @@ export default function AuthForm({
   submitButtonText,
   link,
   linkText,
-  errorProcessor,
 }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -45,8 +44,7 @@ export default function AuthForm({
       const result = await response.json();
 
       if (!response.ok) {
-        const errorMessages = errorProcessor(result.errors);
-        setErrorMessage(errorMessages);
+        setErrorMessage(result.errors);
         return;
       }
 

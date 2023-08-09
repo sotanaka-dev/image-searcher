@@ -10,7 +10,7 @@ class AuthenticationController < ApplicationController
       token = encode_token({ user_id: user.id })
       render json: { user: user.as_json_response(token) }, status: :ok
     else
-      render json: { errors: 'Invalid email or password' }, status: :unauthorized
+      render json: { errors: [I18n.t('errors.authentication.invalid')] }, status: :unauthorized
     end
   end
 

@@ -1,0 +1,19 @@
+ja:
+  activerecord:
+    attributes:
+      user:
+        username: ユーザー名
+        password: パスワード
+      folder:
+        name: フォルダ名
+    errors:
+      messages:
+        taken: "は既に使用されています"
+      models:
+        user:
+          attributes:
+            username:
+              invalid_format: "は英字、数字、アンダースコアのみ使用できます"
+  errors:
+    authentication:
+      invalid: "ユーザー名またはパスワードが無効です"

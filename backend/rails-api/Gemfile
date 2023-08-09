@@ -63,3 +63,4 @@ gem 'jwt'
 gem 'bcrypt'
 gem "sentry-ruby"
 gem "sentry-rails"
+gem 'rails-i18n', '~> 7.0', '>= 7.0.7'

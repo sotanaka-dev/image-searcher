@@ -7,7 +7,6 @@ export default function SignUp() {
       submitButtonText="サインアップ"
       link="/users/signin"
       linkText="アカウントをお持ちの方こちら"
-      errorProcessor={(errors) => Object.values(errors).flat()}
     />
   );
 }
