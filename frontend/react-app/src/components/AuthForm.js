@@ -3,12 +3,14 @@ import { Link, useNavigate } from "react-router-dom";
 import styles from "../styles/pages/AuthForm.module.scss";
 import { AuthContext } from "../contexts/AuthContext";
 import { BASE_URL } from "../config/environment";
+import { toast } from "react-toastify";
 
 export default function AuthForm({
   endpoint,
   submitButtonText,
   link,
   linkText,
+  successMessage,
 }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -50,6 +52,7 @@ export default function AuthForm({
 
       saveToken(result.user.token);
       saveUsername(result.user.username);
+      toast.success(successMessage);
       navigate("/search");
     } catch (error) {
       console.log("Error:", error);

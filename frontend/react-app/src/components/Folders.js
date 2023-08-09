@@ -18,6 +18,7 @@ import {
   MdDeleteOutline,
   MdOutlineEdit,
 } from "../components/Icon";
+import { toast } from "react-toastify";
 
 export default function Folders({
   parentId = null,
@@ -144,17 +145,21 @@ function AddFolder({ reloadFolders, parentId }) {
     setErrorMessage(null);
   };
 
+  const handleSuccess = () => {
+    reloadFolders();
+    closeModal();
+    toast.success("フォルダが作成されました");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     createNewFolder(
       apiEndpoint,
       token,
       folderName,
       parentId,
       setErrorMessage,
-      reloadFolders,
-      closeModal
+      handleSuccess
     );
   };
 
@@ -209,6 +214,18 @@ function UpdateFolderName({ reloadFolders, id, folderName }) {
   const [newFolderName, setNewFolderName] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
 
+  const closeModal = () => {
+    setIsOpen(false);
+    setNewFolderName("");
+    setErrorMessage(null);
+  };
+
+  const handleSuccess = () => {
+    reloadFolders();
+    closeModal();
+    toast.success("フォルダ名が更新されました");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     updateFolderName(
@@ -216,15 +233,8 @@ function UpdateFolderName({ reloadFolders, id, folderName }) {
       token,
       newFolderName,
       setErrorMessage,
-      reloadFolders,
-      closeModal
+      handleSuccess
     );
-  };
-
-  const closeModal = () => {
-    setIsOpen(false);
-    setNewFolderName("");
-    setErrorMessage(null);
   };
 
   return (
@@ -270,8 +280,13 @@ function DeleteFolder({ reloadFolders, id }) {
   const [modalIsOpen, setIsOpen] = useState(false);
   const apiEndpoint = `${BASE_URL}folders/${id}`;
 
+  const handleSuccess = () => {
+    reloadFolders();
+    toast.success("フォルダが削除されました");
+  };
+
   const handleDeleteFolder = async () => {
-    deleteFolder(apiEndpoint, token, reloadFolders);
+    deleteFolder(apiEndpoint, token, handleSuccess);
   };
 
   return (

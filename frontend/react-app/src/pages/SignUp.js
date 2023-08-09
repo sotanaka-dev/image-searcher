@@ -7,6 +7,7 @@ export default function SignUp() {
       submitButtonText="サインアップ"
       link="/users/signin"
       linkText="アカウントをお持ちの方こちら"
+      successMessage="アカウントを作成しました"
     />
   );
 }

@@ -7,6 +7,7 @@ export default function SignIn() {
       submitButtonText="サインイン"
       link="/users"
       linkText="アカウント作成がまだの方はこちら"
+      successMessage="サインインに成功しました"
     />
   );
 }

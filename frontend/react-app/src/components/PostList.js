@@ -13,6 +13,7 @@ import styles from "../styles/components/PostList.module.scss";
 import formModalStyles from "../styles/components/FormModal.module.scss";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import { serviceIcons, MdHelpOutline, MdCheck } from "../components/Icon";
+import { toast } from "react-toastify";
 
 export default function PostList({
   posts,
@@ -114,14 +115,14 @@ function RemoveFavorites({ selectedIds, onComplete, reloadFavorites }) {
   const { token } = useContext(AuthContext);
   const apiEndpoint = `${BASE_URL}favorites/destroy_multiple`;
 
+  const handleSuccess = () => {
+    onComplete();
+    reloadFavorites();
+    toast.success("お気に入りから削除しました");
+  };
+
   const handleRemoveFavorites = () => {
-    removeFavorites(
-      apiEndpoint,
-      token,
-      selectedIds,
-      onComplete,
-      reloadFavorites
-    );
+    removeFavorites(apiEndpoint, token, selectedIds, handleSuccess);
   };
 
   return (
@@ -149,14 +150,14 @@ function RemoveToFolder({
   const { token } = useContext(AuthContext);
   const apiEndpoint = `${BASE_URL}folders/${folderId}/remove_favorites`;
 
+  const handleSuccess = () => {
+    onComplete();
+    reloadFavorites();
+    toast.success("フォルダからお気に入りを削除しました");
+  };
+
   const handleRemoveToFolder = async () => {
-    removeFavoritesToFolders(
-      apiEndpoint,
-      token,
-      selectedIds,
-      onComplete,
-      reloadFavorites
-    );
+    removeFavoritesToFolders(apiEndpoint, token, selectedIds, handleSuccess);
   };
 
   return (
@@ -183,13 +184,18 @@ function AddToFolder({ selectedIds, onComplete }) {
     setIsOpen(false);
   };
 
+  const handleSuccess = () => {
+    onComplete();
+    toast.success("フォルダにお気に入りを追加しました");
+  };
+
   const handleAddToFolder = async (folderIds) => {
     addFavoritesToFolders(
       apiEndpoint,
       token,
       selectedIds,
       folderIds,
-      onComplete
+      handleSuccess
     );
   };
 

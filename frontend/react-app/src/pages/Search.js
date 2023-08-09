@@ -6,6 +6,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import { BASE_URL } from "../config/environment";
 import PostList from "../components/PostList";
 import { serviceIcons } from "../components/Icon";
+import { toast } from "react-toastify";
 
 export default function Search() {
   const [posts, setPosts] = useState([]);
@@ -119,7 +120,7 @@ function SearchInput({ onKeywordSubmit, selectedServices }) {
         onKeywordSubmit(keyword);
         return;
       }
-      console.log("SNS未選択");
+      toast.warning("SNSが選択されていません");
     }
   };
 
