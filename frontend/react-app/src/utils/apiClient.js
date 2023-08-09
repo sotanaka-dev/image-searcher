@@ -24,8 +24,7 @@ export const createNewFolder = async (
   folderName,
   parentId,
   setErrorMessage,
-  reloadFolders,
-  closeModal
+  onSuccess
 ) => {
   try {
     const res = await fetch(apiEndpoint, {
@@ -44,8 +43,7 @@ export const createNewFolder = async (
       return;
     }
 
-    reloadFolders();
-    closeModal();
+    onSuccess();
   } catch (error) {
     console.error("Error:", error);
   }
@@ -56,8 +54,7 @@ export const updateFolderName = async (
   token,
   newFolderName,
   setErrorMessage,
-  reloadFolders,
-  closeModal
+  onSuccess
 ) => {
   try {
     const res = await fetch(apiEndpoint, {
@@ -76,14 +73,13 @@ export const updateFolderName = async (
       return;
     }
 
-    reloadFolders();
-    closeModal();
+    onSuccess();
   } catch (error) {
     console.error("Error:", error);
   }
 };
 
-export const deleteFolder = async (apiEndpoint, token, reloadFolders) => {
+export const deleteFolder = async (apiEndpoint, token, onSuccess) => {
   try {
     const res = await fetch(apiEndpoint, {
       method: "DELETE",
@@ -96,7 +92,8 @@ export const deleteFolder = async (apiEndpoint, token, reloadFolders) => {
       console.error(`Failed to delete folder: ${res.statusText}`);
       return;
     }
-    reloadFolders();
+
+    onSuccess();
   } catch (error) {
     console.error("Error:", error);
   }
@@ -107,7 +104,7 @@ export const addFavoritesToFolders = async (
   token,
   selectedIds,
   folderIds,
-  onComplete
+  onSuccess
 ) => {
   try {
     const res = await fetch(apiEndpoint, {
@@ -127,7 +124,7 @@ export const addFavoritesToFolders = async (
       return;
     }
 
-    onComplete();
+    onSuccess();
   } catch (error) {
     console.error("Error:", error);
   }
@@ -137,8 +134,7 @@ export const removeFavoritesToFolders = async (
   apiEndpoint,
   token,
   selectedIds,
-  onComplete,
-  reloadFavorites
+  onSuccess
 ) => {
   try {
     const res = await fetch(apiEndpoint, {
@@ -157,8 +153,7 @@ export const removeFavoritesToFolders = async (
       return;
     }
 
-    onComplete();
-    reloadFavorites();
+    onSuccess();
   } catch (error) {
     console.error("Error:", error);
   }
@@ -194,8 +189,7 @@ export const removeFavorites = async (
   apiEndpoint,
   token,
   selectedIds,
-  onComplete,
-  reloadFavorites
+  onSuccess
 ) => {
   try {
     const res = await fetch(apiEndpoint, {
@@ -214,9 +208,135 @@ export const removeFavorites = async (
       return;
     }
 
-    onComplete();
-    reloadFavorites();
+    onSuccess();
   } catch (error) {
     console.error("Error:", error);
+  }
+};
+
+export const updateUsername = async (
+  apiEndpoint,
+  token,
+  username,
+  setErrorMessage,
+  onSuccess
+) => {
+  try {
+    const res = await fetch(apiEndpoint, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username }),
+    });
+
+    const result = await res.json();
+
+    if (!res.ok) {
+      setErrorMessage(result.errors);
+      return;
+    }
+
+    onSuccess();
+  } catch (error) {
+    console.error("Unexpected error:", error);
+  }
+};
+
+export const updatePassword = async (
+  apiEndpoint,
+  token,
+  password,
+  setErrorMessage,
+  onSuccess
+) => {
+  try {
+    const res = await fetch(apiEndpoint, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        password: password,
+      }),
+    });
+
+    const result = await res.json();
+
+    if (!res.ok) {
+      setErrorMessage(result.errors);
+      return;
+    }
+
+    onSuccess();
+  } catch (error) {
+    console.error("Unexpected error:", error);
+  }
+};
+
+export const destroyUser = async (apiEndpoint, token, onSuccess) => {
+  try {
+    const res = await fetch(apiEndpoint, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      console.error(`Failed to delete account: ${res.statusText}`);
+      return;
+    }
+
+    onSuccess();
+  } catch (error) {
+    console.error("Unexpected error:", error);
+  }
+};
+
+export const getFavoriteStatus = async (apiEndpoint, token, post_id) => {
+  const res = await fetch(`${apiEndpoint}/exists?post_id=${post_id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.json();
+};
+
+export const toggleFavoriteStatus = async (
+  apiEndpoint,
+  token,
+  isFavorite,
+  favoriteId,
+  post_id,
+  service_id,
+  onSuccess
+) => {
+  try {
+    const res = await fetch(
+      `${apiEndpoint}${isFavorite ? `/${favoriteId}` : ""}`,
+      {
+        method: isFavorite ? "DELETE" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          favorite: { post_id: post_id, service_id: service_id },
+        }),
+      }
+    );
+
+    if (!res.ok) {
+      console.error(`Failed to favorite: ${res.statusText}`);
+      return;
+    }
+
+    onSuccess();
+  } catch (error) {
+    console.error("Unexpected error:", error);
   }
 };

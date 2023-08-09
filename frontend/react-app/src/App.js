@@ -17,6 +17,8 @@ import Favorites from "./pages/Favorites";
 import AllFavorites from "./pages/AllFavorites";
 import FolderFavorites from "./pages/FolderFavorites";
 import NotFound from "./pages/NotFound";
+import { ToastContainer, Slide } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
@@ -25,6 +27,7 @@ function App() {
         <div>
           <Header />
           <Breadcrumbs />
+          <ToastContainer autoClose={5000} transition={Slide} />
 
           <main className="container">
             <Routes>

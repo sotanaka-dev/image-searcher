@@ -5,6 +5,12 @@ import styles from "../styles/pages/MyPage.module.scss";
 import { AuthContext } from "../contexts/AuthContext";
 import { BASE_URL } from "../config/environment";
 import ConfirmationModal from "../components/ConfirmationModal";
+import { toast } from "react-toastify";
+import {
+  updateUsername,
+  updatePassword,
+  destroyUser,
+} from "../utils/apiClient";
 
 export default function MyPage() {
   return (
@@ -26,6 +32,7 @@ function UpdateUsername() {
     username: sessionUsername,
     saveUsername,
   } = useContext(AuthContext);
+  const apiEndpoint = `${BASE_URL}users/username`;
 
   const closeModal = () => {
     setIsOpen(false);
@@ -33,32 +40,21 @@ function UpdateUsername() {
     setErrorMessage(null);
   };
 
+  const handleSuccess = () => {
+    saveUsername(username);
+    closeModal();
+    toast.success("ユーザー名が更新されました");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const apiEndpoint = `${BASE_URL}users/username`;
-
-    try {
-      const res = await fetch(apiEndpoint, {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username }),
-      });
-
-      const result = await res.json();
-
-      if (!res.ok) {
-        setErrorMessage(result.errors);
-        return;
-      }
-
-      saveUsername(result.username);
-      closeModal();
-    } catch (error) {
-      console.error("Unexpected error:", error);
-    }
+    updateUsername(
+      apiEndpoint,
+      token,
+      username,
+      setErrorMessage,
+      handleSuccess
+    );
   };
 
   return (
@@ -105,6 +101,7 @@ function UpdatePassword() {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
   const { token } = useContext(AuthContext);
+  const apiEndpoint = `${BASE_URL}users/password`;
 
   const closeModal = () => {
     setIsOpen(false);
@@ -112,33 +109,20 @@ function UpdatePassword() {
     setErrorMessage(null);
   };
 
+  const handleSuccess = () => {
+    closeModal();
+    toast.success("パスワードが更新されました");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const apiEndpoint = `${BASE_URL}users/password`;
-
-    try {
-      const res = await fetch(apiEndpoint, {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          password: password,
-        }),
-      });
-
-      const result = await res.json();
-
-      if (!res.ok) {
-        setErrorMessage(result.errors);
-        return;
-      }
-
-      closeModal();
-    } catch (error) {
-      console.error("Unexpected error:", error);
-    }
+    updatePassword(
+      apiEndpoint,
+      token,
+      password,
+      setErrorMessage,
+      handleSuccess
+    );
   };
 
   return (
@@ -185,6 +169,7 @@ function SignOut() {
 
   const handleSignOut = () => {
     removeSessionData();
+    toast.success("サインアウトしました");
     navigate("/users/signin");
   };
 
@@ -195,28 +180,16 @@ function DeleteAccount() {
   const navigate = useNavigate();
   const { token, removeSessionData } = useContext(AuthContext);
   const [modalIsOpen, setIsOpen] = useState(false);
+  const apiEndpoint = `${BASE_URL}users`;
+
+  const handleSuccess = () => {
+    removeSessionData();
+    navigate("/users/signin");
+    toast.success("アカウントが削除されました");
+  };
 
   const handleDeleteAccount = async () => {
-    const apiEndpoint = `${BASE_URL}users`;
-
-    try {
-      const res = await fetch(apiEndpoint, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!res.ok) {
-        console.error(`Failed to delete account: ${res.statusText}`);
-        return;
-      }
-
-      removeSessionData();
-      navigate("/users/signin");
-    } catch (error) {
-      console.error("Unexpected error:", error);
-    }
+    destroyUser(apiEndpoint, token, handleSuccess);
   };
 
   return (

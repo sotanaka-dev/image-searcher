@@ -1,8 +1,10 @@
 import React, { useState, useContext, useEffect, useCallback } from "react";
 import { BASE_URL } from "../config/environment";
 import { AuthContext } from "../contexts/AuthContext";
+import { getFavoriteStatus, toggleFavoriteStatus } from "../utils/apiClient";
 import styles from "../styles/components/FavoriteToggle.module.scss";
 import { MdFavoriteBorder, MdFavorite } from "./Icon";
+import { toast } from "react-toastify";
 
 export default function FavoriteToggle({ post, onFavoriteRemoved }) {
   const { token } = useContext(AuthContext);
@@ -10,51 +12,43 @@ export default function FavoriteToggle({ post, onFavoriteRemoved }) {
   const [favoriteId, setFavoriteId] = useState(null);
   const apiEndpoint = `${BASE_URL}favorites`;
 
-  const fetchFavoriteStatus = useCallback(async () => {
-    const res = await fetch(`${apiEndpoint}/exists?post_id=${post.post_id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    const { exists, favoriteId } = await res.json();
+  const updateFavorite = useCallback(async () => {
+    const { exists, favoriteId } = await getFavoriteStatus(
+      apiEndpoint,
+      token,
+      post.post_id
+    );
     setIsFavorite(exists);
     setFavoriteId(favoriteId);
   }, [post.post_id, token, apiEndpoint]);
 
   useEffect(() => {
-    fetchFavoriteStatus();
-  }, [fetchFavoriteStatus]);
+    updateFavorite();
+  }, [updateFavorite]);
 
-  const handleFavorite = async () => {
-    try {
-      const res = await fetch(
-        `${apiEndpoint}${isFavorite ? `/${favoriteId}` : ""}`,
-        {
-          method: isFavorite ? "DELETE" : "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            favorite: { post_id: post.post_id, service_id: post.service_id },
-          }),
-        }
-      );
+  const handleSuccess = () => {
+    updateFavorite();
 
-      if (!res.ok) {
-        console.error(`Failed to favorite: ${res.statusText}`);
-        return;
-      }
-
-      fetchFavoriteStatus();
-
-      if (isFavorite && onFavoriteRemoved) {
+    if (isFavorite) {
+      if (onFavoriteRemoved) {
         onFavoriteRemoved(post.id);
       }
-    } catch (error) {
-      console.error("Unexpected error:", error);
+      toast.success("お気に入りから削除しました");
+      return;
     }
+    toast.success("お気に入りに追加しました");
+  };
+
+  const handleFavorite = async () => {
+    toggleFavoriteStatus(
+      apiEndpoint,
+      token,
+      isFavorite,
+      favoriteId,
+      post.post_id,
+      post.service_id,
+      handleSuccess
+    );
   };
 
   return isFavorite ? (
