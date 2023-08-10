@@ -19,3 +19,7 @@ body {
   margin: 0 auto;
   padding: 96px 24px 144px;
 }
+
+main {
+  min-height: calc(100vh - $header_height - $footer_height);
+}

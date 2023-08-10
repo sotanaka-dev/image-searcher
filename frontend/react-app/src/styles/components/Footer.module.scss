@@ -1,6 +1,20 @@
 @import "../utilities";
 
 .wrap {
-  height: 250px;
-  background-color: $light;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 24px;
+
+  height: $footer_height;
+  background-color: $dark_gray;
+
+  .logo {
+    width: 100px;
+  }
+
+  .copyright {
+    color: $light;
+  }
 }
