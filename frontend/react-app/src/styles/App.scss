@@ -6,6 +6,7 @@ html {
 }
 
 body {
+  margin-top: $header_height;
   font-family: "Poppins", sans-serif;
   color: $dark_gray;
   font-size: 1.4rem;

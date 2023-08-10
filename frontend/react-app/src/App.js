@@ -6,7 +6,6 @@ import {
 } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute";
 import Header from "./components/Header";
-import Breadcrumbs from "./components/Breadcrumbs";
 import Footer from "./components/Footer";
 import { AuthProvider } from "./contexts/AuthContext";
 import SignUp from "./pages/SignUp";
@@ -26,7 +25,6 @@ function App() {
       <Router>
         <div>
           <Header />
-          <Breadcrumbs />
           <ToastContainer autoClose={5000} transition={Slide} />
 
           <main className="container">

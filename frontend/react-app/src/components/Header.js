@@ -1,14 +1,22 @@
 import { Link } from "react-router-dom";
 import styles from "../styles/components/Header.module.scss";
+import HamburgerMenu from "./HamburgerMenu";
 
 function Header() {
   return (
     <header className={styles.wrap}>
-      <Link to="/mypage">My Page</Link>
-      <br />
-      <Link to="/search">Search Page</Link>
-      <br />
-      <Link to="/favorites">Favorites</Link>
+      <div className={styles.innerWrap}>
+        <Link to="/search">
+          <img
+            src={`${process.env.PUBLIC_URL}/header_logo.png`}
+            alt="Logo"
+            className={styles.logo}
+          />
+        </Link>
+        <div>
+          <HamburgerMenu />
+        </div>
+      </div>
     </header>
   );
 }
