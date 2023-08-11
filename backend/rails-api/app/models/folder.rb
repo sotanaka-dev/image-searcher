@@ -8,4 +8,6 @@ class Folder < ApplicationRecord
   validates :name,
             uniqueness: true,
             length: { in: 1..10 }
+
+  delegate :count, to: :favorites, prefix: true
 end
