@@ -3,69 +3,137 @@
 .foldersWrap {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 24px;
+
+  @include mediaQuery(md) {
+    gap: 16px;
+  }
 }
 
 .folderWrap {
-  display: flex;
-  flex-direction: column;
-  row-gap: 6px;
-  width: calc(100% / 4 - 12px);
-  text-align: center;
-  cursor: pointer;
+  position: relative;
+  width: calc(100% / 4 - 18px);
 
   @include mediaQuery(md) {
     width: calc(100% / 2 - 8px);
   }
 
-  .folderInnerWrap {
-    position: relative;
+  .folder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    aspect-ratio: 1 / 1;
+    border-radius: 12px;
 
-    .folder {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      border-radius: 12px;
-      background-color: $light-gray;
+    background-color: #fff;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+    color: $dark-gray;
+    cursor: pointer;
+
+    &:hover .folderInfo {
+      color: $dark-gray;
     }
 
-    .iconWrap {
-      background-color: white;
+    .folderInfo {
+      color: $gray;
+      transition: 0.1s;
 
-      .addIcon {
-        position: absolute;
-        inset: 0;
-        margin: auto;
-        font-size: clamp(10px, 8vw, 60px);
-        color: $dark-gray;
-        cursor: pointer;
+      .folderName {
+        margin-bottom: 12px;
+        font-size: 1.6rem;
 
         @include mediaQuery(md) {
-          font-size: 16vw;
+          font-size: 3vw;
+        }
+      }
+
+      .favoritesCount {
+        @include mediaQuery(md) {
+          font-size: 2.5vw;
         }
       }
     }
+  }
 
-    .selected {
-      filter: brightness(0.3);
+  .folderActions {
+    position: absolute;
+    bottom: 6px;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 6px;
+    font-size: 3rem;
+
+    & > * {
+      color: $gray;
+      cursor: pointer;
+      transition: 0.1s;
+
+      &:hover {
+        color: $dark-gray;
+      }
     }
 
-    .selectIcon {
+    @include mediaQuery(md) {
+      font-size: 5vw;
+    }
+  }
+
+  .selected {
+    background-color: $dark-gray;
+    color: $light-gray;
+
+    .folderInfo {
+      color: $light-gray;
+    }
+
+    &:hover .folderInfo {
+      color: $light;
+    }
+  }
+
+  .selectIcon {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    margin: auto;
+
+    font-size: 2.4rem;
+    color: $light-gray;
+
+    @include mediaQuery(md) {
+      font-size: 6vw;
+    }
+  }
+
+  .addIconWrap {
+    box-shadow: none;
+    border: none;
+    background-color: $light;
+    cursor: default;
+
+    .addIcon {
       position: absolute;
       inset: 0;
       margin: auto;
+      font-size: clamp(10px, 8vw, 60px);
+      color: $gray;
+      cursor: pointer;
+      transition: 0.1s;
 
-      font-size: 3vw;
-      color: white;
+      &:hover {
+        color: $dark-gray;
+      }
 
       @include mediaQuery(md) {
-        font-size: 6vw;
+        font-size: 16vw;
       }
     }
   }
+}
 
-  .folderName {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+.fav {
+  color: $pink;
 }

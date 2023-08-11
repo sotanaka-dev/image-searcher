@@ -12,6 +12,7 @@ import {
   MdMenu,
   MdSearch,
   MdOutlineHome,
+  MdErrorOutline,
 } from "react-icons/md";
 import { RiYoutubeLine, RiFlickrLine } from "react-icons/ri";
 import { SiGiphy } from "react-icons/si";
@@ -33,6 +34,7 @@ export {
   MdMenu,
   MdSearch,
   MdOutlineHome,
+  MdErrorOutline,
 };
 
 export const serviceIcons = {
