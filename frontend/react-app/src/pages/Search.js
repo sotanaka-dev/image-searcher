@@ -5,7 +5,7 @@ import PostDetails from "../components/PostDetails";
 import { AuthContext } from "../contexts/AuthContext";
 import { BASE_URL } from "../config/environment";
 import PostList from "../components/PostList";
-import { serviceIcons } from "../components/Icon";
+import { serviceIcons, MdSearch } from "../components/Icon";
 import { toast } from "react-toastify";
 
 export default function Search() {
@@ -113,15 +113,15 @@ function SearchInput({ onKeywordSubmit, selectedServices }) {
     setKeyword(e.target.value);
   };
 
-  const handleKeywordSubmitInternal = (e) => {
-    if (e.key === "Enter") {
-      if (selectedServices.length > 0) {
-        e.preventDefault();
-        onKeywordSubmit(keyword);
-        return;
-      }
-      toast.warning("SNSが選択されていません");
+  const handleKeywordSubmit = (e) => {
+    if (e.type === "keydown" && e.key !== "Enter") return;
+
+    if (selectedServices.length > 0) {
+      e.preventDefault();
+      onKeywordSubmit(keyword);
+      return;
     }
+    toast.warning("SNSが選択されていません");
   };
 
   return (
@@ -130,9 +130,14 @@ function SearchInput({ onKeywordSubmit, selectedServices }) {
         className={styles.textbox}
         type="text"
         onChange={handleKeywordChange}
-        onKeyDown={handleKeywordSubmitInternal}
+        onKeyDown={handleKeywordSubmit}
         value={keyword}
+        placeholder="keyword"
       />
+
+      <button onClick={handleKeywordSubmit} className={styles.searchBtn}>
+        <MdSearch className={styles.searchIcon} />
+      </button>
     </div>
   );
 }
