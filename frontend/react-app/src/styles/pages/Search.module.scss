@@ -15,10 +15,17 @@
     display: flex;
     gap: 12px;
     justify-content: flex-end;
+    align-items: center;
     width: 100%;
     max-width: 800px;
     font-size: 3rem;
     color: $light_gray;
+
+    .icon {
+      &:last-child {
+        font-size: 0.8em;
+      }
+    }
 
     .selected {
       color: $dark_gray;
@@ -35,16 +42,11 @@
       padding-right: 60px;
       padding: 18px 84px 18px 36px;
       outline: none;
-      box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
-      border: solid 3px $gray;
+      border: solid 3px $dark-gray;
       border-radius: 12px;
       background-color: #fff;
       letter-spacing: 0.2rem;
       transition: 0.1s;
-
-      &:focus {
-        border: solid 3px $dark-gray;
-      }
 
       @include mediaQuery(md) {
         padding: 12px 24px;
@@ -63,18 +65,22 @@
       width: 70px;
       outline: none;
       border-radius: 0 12px 12px 0;
-      background-color: $gray;
+      background-color: $dark-gray;
       cursor: pointer;
       transition: 0.1s;
 
       &:focus,
       &:hover {
-        background-color: $dark_gray;
+        background-color: rgba($dark_gray, 0.8);
       }
 
       .searchIcon {
         font-size: 3.6rem;
         color: #fff;
+      }
+
+      @include mediaQuery(md) {
+        width: 50px;
       }
     }
   }

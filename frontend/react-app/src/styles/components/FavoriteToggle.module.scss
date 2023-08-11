@@ -2,7 +2,13 @@
 
 .icon {
   font-size: 3rem;
+  color: $dark-gray;
   cursor: pointer;
+  transition: 0.1s;
+
+  &:hover {
+    color: $gray;
+  }
 
   @include mediaQuery(md) {
     font-size: 2.4rem;
@@ -11,4 +17,8 @@
 
 .favorite {
   color: $pink;
+
+  &:hover {
+    color: lighten($pink, 10%);
+  }
 }

@@ -39,12 +39,16 @@
 
       .btn {
         width: 50%;
-        border-top: solid 2px $gray;
+        border-top: solid 2px $light-gray;
         text-align: center;
-        transition: 0.5s;
+        transition: 0.1s;
+
+        &:hover {
+          background-color: $light-gray;
+        }
 
         &:first-child {
-          border-right: solid 2px $gray;
+          border-right: solid 2px $light-gray;
         }
       }
     }

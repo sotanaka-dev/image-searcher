@@ -95,11 +95,11 @@ function SelectSns({ selectedServices, setSelectedServices }) {
         <Icon
           key={serviceName}
           onClick={() => handleServiceClick(serviceName.toLowerCase())}
-          className={
+          className={`${styles.icon} ${
             selectedServices.includes(serviceName.toLowerCase())
               ? styles.selected
               : ""
-          }
+          }`}
         />
       ))}
     </div>
@@ -132,7 +132,7 @@ function SearchInput({ onKeywordSubmit, selectedServices }) {
         onChange={handleKeywordChange}
         onKeyDown={handleKeywordSubmit}
         value={keyword}
-        placeholder="keyword"
+        placeholder="キーワード"
       />
 
       <button onClick={handleKeywordSubmit} className={styles.searchBtn}>
