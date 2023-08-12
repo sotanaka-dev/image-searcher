@@ -6,6 +6,7 @@ import PostDetails from "../components/PostDetails";
 import Folders from "../components/Folders";
 import { useParams } from "react-router-dom";
 import { fetchFavoritesByFolder } from "../utils/apiClient";
+import styles from "../styles/pages/FolderFavorites.module.scss";
 
 export default function FolderFavorites() {
   const { id } = useParams();
@@ -29,7 +30,7 @@ export default function FolderFavorites() {
   };
 
   return (
-    <>
+    <div className={styles.wrap}>
       <PostList
         posts={posts}
         folderId={id}
@@ -49,6 +50,6 @@ export default function FolderFavorites() {
         onFavoriteRemoved={handleFavoriteRemoved}
       />
       <Folders parentId={id} />
-    </>
+    </div>
   );
 }

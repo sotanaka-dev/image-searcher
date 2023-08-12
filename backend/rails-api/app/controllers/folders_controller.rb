@@ -10,7 +10,7 @@ class FoldersController < ApplicationController
               else
                 @current_user.folders.where(parent_id: nil)
               end
-    render json: { folders: }, status: :ok
+    render json: { folders: folders.as_json(methods: :favorites_count) }, status: :ok
   end
 
   def show

@@ -12,7 +12,14 @@ import {
 import styles from "../styles/components/PostList.module.scss";
 import formModalStyles from "../styles/components/FormModal.module.scss";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
-import { serviceIcons, MdHelpOutline, MdCheck } from "../components/Icon";
+import {
+  serviceIcons,
+  MdHelpOutline,
+  MdCheck,
+  MdOutlineCreateNewFolder,
+  MdOutlineFolderOff,
+  TbHeartOff,
+} from "../components/Icon";
 import { toast } from "react-toastify";
 
 export default function PostList({
@@ -43,33 +50,46 @@ export default function PostList({
 
   return (
     <div>
-      {isSelectMode ? (
-        <>
-          <button onClick={handleComplete}>キャンセル</button>
-          {selectedIds.length > 0 && (
+      {reloadFavorites && (
+        <div className={styles.headGroup}>
+          {isSelectMode ? (
             <>
-              <AddToFolder
-                selectedIds={selectedIds}
-                onComplete={handleComplete}
-              />
-              {folderId && (
-                <RemoveToFolder
-                  folderId={folderId}
+              <button onClick={handleComplete} className={styles.toggleBtn}>
+                キャンセル
+              </button>
+
+              <div className={styles.fixedWrap}>
+                <AddToFolder
+                  selectedIds={selectedIds}
+                  onComplete={handleComplete}
+                  isDisabled={selectedIds.length === 0}
+                />
+                {folderId && (
+                  <RemoveToFolder
+                    folderId={folderId}
+                    selectedIds={selectedIds}
+                    onComplete={handleComplete}
+                    reloadFavorites={reloadFavorites}
+                    isDisabled={selectedIds.length === 0}
+                  />
+                )}
+                <RemoveFavorites
                   selectedIds={selectedIds}
                   onComplete={handleComplete}
                   reloadFavorites={reloadFavorites}
+                  isDisabled={selectedIds.length === 0}
                 />
-              )}
-              <RemoveFavorites
-                selectedIds={selectedIds}
-                onComplete={handleComplete}
-                reloadFavorites={reloadFavorites}
-              />
+              </div>
             </>
+          ) : (
+            <button
+              onClick={() => setIsSelectMode(true)}
+              className={styles.toggleBtn}
+            >
+              お気に入りを選択
+            </button>
           )}
-        </>
-      ) : (
-        <button onClick={() => setIsSelectMode(true)}>お気に入りを選択</button>
+        </div>
       )}
 
       <ResponsiveMasonry columnsCountBreakPoints={{ 768: 4, 0: 2 }}>
@@ -78,7 +98,7 @@ export default function PostList({
             const ServiceIcon = setServiceIcon(post.service_name);
             return (
               <div
-                className={styles.wrap}
+                className={styles.post}
                 key={post.post_id}
                 onClick={() => {
                   if (isSelectMode) toggleSelect(post.id);
@@ -110,7 +130,12 @@ export default function PostList({
   );
 }
 
-function RemoveFavorites({ selectedIds, onComplete, reloadFavorites }) {
+function RemoveFavorites({
+  selectedIds,
+  onComplete,
+  reloadFavorites,
+  isDisabled,
+}) {
   const [modalIsOpen, setIsOpen] = useState(false);
   const { token } = useContext(AuthContext);
   const apiEndpoint = `${BASE_URL}favorites/destroy_multiple`;
@@ -127,7 +152,22 @@ function RemoveFavorites({ selectedIds, onComplete, reloadFavorites }) {
 
   return (
     <>
-      <button onClick={() => setIsOpen(true)}>お気に入りから削除</button>
+      <button
+        onClick={() => setIsOpen(true)}
+        disabled={isDisabled}
+        className={styles.selectModeBtn}
+      >
+        お気に入りから削除
+      </button>
+
+      <button
+        onClick={() => setIsOpen(true)}
+        disabled={isDisabled}
+        className={styles.selectModeIcon}
+      >
+        <TbHeartOff />
+      </button>
+
       <ConfirmationModal
         isOpen={modalIsOpen}
         handleClose={() => setIsOpen(false)}
@@ -145,6 +185,7 @@ function RemoveToFolder({
   selectedIds,
   onComplete,
   reloadFavorites,
+  isDisabled,
 }) {
   const [modalIsOpen, setIsOpen] = useState(false);
   const { token } = useContext(AuthContext);
@@ -162,7 +203,21 @@ function RemoveToFolder({
 
   return (
     <>
-      <button onClick={() => setIsOpen(true)}>フォルダから削除</button>
+      <button
+        onClick={() => setIsOpen(true)}
+        disabled={isDisabled}
+        className={styles.selectModeBtn}
+      >
+        フォルダから削除
+      </button>
+
+      <button
+        onClick={() => setIsOpen(true)}
+        disabled={isDisabled}
+        className={styles.selectModeIcon}
+      >
+        <MdOutlineFolderOff />
+      </button>
       <ConfirmationModal
         isOpen={modalIsOpen}
         handleClose={() => setIsOpen(false)}
@@ -175,7 +230,7 @@ function RemoveToFolder({
   );
 }
 
-function AddToFolder({ selectedIds, onComplete }) {
+function AddToFolder({ selectedIds, onComplete, isDisabled }) {
   const [modalIsOpen, setIsOpen] = useState(false);
   const { token } = useContext(AuthContext);
   const apiEndpoint = `${BASE_URL}folders/add_favorites`;
@@ -201,7 +256,21 @@ function AddToFolder({ selectedIds, onComplete }) {
 
   return (
     <>
-      <button onClick={() => setIsOpen(true)}>フォルダに追加</button>
+      <button
+        onClick={() => setIsOpen(true)}
+        disabled={isDisabled}
+        className={styles.selectModeBtn}
+      >
+        フォルダに追加
+      </button>
+
+      <button
+        onClick={() => setIsOpen(true)}
+        disabled={isDisabled}
+        className={styles.selectModeIcon}
+      >
+        <MdOutlineCreateNewFolder />
+      </button>
 
       <Modal
         isOpen={modalIsOpen}

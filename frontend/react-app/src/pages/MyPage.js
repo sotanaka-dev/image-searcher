@@ -1,7 +1,6 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
-import styles from "../styles/pages/MyPage.module.scss";
 import { AuthContext } from "../contexts/AuthContext";
 import { BASE_URL } from "../config/environment";
 import ConfirmationModal from "../components/ConfirmationModal";
@@ -11,6 +10,15 @@ import {
   updatePassword,
   destroyUser,
 } from "../utils/apiClient";
+import styles from "../styles/pages/MyPage.module.scss";
+import formModalStyles from "../styles/components/FormModal.module.scss";
+import {
+  MdOutlineEdit,
+  MdOutlineVpnKey,
+  MdOutlineLogout,
+  MdOutlineNoAccounts,
+  MdErrorOutline,
+} from "../components/Icon";
 
 export default function MyPage() {
   return (
@@ -59,35 +67,39 @@ function UpdateUsername() {
 
   return (
     <>
-      <button onClick={() => setIsOpen(true)}>ユーザー名を更新</button>
+      <button onClick={() => setIsOpen(true)}>
+        <MdOutlineEdit className={styles.icon} />
+        <p>ユーザー名を更新</p>
+      </button>
 
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         contentLabel="Update Username"
-        className={styles.modal}
-        overlayClassName={styles.overlay}
+        className={formModalStyles.modal}
+        overlayClassName={formModalStyles.overlay}
       >
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <h1 className={styles.heading}>ユーザー名を更新</h1>
+        <form onSubmit={handleSubmit} className={formModalStyles.form}>
+          <h1 className={formModalStyles.heading}>ユーザー名を更新</h1>
+          <p>現在のユーザー名: {sessionUsername}</p>
           {errorMessage && (
-            <div className={styles.errorMessageWrap}>
+            <div className={formModalStyles.errorMessageWrap}>
               {errorMessage.map((message, index) => (
-                <p key={index} className={styles.errorMessage}>
-                  {message}
+                <p key={index} className={formModalStyles.errorMessage}>
+                  <MdErrorOutline />
+                  &nbsp;{message}
                 </p>
               ))}
             </div>
           )}
-          <p>現在のユーザー名: {sessionUsername}</p>
           <input
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className={styles.textbox}
+            className={formModalStyles.textbox}
             placeholder="新しいユーザー名"
           />
-          <button type="submit" className={styles.btn}>
+          <button type="submit" className={formModalStyles.btn}>
             更新
           </button>
         </form>
@@ -127,22 +139,26 @@ function UpdatePassword() {
 
   return (
     <>
-      <button onClick={() => setIsOpen(true)}>パスワードを更新</button>
+      <button onClick={() => setIsOpen(true)}>
+        <MdOutlineVpnKey className={styles.icon} />
+        <p>パスワードを更新</p>
+      </button>
 
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         contentLabel="Update Password"
-        className={styles.modal}
-        overlayClassName={styles.overlay}
+        className={formModalStyles.modal}
+        overlayClassName={formModalStyles.overlay}
       >
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <h1 className={styles.heading}>パスワードを更新</h1>
+        <form onSubmit={handleSubmit} className={formModalStyles.form}>
+          <h1 className={formModalStyles.heading}>パスワードを更新</h1>
           {errorMessage && (
-            <div className={styles.errorMessageWrap}>
+            <div className={formModalStyles.errorMessageWrap}>
               {errorMessage.map((message, index) => (
-                <p key={index} className={styles.errorMessage}>
-                  {message}
+                <p key={index} className={formModalStyles.errorMessage}>
+                  <MdErrorOutline />
+                  &nbsp;{message}
                 </p>
               ))}
             </div>
@@ -151,10 +167,10 @@ function UpdatePassword() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className={styles.textbox}
+            className={formModalStyles.textbox}
             placeholder="新しいパスワード"
           />
-          <button type="submit" className={styles.btn}>
+          <button type="submit" className={formModalStyles.btn}>
             更新
           </button>
         </form>
@@ -173,7 +189,12 @@ function SignOut() {
     navigate("/users/signin");
   };
 
-  return <button onClick={handleSignOut}>サインアウト</button>;
+  return (
+    <button onClick={handleSignOut}>
+      <MdOutlineLogout className={styles.icon} />
+      <p>サインアウト</p>
+    </button>
+  );
 }
 
 function DeleteAccount() {
@@ -194,7 +215,10 @@ function DeleteAccount() {
 
   return (
     <>
-      <button onClick={() => setIsOpen(true)}>アカウント削除</button>
+      <button onClick={() => setIsOpen(true)}>
+        <MdOutlineNoAccounts className={styles.icon} />
+        <p>アカウント削除</p>
+      </button>
 
       <ConfirmationModal
         isOpen={modalIsOpen}

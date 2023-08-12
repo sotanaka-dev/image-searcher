@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import styles from "../styles/pages/AuthForm.module.scss";
 import { AuthContext } from "../contexts/AuthContext";
 import { BASE_URL } from "../config/environment";
 import { toast } from "react-toastify";
+import styles from "../styles/pages/AuthForm.module.scss";
+import { MdLink } from "../components/Icon";
 
 export default function AuthForm({
   endpoint,
@@ -77,14 +78,19 @@ export default function AuthForm({
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           className={styles.textbox}
+          placeholder="ユーザー名"
         />
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className={styles.textbox}
+          placeholder="パスワード"
         />
-        <Link to={link}>{linkText}</Link>
+        <Link to={link} className={styles.link}>
+          <MdLink className={styles.icon} />
+          &nbsp;{linkText}
+        </Link>
         <button type="submit" className={styles.btn}>
           {submitButtonText}
         </button>

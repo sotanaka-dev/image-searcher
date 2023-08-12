@@ -15,10 +15,17 @@
     display: flex;
     gap: 12px;
     justify-content: flex-end;
+    align-items: center;
     width: 100%;
-    max-width: 600px;
+    max-width: 800px;
     font-size: 3rem;
     color: $light_gray;
+
+    .icon {
+      &:last-child {
+        font-size: 0.8em;
+      }
+    }
 
     .selected {
       color: $dark_gray;
@@ -28,23 +35,57 @@
   .textboxWrap {
     position: relative;
     width: 100%;
-    max-width: 600px;
+    max-width: 800px;
 
     .textbox {
       width: 100%;
-      padding: 18px 36px;
-      outline: solid 2px $gray;
-      border-radius: 6px;
-      background-color: white;
+      padding-right: 60px;
+      padding: 18px 84px 18px 36px;
+      outline: none;
+      border: solid 3px $dark-gray;
+      border-radius: 12px;
+      background-color: #fff;
       letter-spacing: 0.2rem;
-
-      &:focus {
-        outline: solid 4px $dark_gray;
-      }
+      transition: 0.1s;
 
       @include mediaQuery(md) {
         padding: 12px 24px;
       }
     }
+
+    .searchBtn {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      width: 70px;
+      outline: none;
+      border-radius: 0 12px 12px 0;
+      background-color: $dark-gray;
+      cursor: pointer;
+      transition: 0.1s;
+
+      &:focus,
+      &:hover {
+        background-color: rgba($dark_gray, 0.8);
+      }
+
+      .searchIcon {
+        font-size: 3.6rem;
+        color: #fff;
+      }
+
+      @include mediaQuery(md) {
+        width: 50px;
+      }
+    }
   }
+}
+
+::placeholder {
+  color: $gray;
 }

@@ -17,6 +17,8 @@ import {
   MdAdd,
   MdDeleteOutline,
   MdOutlineEdit,
+  MdFavoriteBorder,
+  MdErrorOutline,
 } from "../components/Icon";
 import { toast } from "react-toastify";
 
@@ -65,13 +67,19 @@ export default function Folders({
   return (
     <>
       <div className={styles.foldersWrap}>
+        <div className={styles.headGroup}></div>
+
         {isCalledFromFavorites && (
-          <Link to="/favorites/all" className={styles.folderWrap}>
-            <div className={styles.folderInnerWrap}>
-              <div className={styles.folder}></div>
-            </div>
-            <p>全てのお気に入り</p>
-          </Link>
+          <div className={styles.folderWrap}>
+            <Link to="/favorites/all" className={styles.folder}>
+              <div className={styles.folderInfo}>
+                <p className={styles.folderName}>全てのお気に入り</p>
+                {/* <p className={styles.favoritesCount}>
+                  <MdFavoriteBorder /> 10
+                </p> */}
+              </div>
+            </Link>
+          </div>
         )}
         {folders.map((folder) =>
           // TODO: 同じコンテンツを2回記述していて冗長なのでリファクタリング
@@ -83,51 +91,66 @@ export default function Folders({
               }}
               className={styles.folderWrap}
             >
-              <div className={styles.folderInnerWrap}>
-                <div
-                  className={`${styles.folder} ${
-                    selectedIds.includes(folder.id) ? styles.selected : ""
-                  }`}
-                ></div>
+              <div
+                className={`${styles.folder} ${
+                  selectedIds.includes(folder.id) ? styles.selected : ""
+                }`}
+              >
                 {isSelectMode && selectedIds.includes(folder.id) && (
                   <MdCheck className={styles.selectIcon} />
                 )}
+                <div className={styles.folderInfo}>
+                  <p className={styles.folderName}>{folder.name}</p>
+                  <p className={styles.favoritesCount}>
+                    <MdFavoriteBorder /> {folder.favorites_count}
+                  </p>
+                </div>
               </div>
-              <p className={styles.folderName}>{folder.name}</p>
             </div>
           ) : (
-            <>
+            <div key={folder.id} className={styles.folderWrap}>
               <Link
-                key={folder.id}
                 to={`/favorites/folders/${folder.id}`}
-                className={styles.folderWrap}
+                className={`${styles.folder} ${
+                  selectedIds.includes(folder.id) ? styles.selected : ""
+                }`}
               >
-                <div className={styles.folderInnerWrap}>
-                  <div
-                    className={`${styles.folder} ${
-                      selectedIds.includes(folder.id) ? styles.selected : ""
-                    }`}
-                  ></div>
-                  {isSelectMode && selectedIds.includes(folder.id) && (
-                    <MdCheck className={styles.selectIcon} />
-                  )}
+                {isSelectMode && selectedIds.includes(folder.id) && (
+                  <MdCheck className={styles.selectIcon} />
+                )}
+                <div className={styles.folderInfo}>
+                  <p className={styles.folderName}>{folder.name}</p>
+                  <p className={styles.favoritesCount}>
+                    <MdFavoriteBorder /> {folder.favorites_count}
+                  </p>
                 </div>
-                <p className={styles.folderName}>{folder.name}</p>
               </Link>
-              <DeleteFolder reloadFolders={reloadFolders} id={folder.id} />
-              <UpdateFolderName
-                reloadFolders={reloadFolders}
-                id={folder.id}
-                folderName={folder.name}
-              />
-            </>
+              <div className={styles.folderActions}>
+                <UpdateFolderName
+                  reloadFolders={reloadFolders}
+                  id={folder.id}
+                  folderName={folder.name}
+                />
+                <DeleteFolder reloadFolders={reloadFolders} id={folder.id} />
+              </div>
+            </div>
           )
         )}
         {!defaultSelectMode && (
           <AddFolder reloadFolders={reloadFolders} parentId={parentId} />
         )}
       </div>
-      {isSelectMode && <button onClick={handleComplete}>選択完了</button>}
+      {isSelectMode && (
+        <button
+          onClick={handleComplete}
+          className={
+            selectedIds.length === 0 ? styles.disabledBtn : styles.enabledBtn
+          }
+          disabled={selectedIds.length === 0}
+        >
+          選択したフォルダに追加
+        </button>
+      )}
     </>
   );
 }
@@ -166,10 +189,8 @@ function AddFolder({ reloadFolders, parentId }) {
   return (
     <>
       <div className={styles.folderWrap}>
-        <div className={styles.folderInnerWrap}>
-          <div className={`${styles.folder} ${styles.iconWrap}`}>
-            <MdAdd onClick={() => setIsOpen(true)} className={styles.addIcon} />
-          </div>
+        <div className={`${styles.folder} ${styles.addIconWrap}`}>
+          <MdAdd onClick={() => setIsOpen(true)} className={styles.addIcon} />
         </div>
       </div>
 
@@ -186,7 +207,8 @@ function AddFolder({ reloadFolders, parentId }) {
             <div className={formModalStyles.errorMessageWrap}>
               {errorMessage.map((message, index) => (
                 <p key={index} className={formModalStyles.errorMessage}>
-                  {message}
+                  <MdErrorOutline />
+                  &nbsp;{message}
                 </p>
               ))}
             </div>
@@ -253,7 +275,8 @@ function UpdateFolderName({ reloadFolders, id, folderName }) {
             <div className={formModalStyles.errorMessageWrap}>
               {errorMessage.map((message, index) => (
                 <p key={index} className={formModalStyles.errorMessage}>
-                  {message}
+                  <MdErrorOutline />
+                  &nbsp;{message}
                 </p>
               ))}
             </div>

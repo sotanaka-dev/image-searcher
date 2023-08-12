@@ -1,7 +1,7 @@
 @import "../utilities";
 
 .overlay {
-  z-index: 1;
+  z-index: 11;
   position: fixed;
   top: 0;
   left: 0;
@@ -43,7 +43,13 @@
 
         .icon {
           font-size: 3rem;
+          color: $dark-gray;
           cursor: pointer;
+          transition: 0.1s;
+
+          &:hover {
+            color: $gray;
+          }
 
           @include mediaQuery(md) {
             font-size: 2.4rem;

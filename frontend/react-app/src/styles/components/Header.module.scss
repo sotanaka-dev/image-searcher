@@ -1,12 +1,29 @@
 @import "../utilities";
 
 .wrap {
-  z-index: 1;
   position: fixed;
+  z-index: 10;
   top: 0;
   left: 0;
   width: 100%;
-  height: $header_height;
-  background-color: $white;
+  background-color: #fff;
   box-shadow: 0 8px 25px -25px $dark_gray;
+
+  .innerWrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: $header_height;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+
+    .logo {
+      width: 200px;
+
+      @include mediaQuery(md) {
+        width: 150px;
+      }
+    }
+  }
 }

@@ -1,0 +1,11 @@
+@import "../utilities";
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  row-gap: 84px;
+
+  @include mediaQuery(md) {
+    row-gap: 48px;
+  }
+}
