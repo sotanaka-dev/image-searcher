@@ -137,3 +137,28 @@
 .fav {
   color: $pink;
 }
+
+.disabledBtn,
+.enabledBtn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
+  border: 2px solid transparent;
+  text-align: center;
+  letter-spacing: 0.2rem;
+  transition: 0.1s;
+}
+
+.disabledBtn {
+  background-color: $light-gray;
+  color: $gray;
+}
+
+.enabledBtn {
+  background-color: $dark_gray;
+  color: $light;
+
+  &:hover {
+    background-color: rgba($dark_gray, 0.8);
+  }
+}

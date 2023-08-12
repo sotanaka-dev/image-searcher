@@ -138,7 +138,17 @@ export default function Folders({
           <AddFolder reloadFolders={reloadFolders} parentId={parentId} />
         )}
       </div>
-      {isSelectMode && <button onClick={handleComplete}>選択完了</button>}
+      {isSelectMode && (
+        <button
+          onClick={handleComplete}
+          className={
+            selectedIds.length === 0 ? styles.disabledBtn : styles.enabledBtn
+          }
+          disabled={selectedIds.length === 0}
+        >
+          選択したフォルダに追加
+        </button>
+      )}
     </>
   );
 }
