@@ -67,6 +67,8 @@ export default function Folders({
   return (
     <>
       <div className={styles.foldersWrap}>
+        <div className={styles.headGroup}></div>
+
         {isCalledFromFavorites && (
           <div className={styles.folderWrap}>
             <Link to="/favorites/all" className={styles.folder}>

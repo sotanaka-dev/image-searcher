@@ -16,9 +16,12 @@ import {
   MdOutlineVpnKey,
   MdOutlineLogout,
   MdOutlineNoAccounts,
+  MdOutlineCreateNewFolder,
+  MdOutlineFolderOff,
 } from "react-icons/md";
 import { RiYoutubeLine, RiFlickrLine } from "react-icons/ri";
 import { SiGiphy } from "react-icons/si";
+import { TbHeartOff } from "react-icons/tb";
 
 export {
   MdLink,
@@ -41,6 +44,9 @@ export {
   MdOutlineVpnKey,
   MdOutlineLogout,
   MdOutlineNoAccounts,
+  MdOutlineCreateNewFolder,
+  MdOutlineFolderOff,
+  TbHeartOff,
 };
 
 export const serviceIcons = {

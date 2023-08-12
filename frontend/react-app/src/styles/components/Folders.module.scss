@@ -10,6 +10,11 @@
   }
 }
 
+.headGroup {
+  width: 100%;
+  border-bottom: solid 2px $light-gray;
+}
+
 .folderWrap {
   position: relative;
   width: calc(100% / 4 - 18px);
