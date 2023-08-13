@@ -28,6 +28,7 @@ entity favorites {
     --
     post_id : VARCHAR(255)
     user_id : BIGINT <<FK>>
+    service_id : BIGINT <<FK>>
 }
 
 entity folders {
@@ -77,6 +78,7 @@ favorites ||..o{ folder_favorites
 folders ||..o{ folder_favorites
 
 custom_feeds ||..o{ custom_feed_services
+services ||..o{ favorites
 services ||..o{ custom_feed_services
 
 @enduml
