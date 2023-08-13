@@ -5,6 +5,7 @@ import { BASE_URL } from "../config/environment";
 import { toast } from "react-toastify";
 import styles from "../styles/pages/AuthForm.module.scss";
 import { MdLink } from "../components/Icon";
+import PageTransition from "../styles/PageTransition";
 
 export default function AuthForm({
   endpoint,
@@ -61,7 +62,7 @@ export default function AuthForm({
   };
 
   return (
-    <div className={styles.wrap}>
+    <PageTransition className={styles.wrap}>
       <form onSubmit={handleSubmit} className={styles.form}>
         <h1 className={styles.heading}>{submitButtonText}</h1>
         {errorMessage && (
@@ -95,6 +96,6 @@ export default function AuthForm({
           {submitButtonText}
         </button>
       </form>
-    </div>
+    </PageTransition>
   );
 }

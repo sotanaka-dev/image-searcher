@@ -4,6 +4,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import PostList from "../components/PostList";
 import PostDetails from "../components/PostDetails";
 import { fetchFavorites } from "../utils/apiClient";
+import PageTransition from "../styles/PageTransition";
 
 export default function AllFavorites() {
   const [posts, setPosts] = useState([]);
@@ -26,7 +27,7 @@ export default function AllFavorites() {
   };
 
   return (
-    <>
+    <PageTransition>
       <PostList
         posts={posts}
         selectPost={(post) => {
@@ -44,6 +45,6 @@ export default function AllFavorites() {
         }}
         onFavoriteRemoved={handleFavoriteRemoved}
       />
-    </>
+    </PageTransition>
   );
 }

@@ -1,7 +1,9 @@
+import PageTransition from "../styles/PageTransition";
+
 export default function NotFound() {
   return (
-    <div>
+    <PageTransition>
       <h1>404 - ページが見つかりません</h1>
-    </div>
+    </PageTransition>
   );
 }

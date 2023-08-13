@@ -19,15 +19,16 @@ import {
   MdOutlineNoAccounts,
   MdErrorOutline,
 } from "../components/Icon";
+import PageTransition from "../styles/PageTransition";
 
 export default function MyPage() {
   return (
-    <div className={styles.wrap}>
+    <PageTransition className={styles.wrap}>
       <UpdateUsername />
       <UpdatePassword />
       <SignOut />
       <DeleteAccount />
-    </div>
+    </PageTransition>
   );
 }
 
