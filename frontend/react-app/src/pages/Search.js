@@ -7,6 +7,7 @@ import { BASE_URL } from "../config/environment";
 import PostList from "../components/PostList";
 import { serviceIcons, MdSearch } from "../components/Icon";
 import { toast } from "react-toastify";
+import PageTransition from "../styles/PageTransition";
 
 export default function Search() {
   const [posts, setPosts] = useState([]);
@@ -50,7 +51,7 @@ export default function Search() {
   };
 
   return (
-    <>
+    <PageTransition>
       <div className={styles.headGroup}>
         <SelectSns
           selectedServices={selectedServices}
@@ -76,7 +77,7 @@ export default function Search() {
           setSelectedPost(null);
         }}
       />
-    </>
+    </PageTransition>
   );
 }
 

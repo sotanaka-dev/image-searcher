@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 import styles from "../styles/pages/Landing.module.scss";
+import PageTransition from "../styles/PageTransition";
 
 export default function Landing() {
   return (
-    <div className={styles.wrap}>
+    <PageTransition className={styles.wrap}>
       <div className={styles.infoGroup}>
         <img
           src={`${process.env.PUBLIC_URL}/header_logo.png`}
@@ -30,6 +31,6 @@ export default function Landing() {
           className={styles.sampleImg}
         />
       </div>
-    </div>
+    </PageTransition>
   );
 }
