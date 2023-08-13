@@ -1,13 +1,9 @@
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { AuthProvider } from "./contexts/AuthContext";
+import Landing from "./pages/Landing";
 import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 import MyPage from "./pages/MyPage";
@@ -27,12 +23,9 @@ function App() {
           <Header />
           <ToastContainer autoClose={5000} transition={Slide} />
 
-          <main className="container">
+          <main>
             <Routes>
-              <Route
-                path="/"
-                element={<Navigate to="/users/signin" replace />}
-              />
+              <Route path="/" element={<Landing />} />
               <Route path="/users" element={<SignUp />} />
               <Route path="/users/signin" element={<SignIn />} />
               <Route
