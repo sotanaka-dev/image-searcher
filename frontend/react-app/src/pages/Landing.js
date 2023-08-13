@@ -12,7 +12,7 @@ export default function Landing() {
           className={styles.logo}
         />
         <p className={styles.overview}>
-          普段から画像・動画系のSNSをよく利用する人のための、それらのSNSの検索結果を1ヶ所で確認できるサービスです。
+          普段から画像・動画系のSNSをよく利用する人のための、いろいろなSNSの検索結果を1ヶ所で確認できるサービスです。
         </p>
         <div className={styles.btnWrap}>
           <Link to="/users" className={styles.btn}>
