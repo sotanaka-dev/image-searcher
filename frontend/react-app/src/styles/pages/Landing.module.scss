@@ -1,0 +1,84 @@
+@import "../utilities";
+
+.wrap {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  max-width: 900px;
+  margin: 0 auto;
+
+  @include mediaQuery(md) {
+    flex-direction: column;
+  }
+
+  .infoGroup {
+    flex: 5;
+    display: flex;
+    flex-direction: column;
+    row-gap: 24px;
+
+    @include mediaQuery(md) {
+      max-width: 90%;
+    }
+
+    .logo {
+      align-self: center;
+      width: 100%;
+      max-width: 300px;
+
+      @include mediaQuery(md) {
+      }
+    }
+
+    .overview {
+      text-align: justify;
+      line-height: 1.8;
+
+      @include mediaQuery(md) {
+        text-align: center;
+      }
+    }
+
+    .btnWrap {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+
+      @include mediaQuery(md) {
+        max-width: 100%;
+      }
+
+      .btn {
+        width: 144px;
+        padding: 12px;
+        border-radius: 6px;
+        border: 2px solid transparent;
+        background-color: $dark_gray;
+        text-align: center;
+        letter-spacing: 0.2rem;
+        color: $light;
+        transition: 0.1s;
+
+        &:hover {
+          background-color: rgba($dark_gray, 0.8);
+        }
+
+        @include mediaQuery(md) {
+          font-size: 1.2rem;
+        }
+      }
+    }
+  }
+
+  .imgWrap {
+    flex: 6;
+
+    @include mediaQuery(md) {
+      display: none;
+    }
+
+    .sampleImg {
+      width: 100%;
+    }
+  }
+}
