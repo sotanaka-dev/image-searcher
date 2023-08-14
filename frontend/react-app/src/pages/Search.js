@@ -8,6 +8,7 @@ import PostList from "../components/PostList";
 import { serviceIcons, MdSearch } from "../components/Icon";
 import { toast } from "react-toastify";
 import PageTransition from "../styles/PageTransition";
+import * as apiClient from "../utils/apiClient";
 
 export default function Search() {
   const [posts, setPosts] = useState([]);
@@ -15,6 +16,7 @@ export default function Search() {
   const [unavailableServices, setUnavailableServices] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedServices, setSelectedServices] = useState(
     Object.keys(serviceIcons).map((serviceName) => serviceName.toLowerCase())
   );
@@ -33,20 +35,11 @@ export default function Search() {
         return;
       }
 
-      try {
-        const res = await fetch(apiEndpoint, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!res.ok) throw new Error(res.statusText);
-        const data = await res.json();
-        setPosts(data.posts);
-        setUnavailableServices(data.unavailable_services);
-      } catch (error) {
-        console.error("Error:", error);
-      }
+      setIsLoading(true);
+      const data = await apiClient.get(apiEndpoint, token);
+      setPosts(data.posts || []);
+      setUnavailableServices(data.unavailable_services || []);
+      setIsLoading(false);
     }
   };
 
@@ -68,6 +61,7 @@ export default function Search() {
           setSelectedPost(post);
           setIsOpen(true);
         }}
+        isLoading={isLoading}
       />
       <PostDetails
         post={selectedPost}

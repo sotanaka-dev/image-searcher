@@ -21,12 +21,16 @@ import {
   TbHeartOff,
 } from "../components/Icon";
 import { toast } from "react-toastify";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import { motion } from "framer-motion";
 
 export default function PostList({
   posts,
   folderId = false,
   selectPost,
   reloadFavorites,
+  isLoading,
 }) {
   const [isSelectMode, setIsSelectMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
@@ -92,40 +96,49 @@ export default function PostList({
         </div>
       )}
 
-      <ResponsiveMasonry columnsCountBreakPoints={{ 768: 4, 0: 2 }}>
-        <Masonry gutter="12px">
-          {posts.map((post) => {
-            const ServiceIcon = setServiceIcon(post.service_name);
-            return (
-              <div
-                className={styles.post}
-                key={post.post_id}
-                onClick={() => {
-                  if (isSelectMode) toggleSelect(post.id);
-                }}
-              >
-                {isSelectMode && selectedIds.includes(post.id) && (
-                  <MdCheck className={styles.selectIcon} />
-                )}
-                <ServiceIcon className={styles.serviceIcon} />
-                <img
-                  className={`${styles.image} ${
-                    selectedIds.includes(post.id) ? styles.selected : ""
-                  }`}
-                  src={post.image}
-                  alt={post.title}
-                  onClick={(event) => {
-                    if (!isSelectMode) {
-                      event.stopPropagation();
-                      selectPost(post);
-                    }
+      {isLoading ? (
+        <div>
+          <Skeleton count={30} />
+        </div>
+      ) : (
+        <ResponsiveMasonry columnsCountBreakPoints={{ 768: 4, 0: 2 }}>
+          <Masonry gutter="12px">
+            {posts.map((post, index) => {
+              const ServiceIcon = setServiceIcon(post.service_name);
+              return (
+                <motion.div
+                  className={styles.post}
+                  key={post.post_id}
+                  onClick={() => {
+                    if (isSelectMode) toggleSelect(post.id);
                   }}
-                />
-              </div>
-            );
-          })}
-        </Masonry>
-      </ResponsiveMasonry>
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                >
+                  {isSelectMode && selectedIds.includes(post.id) && (
+                    <MdCheck className={styles.selectIcon} />
+                  )}
+                  <ServiceIcon className={styles.serviceIcon} />
+                  <img
+                    className={`${styles.image} ${
+                      selectedIds.includes(post.id) ? styles.selected : ""
+                    }`}
+                    src={post.image}
+                    alt={post.title}
+                    onClick={(event) => {
+                      if (!isSelectMode) {
+                        event.stopPropagation();
+                        selectPost(post);
+                      }
+                    }}
+                  />
+                </motion.div>
+              );
+            })}
+          </Masonry>
+        </ResponsiveMasonry>
+      )}
     </div>
   );
 }

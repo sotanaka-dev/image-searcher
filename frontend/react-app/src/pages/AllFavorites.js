@@ -3,19 +3,23 @@ import { BASE_URL } from "../config/environment";
 import { AuthContext } from "../contexts/AuthContext";
 import PostList from "../components/PostList";
 import PostDetails from "../components/PostDetails";
-import { fetchFavorites } from "../utils/apiClient";
+import * as apiClient from "../utils/apiClient";
 import PageTransition from "../styles/PageTransition";
 
 export default function AllFavorites() {
   const [posts, setPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { token } = useContext(AuthContext);
   const apiEndpoint = `${BASE_URL}favorites`;
 
-  const reloadFavorites = useCallback(() => {
-    fetchFavorites(apiEndpoint, token, setPosts);
-  }, [apiEndpoint, token, setPosts]);
+  const reloadFavorites = useCallback(async () => {
+    setIsLoading(true);
+    const data = await apiClient.get(apiEndpoint, token);
+    setPosts(data || []);
+    setIsLoading(false);
+  }, [apiEndpoint, token]);
 
   useEffect(() => {
     reloadFavorites();
@@ -35,6 +39,7 @@ export default function AllFavorites() {
           setIsOpen(true);
         }}
         reloadFavorites={reloadFavorites}
+        isLoading={isLoading}
       />
       <PostDetails
         post={selectedPost}
