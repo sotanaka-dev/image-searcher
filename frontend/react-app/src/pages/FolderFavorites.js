@@ -5,7 +5,7 @@ import PostList from "../components/PostList";
 import PostDetails from "../components/PostDetails";
 import Folders from "../components/Folders";
 import { useParams } from "react-router-dom";
-import { fetchFavoritesByFolder } from "../utils/apiClient";
+import * as apiClient from "../utils/apiClient";
 import styles from "../styles/pages/FolderFavorites.module.scss";
 import PageTransition from "../styles/PageTransition";
 
@@ -14,12 +14,16 @@ export default function FolderFavorites() {
   const [posts, setPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { token } = useContext(AuthContext);
   const apiEndpoint = `${BASE_URL}favorites/folder/${id}`;
 
-  const reloadFavorites = useCallback(() => {
-    fetchFavoritesByFolder(apiEndpoint, token, setPosts);
-  }, [apiEndpoint, token, setPosts]);
+  const reloadFavorites = useCallback(async () => {
+    setIsLoading(true);
+    const data = await apiClient.get(apiEndpoint, token);
+    setPosts(data || []);
+    setIsLoading(false);
+  }, [apiEndpoint, token]);
 
   useEffect(() => {
     reloadFavorites();
@@ -40,6 +44,7 @@ export default function FolderFavorites() {
           setIsOpen(true);
         }}
         reloadFavorites={reloadFavorites}
+        isLoading={isLoading}
       />
       <PostDetails
         post={selectedPost}

@@ -159,32 +159,6 @@ export const removeFavoritesToFolders = async (
   }
 };
 
-export const fetchFavoritesByFolder = async (apiEndpoint, token, setPosts) => {
-  try {
-    const res = await fetch(apiEndpoint, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    const data = await res.json();
-    setPosts(data);
-  } catch (error) {
-    console.error("Error fetching the posts:", error);
-  }
-};
-
-export const fetchFavorites = async (apiEndpoint, token, setPosts) => {
-  const res = await fetch(apiEndpoint, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  const data = await res.json();
-  setPosts(data);
-};
-
 export const removeFavorites = async (
   apiEndpoint,
   token,
