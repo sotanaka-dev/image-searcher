@@ -340,3 +340,23 @@ export const toggleFavoriteStatus = async (
     console.error("Unexpected error:", error);
   }
 };
+
+export const get = async (apiEndpoint, token) => {
+  try {
+    const res = await fetch(apiEndpoint, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      console.error(`Failed to fetch data from API: ${res.statusText}`);
+      return null;
+    }
+
+    return res.json();
+  } catch (error) {
+    console.error("Error:", error);
+    return null;
+  }
+};
