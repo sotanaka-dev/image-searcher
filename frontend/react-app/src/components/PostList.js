@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import Modal from "react-modal";
-import Folders from "../components/Folders";
+import SelectFolders from "./SelectFolders";
 import ConfirmationModal from "../components/ConfirmationModal";
 import { BASE_URL } from "../config/environment";
 import { AuthContext } from "../contexts/AuthContext";
@@ -293,8 +293,7 @@ function AddToFolder({ selectedIds, onComplete, isDisabled }) {
         overlayClassName={formModalStyles.overlay}
       >
         <div className={formModalStyles.form}>
-          <Folders
-            defaultSelectMode={true}
+          <SelectFolders
             onAddToFolder={(folderIds) => {
               handleAddToFolder(folderIds);
               closeModal();

@@ -13,7 +13,6 @@ import {
 import styles from "../styles/components/Folders.module.scss";
 import formModalStyles from "../styles/components/FormModal.module.scss";
 import {
-  MdCheck,
   MdAdd,
   MdDeleteOutline,
   MdOutlineEdit,
@@ -24,22 +23,15 @@ import { toast } from "react-toastify";
 
 export default function Folders({
   parentId = null,
+  /* 可能なら、parendIdがnullかどうかで判断して下記の引数は消したい */
   isCalledFromFavorites = false,
-  defaultSelectMode = false,
   onAddToFolder = () => {},
 }) {
   const [folders, setFolders] = useState([]);
   const { token } = useContext(AuthContext);
-  // TODO: 関数化
-  let apiEndpoint = `${BASE_URL}folders`;
-  if (parentId !== null) {
-    apiEndpoint += `?parent_id=${parentId}`;
-  } else if (defaultSelectMode) {
-    apiEndpoint += "?all=true";
-  }
-
-  const [isSelectMode, setIsSelectMode] = useState(defaultSelectMode);
-  const [selectedIds, setSelectedIds] = useState([]);
+  const apiEndpoint = `${BASE_URL}folders${
+    parentId !== null ? `?parent_id=${parentId}` : ""
+  }`;
 
   useEffect(() => {
     fetchFolders(apiEndpoint, token, setFolders);
@@ -49,109 +41,49 @@ export default function Folders({
     fetchFolders(apiEndpoint, token, setFolders);
   };
 
-  const toggleSelect = (id) => {
-    if (selectedIds.includes(id)) {
-      setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
-    } else {
-      setSelectedIds([...selectedIds, id]);
-    }
-  };
-
-  const handleComplete = () => {
-    onAddToFolder(selectedIds);
-
-    setIsSelectMode(false);
-    setSelectedIds([]);
-  };
-
   return (
-    <>
-      <div className={styles.foldersWrap}>
-        <div className={styles.headGroup}></div>
+    <div className={styles.foldersWrap}>
+      <div className={styles.headGroup}></div>
 
-        {isCalledFromFavorites && (
-          <div className={styles.folderWrap}>
-            <Link to="/favorites/all" className={styles.folder}>
-              <div className={styles.folderInfo}>
-                <p className={styles.folderName}>全てのお気に入り</p>
-                {/* <p className={styles.favoritesCount}>
+      {isCalledFromFavorites && (
+        <div className={styles.folderWrap}>
+          <Link to="/favorites/all" className={styles.folder}>
+            <div className={styles.folderInfo}>
+              <p className={styles.folderName}>全てのお気に入り</p>
+              {/* <p className={styles.favoritesCount}>
                   <MdFavoriteBorder /> 10
                 </p> */}
-              </div>
-            </Link>
-          </div>
-        )}
-        {folders.map((folder) =>
-          // TODO: 同じコンテンツを2回記述していて冗長なのでリファクタリング
-          isSelectMode ? (
-            <div
-              key={folder.id}
-              onClick={() => {
-                if (isSelectMode) toggleSelect(folder.id);
-              }}
-              className={styles.folderWrap}
-            >
-              <div
-                className={`${styles.folder} ${
-                  selectedIds.includes(folder.id) ? styles.selected : ""
-                }`}
-              >
-                {isSelectMode && selectedIds.includes(folder.id) && (
-                  <MdCheck className={styles.selectIcon} />
-                )}
-                <div className={styles.folderInfo}>
-                  <p className={styles.folderName}>{folder.name}</p>
-                  <p className={styles.favoritesCount}>
-                    <MdFavoriteBorder /> {folder.favorites_count}
-                  </p>
-                </div>
-              </div>
             </div>
-          ) : (
-            <div key={folder.id} className={styles.folderWrap}>
-              <Link
-                to={`/favorites/folders/${folder.id}`}
-                className={`${styles.folder} ${
-                  selectedIds.includes(folder.id) ? styles.selected : ""
-                }`}
-              >
-                {isSelectMode && selectedIds.includes(folder.id) && (
-                  <MdCheck className={styles.selectIcon} />
-                )}
-                <div className={styles.folderInfo}>
-                  <p className={styles.folderName}>{folder.name}</p>
-                  <p className={styles.favoritesCount}>
-                    <MdFavoriteBorder /> {folder.favorites_count}
-                  </p>
-                </div>
-              </Link>
-              <div className={styles.folderActions}>
-                <UpdateFolderName
-                  reloadFolders={reloadFolders}
-                  id={folder.id}
-                  folderName={folder.name}
-                />
-                <DeleteFolder reloadFolders={reloadFolders} id={folder.id} />
-              </div>
-            </div>
-          )
-        )}
-        {!defaultSelectMode && (
-          <AddFolder reloadFolders={reloadFolders} parentId={parentId} />
-        )}
-      </div>
-      {isSelectMode && (
-        <button
-          onClick={handleComplete}
-          className={
-            selectedIds.length === 0 ? styles.disabledBtn : styles.enabledBtn
-          }
-          disabled={selectedIds.length === 0}
-        >
-          選択したフォルダに追加
-        </button>
+          </Link>
+        </div>
       )}
-    </>
+      {folders.map((folder) => (
+        <div key={folder.id} className={styles.folderWrap}>
+          <Link
+            to={`/favorites/folders/${folder.id}`}
+            className={styles.folder}
+          >
+            <div className={styles.folderInfo}>
+              <p className={styles.folderName}>{folder.name}</p>
+              <p className={styles.favoritesCount}>
+                <MdFavoriteBorder /> {folder.favorites_count}
+              </p>
+            </div>
+          </Link>
+
+          <div className={styles.folderActions}>
+            <UpdateFolderName
+              reloadFolders={reloadFolders}
+              id={folder.id}
+              folderName={folder.name}
+            />
+            <DeleteFolder reloadFolders={reloadFolders} id={folder.id} />
+          </div>
+        </div>
+      ))}
+
+      <AddFolder reloadFolders={reloadFolders} parentId={parentId} />
+    </div>
   );
 }
 
