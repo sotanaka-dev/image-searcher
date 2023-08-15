@@ -254,6 +254,7 @@ function AddToFolder({ selectedIds, onComplete, isDisabled }) {
 
   const handleSuccess = () => {
     onComplete();
+    closeModal();
     toast.success("フォルダにお気に入りを追加しました");
   };
 
@@ -293,12 +294,7 @@ function AddToFolder({ selectedIds, onComplete, isDisabled }) {
         overlayClassName={formModalStyles.overlay}
       >
         <div className={formModalStyles.form}>
-          <SelectFolders
-            onAddToFolder={(folderIds) => {
-              handleAddToFolder(folderIds);
-              closeModal();
-            }}
-          />
+          <SelectFolders onFolderSelect={handleAddToFolder} mode="multi" />
         </div>
       </Modal>
     </>

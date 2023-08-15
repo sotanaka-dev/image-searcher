@@ -18,6 +18,7 @@ import {
   MdOutlineNoAccounts,
   MdOutlineCreateNewFolder,
   MdOutlineFolderOff,
+  MdOutlineDriveFileMove,
 } from "react-icons/md";
 import { RiYoutubeLine, RiFlickrLine } from "react-icons/ri";
 import { SiGiphy } from "react-icons/si";
@@ -47,6 +48,7 @@ export {
   MdOutlineCreateNewFolder,
   MdOutlineFolderOff,
   TbHeartOff,
+  MdOutlineDriveFileMove,
 };
 
 export const serviceIcons = {

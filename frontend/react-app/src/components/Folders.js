@@ -4,12 +4,8 @@ import { BASE_URL } from "../config/environment";
 import { AuthContext } from "../contexts/AuthContext";
 import Modal from "react-modal";
 import ConfirmationModal from "../components/ConfirmationModal";
-import {
-  createNewFolder,
-  updateFolderName,
-  deleteFolder,
-  fetchFolders,
-} from "../utils/apiClient";
+import * as apiClient from "../utils/apiClient";
+import SelectFolders from "./SelectFolders";
 import styles from "../styles/components/Folders.module.scss";
 import formModalStyles from "../styles/components/FormModal.module.scss";
 import {
@@ -18,14 +14,13 @@ import {
   MdOutlineEdit,
   MdFavoriteBorder,
   MdErrorOutline,
+  MdOutlineDriveFileMove,
 } from "../components/Icon";
 import { toast } from "react-toastify";
 
 export default function Folders({
   parentId = null,
-  /* 可能なら、parendIdがnullかどうかで判断して下記の引数は消したい */
   isCalledFromFavorites = false,
-  onAddToFolder = () => {},
 }) {
   const [folders, setFolders] = useState([]);
   const { token } = useContext(AuthContext);
@@ -33,13 +28,13 @@ export default function Folders({
     parentId !== null ? `?parent_id=${parentId}` : ""
   }`;
 
-  useEffect(() => {
-    fetchFolders(apiEndpoint, token, setFolders);
-  }, [parentId, apiEndpoint, token]);
-
   const reloadFolders = () => {
-    fetchFolders(apiEndpoint, token, setFolders);
+    apiClient.fetchFolders(apiEndpoint, token, setFolders);
   };
+
+  useEffect(() => {
+    reloadFolders();
+  }, [parentId, apiEndpoint, token]);
 
   return (
     <div className={styles.foldersWrap}>
@@ -77,6 +72,7 @@ export default function Folders({
               id={folder.id}
               folderName={folder.name}
             />
+            <MoveFolder reloadFolders={reloadFolders} id={folder.id} />
             <DeleteFolder reloadFolders={reloadFolders} id={folder.id} />
           </div>
         </div>
@@ -108,7 +104,7 @@ function AddFolder({ reloadFolders, parentId }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    createNewFolder(
+    apiClient.createNewFolder(
       apiEndpoint,
       token,
       folderName,
@@ -182,7 +178,7 @@ function UpdateFolderName({ reloadFolders, id, folderName }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    updateFolderName(
+    apiClient.updateFolderName(
       apiEndpoint,
       token,
       newFolderName,
@@ -241,7 +237,7 @@ function DeleteFolder({ reloadFolders, id }) {
   };
 
   const handleDeleteFolder = async () => {
-    deleteFolder(apiEndpoint, token, handleSuccess);
+    apiClient.deleteFolder(apiEndpoint, token, handleSuccess);
   };
 
   return (
@@ -255,6 +251,52 @@ function DeleteFolder({ reloadFolders, id }) {
         confirmText="削除"
         cancelText="キャンセル"
       />
+    </>
+  );
+}
+
+function MoveFolder({ reloadFolders, id }) {
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const { token } = useContext(AuthContext);
+  const apiEndpoint = `${BASE_URL}folders/${id}`;
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
+  const handleSuccess = () => {
+    reloadFolders();
+    closeModal();
+    toast.success("フォルダを移動しました");
+  };
+
+  const handleMoveFolder = async ([parentId]) => {
+    await apiClient.patch(apiEndpoint, token, {
+      folder: { parent_id: parentId },
+    });
+
+    handleSuccess();
+  };
+
+  return (
+    <>
+      <MdOutlineDriveFileMove onClick={() => setIsOpen(true)} />
+
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="Move Folder"
+        className={formModalStyles.modal}
+        overlayClassName={formModalStyles.overlay}
+      >
+        <div className={formModalStyles.form}>
+          <SelectFolders
+            onFolderSelect={handleMoveFolder}
+            mode="single"
+            movingFolderId={id}
+          />
+        </div>
+      </Modal>
     </>
   );
 }
