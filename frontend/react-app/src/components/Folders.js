@@ -30,7 +30,12 @@ export default function Folders({
 
   const reloadFolders = useCallback(async () => {
     const result = await apiClient.get(apiEndpoint, token);
-    setFolders(result.folders || []);
+
+    if (result) {
+      setFolders(result.folders);
+      return;
+    }
+    toast.error("フォルダの取得に失敗しました");
   }, [apiEndpoint, token]);
 
   useEffect(() => {
@@ -97,22 +102,21 @@ function AddFolder({ reloadFolders, parentId }) {
     setErrorMessage(null);
   };
 
-  const handleSuccess = () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const result = await apiClient.post(apiEndpoint, token, {
+      folder: { name: folderName, parent_id: parentId },
+    });
+
+    if (result.errors) {
+      setErrorMessage(result.errors);
+      return;
+    }
+
     reloadFolders();
     closeModal();
     toast.success("フォルダが作成されました");
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    apiClient.createNewFolder(
-      apiEndpoint,
-      token,
-      folderName,
-      parentId,
-      setErrorMessage,
-      handleSuccess
-    );
   };
 
   return (
@@ -171,21 +175,21 @@ function UpdateFolderName({ reloadFolders, id, folderName }) {
     setErrorMessage(null);
   };
 
-  const handleSuccess = () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const result = await apiClient.patch(apiEndpoint, token, {
+      folder: { name: newFolderName },
+    });
+
+    if (result.errors) {
+      setErrorMessage(result.errors);
+      return;
+    }
+
     reloadFolders();
     closeModal();
     toast.success("フォルダ名が更新されました");
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    apiClient.updateFolderName(
-      apiEndpoint,
-      token,
-      newFolderName,
-      setErrorMessage,
-      handleSuccess
-    );
   };
 
   return (
@@ -232,13 +236,16 @@ function DeleteFolder({ reloadFolders, id }) {
   const [modalIsOpen, setIsOpen] = useState(false);
   const apiEndpoint = `${BASE_URL}folders/${id}`;
 
-  const handleSuccess = () => {
-    reloadFolders();
-    toast.success("フォルダが削除されました");
-  };
-
   const handleDeleteFolder = async () => {
-    apiClient.deleteFolder(apiEndpoint, token, handleSuccess);
+    const result = await apiClient.destroy(apiEndpoint, token);
+
+    if (result) {
+      reloadFolders();
+      toast.success("フォルダが削除されました");
+      return;
+    }
+
+    toast.error("フォルダの削除に失敗しました");
   };
 
   return (
@@ -265,18 +272,19 @@ function MoveFolder({ reloadFolders, id }) {
     setIsOpen(false);
   };
 
-  const handleSuccess = () => {
-    reloadFolders();
-    closeModal();
-    toast.success("フォルダを移動しました");
-  };
-
   const handleMoveFolder = async ([parentId]) => {
-    await apiClient.patch(apiEndpoint, token, {
+    const result = await apiClient.patch(apiEndpoint, token, {
       folder: { parent_id: parentId },
     });
 
-    handleSuccess();
+    if (result.errors) {
+      toast.error("フォルダの移動に失敗しました");
+      return;
+    }
+
+    reloadFolders();
+    closeModal();
+    toast.success("フォルダを移動しました");
   };
 
   return (

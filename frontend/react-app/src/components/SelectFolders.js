@@ -4,6 +4,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import * as apiClient from "../utils/apiClient";
 import styles from "../styles/components/Folders.module.scss";
 import { MdCheck, MdFavoriteBorder } from "../components/Icon";
+import { toast } from "react-toastify";
 
 export default function SelectFolders({
   onFolderSelect = () => {},
@@ -16,8 +17,13 @@ export default function SelectFolders({
   const apiEndpoint = `${BASE_URL}folders?all=true`;
 
   const reloadFolders = useCallback(async () => {
-    const data = await apiClient.get(apiEndpoint, token);
-    setFolders(data.folders || []);
+    const result = await apiClient.get(apiEndpoint, token);
+
+    if (result) {
+      setFolders(result.folders);
+      return;
+    }
+    toast.error("フォルダの取得に失敗しました");
   }, [apiEndpoint, token]);
 
   useEffect(() => {
