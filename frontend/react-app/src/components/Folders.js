@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { BASE_URL } from "../config/environment";
 import { AuthContext } from "../contexts/AuthContext";
@@ -28,13 +28,14 @@ export default function Folders({
     parentId !== null ? `?parent_id=${parentId}` : ""
   }`;
 
-  const reloadFolders = () => {
-    apiClient.fetchFolders(apiEndpoint, token, setFolders);
-  };
+  const reloadFolders = useCallback(async () => {
+    const result = await apiClient.get(apiEndpoint, token);
+    setFolders(result.folders || []);
+  }, [apiEndpoint, token]);
 
   useEffect(() => {
     reloadFolders();
-  }, [parentId, apiEndpoint, token]);
+  }, [reloadFolders]);
 
   return (
     <div className={styles.foldersWrap}>

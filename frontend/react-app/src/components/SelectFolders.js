@@ -1,7 +1,7 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 import { BASE_URL } from "../config/environment";
 import { AuthContext } from "../contexts/AuthContext";
-import { fetchFolders } from "../utils/apiClient";
+import * as apiClient from "../utils/apiClient";
 import styles from "../styles/components/Folders.module.scss";
 import { MdCheck, MdFavoriteBorder } from "../components/Icon";
 
@@ -15,10 +15,14 @@ export default function SelectFolders({
   const { token } = useContext(AuthContext);
   const apiEndpoint = `${BASE_URL}folders?all=true`;
 
-  useEffect(() => {
-    /* TODO: apiClientをリファクタリング */
-    fetchFolders(apiEndpoint, token, setFolders);
+  const reloadFolders = useCallback(async () => {
+    const data = await apiClient.get(apiEndpoint, token);
+    setFolders(data.folders || []);
   }, [apiEndpoint, token]);
+
+  useEffect(() => {
+    reloadFolders();
+  }, [reloadFolders]);
 
   const toggleSelect = (id) => {
     if (mode === "single") {
