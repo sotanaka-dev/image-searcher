@@ -24,7 +24,7 @@ export default function PostDetails({
         <>
           <img className={styles.image} src={post.image} alt={post.title} />
           <div className={styles.footGroup}>
-            <h2>{post.title}</h2>
+            <h2 className={styles.title}>{post.title}</h2>
             <div className={styles.actions}>
               <MdArrowBack className={styles.icon} onClick={closeModal} />
 
