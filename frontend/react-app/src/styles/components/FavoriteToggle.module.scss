@@ -1,7 +1,7 @@
 @import "../utilities";
 
 .icon {
-  font-size: 3rem;
+  font-size: 3.2rem;
   color: $dark-gray;
   cursor: pointer;
   transition: 0.1s;
@@ -11,7 +11,7 @@
   }
 
   @include mediaQuery(md) {
-    font-size: 2.4rem;
+    font-size: 2.6rem;
   }
 }
 
