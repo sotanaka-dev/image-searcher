@@ -19,10 +19,7 @@ import {
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 
-export default function Folders({
-  parentId = null,
-  isCalledFromFavorites = false,
-}) {
+export default function Folders({ parentId = null }) {
   const [folders, setFolders] = useState([]);
   const { token } = useContext(AuthContext);
   const apiEndpoint = `${BASE_URL}folders${
@@ -44,26 +41,7 @@ export default function Folders({
   }, [reloadFolders]);
 
   return (
-    <div className={styles.foldersWrap}>
-      <div className={styles.headGroup}></div>
-
-      {isCalledFromFavorites && (
-        <motion.div
-          className={styles.folderWrap}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-        >
-          <Link to="/favorites/all" className={styles.folder}>
-            <div className={styles.folderInfo}>
-              <p className={styles.folderName}>全てのお気に入り</p>
-              {/* <p className={styles.favoritesCount}>
-                  <MdFavoriteBorder /> 10
-                </p> */}
-            </div>
-          </Link>
-        </motion.div>
-      )}
+    <>
       {folders.map((folder) => (
         <motion.div
           key={folder.id}
@@ -97,7 +75,7 @@ export default function Folders({
       ))}
 
       <AddFolder reloadFolders={reloadFolders} parentId={parentId} />
-    </div>
+    </>
   );
 }
 
