@@ -1,104 +1,3 @@
-export const fetchFolders = async (apiEndpoint, token, setFolders) => {
-  try {
-    const res = await fetch(apiEndpoint, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (!res.ok) {
-      console.error(`Failed to get folder: ${res.statusText}`);
-      return;
-    }
-
-    const data = await res.json();
-    setFolders(data.folders);
-  } catch (error) {
-    console.error("Error:", error);
-  }
-};
-
-export const createNewFolder = async (
-  apiEndpoint,
-  token,
-  folderName,
-  parentId,
-  setErrorMessage,
-  onSuccess
-) => {
-  try {
-    const res = await fetch(apiEndpoint, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name: folderName, parent_id: parentId }),
-    });
-
-    const result = await res.json();
-
-    if (!res.ok) {
-      setErrorMessage(result.errors);
-      return;
-    }
-
-    onSuccess();
-  } catch (error) {
-    console.error("Error:", error);
-  }
-};
-
-export const updateFolderName = async (
-  apiEndpoint,
-  token,
-  newFolderName,
-  setErrorMessage,
-  onSuccess
-) => {
-  try {
-    const res = await fetch(apiEndpoint, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name: newFolderName }),
-    });
-
-    const result = await res.json();
-
-    if (!res.ok) {
-      setErrorMessage(result.errors);
-      return;
-    }
-
-    onSuccess();
-  } catch (error) {
-    console.error("Error:", error);
-  }
-};
-
-export const deleteFolder = async (apiEndpoint, token, onSuccess) => {
-  try {
-    const res = await fetch(apiEndpoint, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (!res.ok) {
-      console.error(`Failed to delete folder: ${res.statusText}`);
-      return;
-    }
-
-    onSuccess();
-  } catch (error) {
-    console.error("Error:", error);
-  }
-};
-
 export const addFavoritesToFolders = async (
   apiEndpoint,
   token,
@@ -324,13 +223,98 @@ export const get = async (apiEndpoint, token) => {
     });
 
     if (!res.ok) {
-      console.error(`Failed to fetch data from API: ${res.statusText}`);
-      return null;
+      throw new Error(`${res.status} ${res.statusText}`);
     }
 
     return res.json();
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Error:", error.message);
+    console.log(error.stack);
     return null;
+  }
+};
+
+export const post = async (apiEndpoint, token, dataBody) => {
+  try {
+    const res = await fetch(apiEndpoint, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dataBody),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      return data;
+    }
+
+    if (data.errors) {
+      return data;
+    }
+
+    throw new Error(`${res.status} ${res.statusText}`);
+  } catch (error) {
+    console.error("Error:", error.message);
+    console.log(error.stack);
+    return {
+      errors: ["予期しないエラーが発生しました"],
+    };
+  }
+};
+
+export const patch = async (apiEndpoint, token, dataBody) => {
+  try {
+    const res = await fetch(apiEndpoint, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dataBody),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      return data;
+    }
+
+    if (data.errors) {
+      return data;
+    }
+
+    throw new Error(`${res.status} ${res.statusText}`);
+  } catch (error) {
+    console.error("Error:", error.message);
+    console.log(error.stack);
+    return {
+      errors: ["予期しないエラーが発生しました"],
+    };
+  }
+};
+
+export const destroy = async (apiEndpoint, token, dataBody = null) => {
+  try {
+    const res = await fetch(apiEndpoint, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(dataBody),
+    });
+
+    if (res.ok) {
+      return true;
+    }
+
+    throw new Error(`${res.status} ${res.statusText}`);
+  } catch (error) {
+    console.error("Error:", error.message);
+    console.log(error.stack);
+    return false;
   }
 };

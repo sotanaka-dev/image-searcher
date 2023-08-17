@@ -7,6 +7,7 @@ import Folders from "../components/Folders";
 import { useParams } from "react-router-dom";
 import * as apiClient from "../utils/apiClient";
 import styles from "../styles/pages/FolderFavorites.module.scss";
+import foldersStyles from "../styles/components/Folders.module.scss";
 import PageTransition from "../styles/PageTransition";
 
 export default function FolderFavorites() {
@@ -46,6 +47,7 @@ export default function FolderFavorites() {
         reloadFavorites={reloadFavorites}
         isLoading={isLoading}
       />
+
       <PostDetails
         post={selectedPost}
         modalIsOpen={modalIsOpen}
@@ -55,7 +57,12 @@ export default function FolderFavorites() {
         }}
         onFavoriteRemoved={handleFavoriteRemoved}
       />
-      <Folders parentId={id} />
+
+      <div className={foldersStyles.foldersWrap}>
+        <div className={foldersStyles.headGroup}></div>
+
+        <Folders parentId={id} />
+      </div>
     </PageTransition>
   );
 }
