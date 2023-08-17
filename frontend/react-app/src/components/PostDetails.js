@@ -1,6 +1,6 @@
 import Modal from "react-modal";
 import styles from "../styles/components/PostDetails.module.scss";
-import { MdLink, MdArrowBack, RxTwitterLogo, LiaLine } from "./Icon";
+import { MdLink, MdArrowBack, RiTwitterLine, LiaLine } from "./Icon";
 
 import FavoriteToggle from "./FavoriteToggle";
 
@@ -57,10 +57,15 @@ function ShareToTwitter({ post }) {
 
   const URL = `https://twitter.com/share?url=${encodedURL}&text=${encodedText}`;
 
+  const handleClick = (e) => {
+    e.preventDefault();
+    window.open(URL, "_blank", "noopener,noreferrer");
+  };
+
   return (
-    <a href={URL} target="_blank" rel="noopener noreferrer">
-      <RxTwitterLogo className={styles.icon} />
-    </a>
+    <span onClick={handleClick}>
+      <RiTwitterLine className={styles.icon} />
+    </span>
   );
 }
 
@@ -70,9 +75,14 @@ function ShareToLine({ post }) {
 
   const URL = `https://social-plugins.line.me/lineit/share?url=${encodedURL}&text=${encodedText}`;
 
+  const handleClick = (e) => {
+    e.preventDefault();
+    window.open(URL, "_blank", "noopener,noreferrer");
+  };
+
   return (
-    <a href={URL} target="_blank" rel="noopener noreferrer">
+    <span onClick={handleClick}>
       <LiaLine className={styles.icon} />
-    </a>
+    </span>
   );
 }
