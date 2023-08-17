@@ -20,11 +20,10 @@ import {
   MdOutlineFolderOff,
   MdOutlineDriveFileMove,
 } from "react-icons/md";
-import { RiYoutubeLine, RiFlickrLine } from "react-icons/ri";
+import { RiYoutubeLine, RiFlickrLine, RiTwitterLine } from "react-icons/ri";
 import { SiGiphy } from "react-icons/si";
 import { TbHeartOff } from "react-icons/tb";
 import { LiaLine } from "react-icons/lia";
-import { RxTwitterLogo } from "react-icons/rx";
 
 export {
   MdLink,
@@ -52,7 +51,7 @@ export {
   TbHeartOff,
   MdOutlineDriveFileMove,
   LiaLine,
-  RxTwitterLogo,
+  RiTwitterLine,
 };
 
 export const serviceIcons = {

@@ -1,6 +1,6 @@
 import Modal from "react-modal";
 import styles from "../styles/components/PostDetails.module.scss";
-import { MdLink, MdArrowBack, RxTwitterLogo, LiaLine } from "./Icon";
+import { MdLink, MdArrowBack, RiTwitterLine, LiaLine } from "./Icon";
 
 import FavoriteToggle from "./FavoriteToggle";
 
@@ -64,7 +64,7 @@ function ShareToTwitter({ post }) {
 
   return (
     <span onClick={handleClick}>
-      <RxTwitterLogo className={styles.icon} />
+      <RiTwitterLine className={styles.icon} />
     </span>
   );
 }
