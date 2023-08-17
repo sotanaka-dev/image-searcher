@@ -5,6 +5,7 @@ import * as apiClient from "../utils/apiClient";
 import styles from "../styles/components/Folders.module.scss";
 import { MdCheck, MdFavoriteBorder } from "../components/Icon";
 import { toast } from "react-toastify";
+import { motion } from "framer-motion";
 
 export default function SelectFolders({
   onFolderSelect = () => {},
@@ -105,7 +106,13 @@ export default function SelectFolders({
 
 const FolderItem = ({ folder, isSelected, onClick }) => {
   return (
-    <div onClick={onClick} className={styles.folderWrap}>
+    <motion.div
+      onClick={onClick}
+      className={styles.folderWrap}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5, delay: 0.3 }}
+    >
       <div className={`${styles.folder} ${isSelected ? styles.selected : ""}`}>
         {isSelected && <MdCheck className={styles.selectIcon} />}
         <div className={styles.folderInfo}>
@@ -117,6 +124,6 @@ const FolderItem = ({ folder, isSelected, onClick }) => {
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };

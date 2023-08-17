@@ -17,6 +17,7 @@ import {
   MdOutlineDriveFileMove,
 } from "../components/Icon";
 import { toast } from "react-toastify";
+import { motion } from "framer-motion";
 
 export default function Folders({
   parentId = null,
@@ -47,7 +48,12 @@ export default function Folders({
       <div className={styles.headGroup}></div>
 
       {isCalledFromFavorites && (
-        <div className={styles.folderWrap}>
+        <motion.div
+          className={styles.folderWrap}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
           <Link to="/favorites/all" className={styles.folder}>
             <div className={styles.folderInfo}>
               <p className={styles.folderName}>全てのお気に入り</p>
@@ -56,10 +62,16 @@ export default function Folders({
                 </p> */}
             </div>
           </Link>
-        </div>
+        </motion.div>
       )}
       {folders.map((folder) => (
-        <div key={folder.id} className={styles.folderWrap}>
+        <motion.div
+          key={folder.id}
+          className={styles.folderWrap}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
           <Link
             to={`/favorites/folders/${folder.id}`}
             className={styles.folder}
@@ -81,7 +93,7 @@ export default function Folders({
             <MoveFolder reloadFolders={reloadFolders} id={folder.id} />
             <DeleteFolder reloadFolders={reloadFolders} id={folder.id} />
           </div>
-        </div>
+        </motion.div>
       ))}
 
       <AddFolder reloadFolders={reloadFolders} parentId={parentId} />
