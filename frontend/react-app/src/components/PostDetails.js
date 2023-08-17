@@ -1,6 +1,6 @@
 import Modal from "react-modal";
 import styles from "../styles/components/PostDetails.module.scss";
-import { MdLink, MdOutlineShare, MdArrowBack } from "./Icon";
+import { MdLink, MdArrowBack, RxTwitterLogo, LiaLine } from "./Icon";
 
 import FavoriteToggle from "./FavoriteToggle";
 
@@ -29,14 +29,17 @@ export default function PostDetails({
               <MdArrowBack className={styles.icon} onClick={closeModal} />
 
               <div className={styles.rightGroup}>
-                <a href={post.url} target="_blank" rel="noopener noreferrer">
-                  <MdLink className={styles.icon} />
-                </a>
                 <FavoriteToggle
                   post={post}
                   onFavoriteRemoved={onFavoriteRemoved}
                 />
-                <MdOutlineShare className={styles.icon} />
+
+                <a href={post.url} target="_blank" rel="noopener noreferrer">
+                  <MdLink className={styles.icon} />
+                </a>
+
+                <ShareToTwitter post={post} />
+                <ShareToLine post={post} />
               </div>
             </div>
           </div>
@@ -45,5 +48,31 @@ export default function PostDetails({
         "No post selected"
       )}
     </Modal>
+  );
+}
+
+function ShareToTwitter({ post }) {
+  const encodedURL = encodeURIComponent(post.url);
+  const encodedText = encodeURIComponent(post.title);
+
+  const URL = `https://twitter.com/share?url=${encodedURL}&text=${encodedText}`;
+
+  return (
+    <a href={URL} target="_blank" rel="noopener noreferrer">
+      <RxTwitterLogo className={styles.icon} />
+    </a>
+  );
+}
+
+function ShareToLine({ post }) {
+  const encodedURL = encodeURIComponent(post.url);
+  const encodedText = encodeURIComponent(post.title);
+
+  const URL = `https://social-plugins.line.me/lineit/share?url=${encodedURL}&text=${encodedText}`;
+
+  return (
+    <a href={URL} target="_blank" rel="noopener noreferrer">
+      <LiaLine className={styles.icon} />
+    </a>
   );
 }
