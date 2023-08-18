@@ -1,0 +1,2 @@
+class SearchHistoriesController < ApplicationController
+end
