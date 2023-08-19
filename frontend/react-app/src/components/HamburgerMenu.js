@@ -7,19 +7,21 @@ import {
   MdOutlineHome,
   MdFavoriteBorder,
   MdHistory,
+  MdOutlineAccountCircle,
 } from "./Icon";
+import styles from "../styles/components/HamburgerMenu.module.scss";
 
 export default function HamburgerMenu() {
   const [isOpen, setIsOpen] = useState(false);
 
-  const styles = {
+  const customStyles = {
     bmCrossButton: {
       height: "24px",
       width: "24px",
       left: "10px",
     },
     bmCross: {
-      background: "#ccc",
+      background: "#f8f8f8",
     },
     bmMenuWrap: {
       position: "fixed",
@@ -36,9 +38,12 @@ export default function HamburgerMenu() {
       display: "flex",
       flexDirection: "column",
       rowGap: "36px",
-      color: "#ccc",
+      color: "#f8f8f8",
     },
     bmItem: {
+      display: "flex",
+      alignItems: "center",
+      columnGap: "12px",
       outline: "none",
     },
     bmOverlay: {
@@ -47,41 +52,47 @@ export default function HamburgerMenu() {
     },
   };
 
-  const iconStyles = {
-    fontSize: "3.6rem",
-    cursor: "pointer",
-  };
-
   const handleCloseMenu = () => {
     setIsOpen(false);
   };
 
   return (
     <>
-      <MdMenu onClick={() => setIsOpen(!isOpen)} style={iconStyles} />
+      <MdMenu
+        onClick={() => setIsOpen(!isOpen)}
+        className={styles.hamburgerIcon}
+      />
 
       <Menu
         right
-        styles={styles}
+        styles={customStyles}
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         customBurgerIcon={false}
       >
-        <Link to="/search" onClick={handleCloseMenu}>
-          <MdSearch />
-          &nbsp;&nbsp;検索
+        <Link to="/" onClick={handleCloseMenu} className={styles.link}>
+          <MdOutlineHome className={styles.linkIcon} />
+          <p>トップ</p>
         </Link>
-        <Link to="/history" onClick={handleCloseMenu}>
-          <MdHistory />
-          &nbsp;&nbsp;検索履歴
+
+        <Link to="/search" onClick={handleCloseMenu} className={styles.link}>
+          <MdSearch className={styles.linkIcon} />
+          <p>検索</p>
         </Link>
-        <Link to="/mypage" onClick={handleCloseMenu}>
-          <MdOutlineHome />
-          &nbsp;&nbsp;マイページ
+
+        <Link to="/history" onClick={handleCloseMenu} className={styles.link}>
+          <MdHistory className={styles.linkIcon} />
+          <p>検索履歴</p>
         </Link>
-        <Link to="/favorites" onClick={handleCloseMenu}>
-          <MdFavoriteBorder />
-          &nbsp;&nbsp;お気に入り
+
+        <Link to="/favorites" onClick={handleCloseMenu} className={styles.link}>
+          <MdFavoriteBorder className={styles.linkIcon} />
+          <p>お気に入り</p>
+        </Link>
+
+        <Link to="/mypage" onClick={handleCloseMenu} className={styles.link}>
+          <MdOutlineAccountCircle className={styles.linkIcon} />
+          <p>マイページ</p>
         </Link>
       </Menu>
     </>

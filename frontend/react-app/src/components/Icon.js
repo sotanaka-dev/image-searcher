@@ -21,6 +21,7 @@ import {
   MdOutlineDriveFileMove,
   MdHistory,
   MdClose,
+  MdOutlineAccountCircle,
 } from "react-icons/md";
 import { RiYoutubeLine, RiFlickrLine, RiTwitterLine } from "react-icons/ri";
 import { SiGiphy } from "react-icons/si";
@@ -56,6 +57,7 @@ export {
   RiTwitterLine,
   MdHistory,
   MdClose,
+  MdOutlineAccountCircle,
 };
 
 export const serviceIcons = {
