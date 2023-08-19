@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_02_085408) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_17_130857) do
   create_table "favorites", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "post_id", null: false
     t.bigint "user_id", null: false
@@ -41,6 +41,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_02_085408) do
     t.index ["user_id"], name: "index_folders_on_user_id"
   end
 
+  create_table "search_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "keyword", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_search_histories_on_user_id"
+  end
+
   create_table "services", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -62,4 +70,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_02_085408) do
   add_foreign_key "folder_favorites", "folders"
   add_foreign_key "folders", "folders", column: "parent_id"
   add_foreign_key "folders", "users"
+  add_foreign_key "search_histories", "users"
 end

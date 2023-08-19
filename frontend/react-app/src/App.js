@@ -13,6 +13,7 @@ import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 import MyPage from "./pages/MyPage";
 import Search from "./pages/Search";
+import SearchHistories from "./pages/SearchHistories";
 import Favorites from "./pages/Favorites";
 import AllFavorites from "./pages/AllFavorites";
 import FolderFavorites from "./pages/FolderFavorites";
@@ -48,6 +49,14 @@ function Contents() {
               element={
                 <PrivateRoute>
                   <Search />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/history"
+              element={
+                <PrivateRoute>
+                  <SearchHistories />
                 </PrivateRoute>
               }
             />

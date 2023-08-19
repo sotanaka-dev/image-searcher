@@ -26,20 +26,25 @@ export default function Search() {
 
   const fetchData = async (keyword) => {
     if (keyword !== "") {
-      const apiEndpoint = `${BASE_URL}search?keyword=${encodeURIComponent(
-        keyword
-      )}&services=${selectedServices.join(",")}`;
-
       if (!token) {
         navigate("/users/signin");
         return;
       }
 
+      const searchEndpoint = `${BASE_URL}search?keyword=${encodeURIComponent(
+        keyword
+      )}&services=${selectedServices.join(",")}`;
+
       setIsLoading(true);
-      const data = await apiClient.get(apiEndpoint, token);
+      const data = await apiClient.get(searchEndpoint, token);
       setPosts(data.posts || []);
       setUnavailableServices(data.unavailable_services || []);
       setIsLoading(false);
+
+      const searchHistoryEndpoint = `${BASE_URL}search_histories`;
+      apiClient.post(searchHistoryEndpoint, token, {
+        search_history: { keyword: keyword },
+      });
     }
   };
 

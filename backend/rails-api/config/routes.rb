@@ -29,6 +29,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :search_histories, only: [:index, :create, :destroy]
+
   post '/users/signin', to: 'authentication#sign_in'
 
   get '/search', to: 'search#search'
