@@ -1,0 +1,77 @@
+@import "../utilities";
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 36px;
+
+  @include mediaQuery(md) {
+    row-gap: 24px;
+  }
+
+  .dailyHistory {
+    display: flex;
+    flex-direction: column;
+    row-gap: 12px;
+    width: 100%;
+    max-width: 800px;
+
+    .date {
+      padding-bottom: 12px;
+      border-bottom: solid 2px $light-gray;
+      font-size: 1.8rem;
+      font-weight: bold;
+
+      @include mediaQuery(md) {
+        font-size: 1.6rem;
+      }
+    }
+
+    .historyList {
+      display: flex;
+      flex-direction: column;
+      row-gap: 12px;
+
+      .history {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 24px;
+        border-radius: 6px;
+        background-color: #fff;
+        box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
+        font-size: 1.6rem;
+
+        @include mediaQuery(md) {
+          padding: 12px 18px;
+          font-size: 1.4rem;
+        }
+
+        .rightGroup {
+          display: flex;
+          align-items: center;
+          column-gap: 24px;
+
+          @include mediaQuery(md) {
+            column-gap: 12px;
+          }
+
+          .closeIcon {
+            font-size: 2rem;
+            cursor: pointer;
+            transition: 0.1s;
+
+            &:hover {
+              color: $gray;
+            }
+
+            @include mediaQuery(md) {
+              font-size: 1.8rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}

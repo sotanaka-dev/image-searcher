@@ -1,7 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { stack as Menu } from "react-burger-menu";
-import { MdMenu, MdSearch, MdOutlineHome, MdFavoriteBorder } from "./Icon";
+import {
+  MdMenu,
+  MdSearch,
+  MdOutlineHome,
+  MdFavoriteBorder,
+  MdHistory,
+} from "./Icon";
 
 export default function HamburgerMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -64,6 +70,10 @@ export default function HamburgerMenu() {
         <Link to="/search" onClick={handleCloseMenu}>
           <MdSearch />
           &nbsp;&nbsp;検索
+        </Link>
+        <Link to="/history" onClick={handleCloseMenu}>
+          <MdHistory />
+          &nbsp;&nbsp;検索履歴
         </Link>
         <Link to="/mypage" onClick={handleCloseMenu}>
           <MdOutlineHome />
