@@ -16,7 +16,7 @@ class UsersController < ApplicationController
   end
 
   def update_username
-    if @current_user.update(username: params[:username])
+    if @current_user.update(username: user_params[:username])
       render json: { username: @current_user.username }, status: :ok
     else
       render json: { errors: @current_user.errors.full_messages }, status: :unprocessable_entity
@@ -24,9 +24,10 @@ class UsersController < ApplicationController
   end
 
   def update_password
-    params[:password] = nil if params[:password].blank?
+    # presenceで空文字の場合にnilを返し、bcryptによる空文字での更新が実行されないようにする
+    password = user_params[:password].presence
 
-    if @current_user.update(password: params[:password])
+    if @current_user.update(password:)
       render json: {}, status: :ok
     else
       render json: { errors: @current_user.errors.full_messages }, status: :unprocessable_entity
