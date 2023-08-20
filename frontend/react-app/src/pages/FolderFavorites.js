@@ -22,7 +22,7 @@ export default function FolderFavorites() {
   const reloadFavorites = useCallback(async () => {
     setIsLoading(true);
     const data = await apiClient.get(apiEndpoint, token);
-    setPosts(data || []);
+    setPosts(data.posts || []);
     setIsLoading(false);
   }, [apiEndpoint, token]);
 

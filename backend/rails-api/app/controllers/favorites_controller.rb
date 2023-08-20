@@ -2,54 +2,46 @@ class FavoritesController < ApplicationController
   before_action :authenticate_request
 
   def exists
-    favorite = Favorite.find_by(user_id: @current_user.id, post_id: params[:post_id])
+    favorite = @current_user.favorites.find_by(post_id: params[:post_id])
     render json: { exists: favorite.present?, favoriteId: favorite&.id }
   end
 
   def index
     favorites = @current_user.favorites.includes(:service).order(created_at: :desc)
     posts = fetch_sns_posts_from_favorites(favorites)
-    render json: posts, status: :ok
+    render json: { posts: }, status: :ok
   end
 
   def favorites_by_folder
     favorite_ids = FolderFavorite.where(folder_id: params[:id]).pluck(:favorite_id)
     favorites = @current_user.favorites.includes(:service).where(id: favorite_ids).order(created_at: :desc)
     posts = fetch_sns_posts_from_favorites(favorites)
-    render json: posts, status: :ok
+    render json: { posts: }, status: :ok
   end
 
   def create
-    favorite = Favorite.new(
-      user_id: @current_user.id,
+    favorite = @current_user.favorites.new(
       post_id: favorite_params[:post_id],
       service_id: favorite_params[:service_id]
     )
 
     if favorite.save
-      render json: {}, status: :created
+      render json: { favorite: }, status: :created
     else
-      render json: {}, status: :unprocessable_entity
+      render json: { errors: favorite.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
   def destroy
-    favorite = Favorite.find_by(id: params[:id])
-    if favorite&.destroy
-      render json: {}, status: :no_content
-    else
-      render json: {}, status: :unprocessable_entity
-    end
+    favorite = @current_user.favorites.find(params[:id])
+    favorite.destroy!
+    head :no_content
   end
 
   def destroy_multiple
     favorite_ids = destroy_multiple_params
-    favorites = Favorite.where(id: favorite_ids)
-    if favorites.destroy_all
-      render json: {}, status: :no_content
-    else
-      render json: {}, status: :unprocessable_entity
-    end
+    @current_user.favorites.where(id: favorite_ids).destroy_all
+    head :no_content
   end
 
   private
