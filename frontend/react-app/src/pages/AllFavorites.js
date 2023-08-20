@@ -5,6 +5,7 @@ import PostList from "../components/PostList";
 import PostDetails from "../components/PostDetails";
 import * as apiClient from "../utils/apiClient";
 import PageTransition from "../styles/PageTransition";
+import { toast } from "react-toastify";
 
 export default function AllFavorites() {
   const [posts, setPosts] = useState([]);
@@ -16,9 +17,15 @@ export default function AllFavorites() {
 
   const reloadFavorites = useCallback(async () => {
     setIsLoading(true);
-    const data = await apiClient.get(apiEndpoint, token);
-    setPosts(data.posts || []);
+    const result = await apiClient.get(apiEndpoint, token);
     setIsLoading(false);
+
+    if (result) {
+      setPosts(result.posts);
+      return;
+    }
+
+    toast.error("お気に入りの取得に失敗しました");
   }, [apiEndpoint, token]);
 
   useEffect(() => {

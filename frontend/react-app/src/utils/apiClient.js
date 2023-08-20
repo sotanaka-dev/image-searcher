@@ -87,51 +87,6 @@ export const removeFavorites = async (
   }
 };
 
-export const getFavoriteStatus = async (apiEndpoint, token, post_id) => {
-  const res = await fetch(`${apiEndpoint}/exists?post_id=${post_id}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  return res.json();
-};
-
-export const toggleFavoriteStatus = async (
-  apiEndpoint,
-  token,
-  isFavorite,
-  favoriteId,
-  post_id,
-  service_id,
-  onSuccess
-) => {
-  try {
-    const res = await fetch(
-      `${apiEndpoint}${isFavorite ? `/${favoriteId}` : ""}`,
-      {
-        method: isFavorite ? "DELETE" : "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          favorite: { post_id: post_id, service_id: service_id },
-        }),
-      }
-    );
-
-    if (!res.ok) {
-      console.error(`Failed to favorite: ${res.statusText}`);
-      return;
-    }
-
-    onSuccess();
-  } catch (error) {
-    console.error("Unexpected error:", error);
-  }
-};
-
 export const get = async (apiEndpoint, token) => {
   try {
     const res = await fetch(apiEndpoint, {
