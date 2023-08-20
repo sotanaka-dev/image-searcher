@@ -18,7 +18,7 @@ class FoldersController < ApplicationController
   end
 
   def create
-    folder = @current_user.folders.build(folder_params)
+    folder = @current_user.folders.new(folder_params)
     if folder.save
       render json: { folder: }, status: :created
     else
