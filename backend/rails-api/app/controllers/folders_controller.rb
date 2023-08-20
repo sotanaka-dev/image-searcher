@@ -35,11 +35,8 @@ class FoldersController < ApplicationController
   end
 
   def destroy
-    if @folder.destroy
-      head :no_content
-    else
-      render json: {}, status: :unprocessable_entity
-    end
+    @folder.destroy!
+    head :no_content
   end
 
   def add_favorites
