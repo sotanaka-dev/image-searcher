@@ -9,5 +9,6 @@ class Folder < ApplicationRecord
             uniqueness: true,
             length: { in: 1..10 }
 
+  # favoritesのcountメソッドをfavorites_countで呼び出し、お気に入りの件数を取得可能に
   delegate :count, to: :favorites, prefix: true
 end
