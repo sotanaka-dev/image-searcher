@@ -9,6 +9,7 @@ import * as apiClient from "../utils/apiClient";
 import styles from "../styles/pages/FolderFavorites.module.scss";
 import foldersStyles from "../styles/components/Folders.module.scss";
 import PageTransition from "../styles/PageTransition";
+import { toast } from "react-toastify";
 
 export default function FolderFavorites() {
   const { id } = useParams();
@@ -21,9 +22,15 @@ export default function FolderFavorites() {
 
   const reloadFavorites = useCallback(async () => {
     setIsLoading(true);
-    const data = await apiClient.get(apiEndpoint, token);
-    setPosts(data || []);
+    const result = await apiClient.get(apiEndpoint, token);
     setIsLoading(false);
+
+    if (result) {
+      setPosts(result.posts);
+      return;
+    }
+
+    toast.error("お気に入りの取得に失敗しました");
   }, [apiEndpoint, token]);
 
   useEffect(() => {

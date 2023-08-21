@@ -5,11 +5,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import { BASE_URL } from "../config/environment";
 import ConfirmationModal from "../components/ConfirmationModal";
 import { toast } from "react-toastify";
-import {
-  updateUsername,
-  updatePassword,
-  destroyUser,
-} from "../utils/apiClient";
+import * as apiClient from "../utils/apiClient";
 import styles from "../styles/pages/MyPage.module.scss";
 import formModalStyles from "../styles/components/FormModal.module.scss";
 import {
@@ -49,21 +45,21 @@ function UpdateUsername() {
     setErrorMessage(null);
   };
 
-  const handleSuccess = () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const result = await apiClient.patch(apiEndpoint, token, {
+      user: { username },
+    });
+
+    if (result.errors) {
+      setErrorMessage(result.errors);
+      return;
+    }
+
     saveUsername(username);
     closeModal();
     toast.success("ユーザー名が更新されました");
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    updateUsername(
-      apiEndpoint,
-      token,
-      username,
-      setErrorMessage,
-      handleSuccess
-    );
   };
 
   return (
@@ -122,20 +118,20 @@ function UpdatePassword() {
     setErrorMessage(null);
   };
 
-  const handleSuccess = () => {
-    closeModal();
-    toast.success("パスワードが更新されました");
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    updatePassword(
-      apiEndpoint,
-      token,
-      password,
-      setErrorMessage,
-      handleSuccess
-    );
+
+    const result = await apiClient.patch(apiEndpoint, token, {
+      user: { password },
+    });
+
+    if (result.errors) {
+      setErrorMessage(result.errors);
+      return;
+    }
+
+    closeModal();
+    toast.success("パスワードが更新されました");
   };
 
   return (
@@ -204,14 +200,17 @@ function DeleteAccount() {
   const [modalIsOpen, setIsOpen] = useState(false);
   const apiEndpoint = `${BASE_URL}users`;
 
-  const handleSuccess = () => {
-    removeSessionData();
-    navigate("/users/signin");
-    toast.success("アカウントが削除されました");
-  };
-
   const handleDeleteAccount = async () => {
-    destroyUser(apiEndpoint, token, handleSuccess);
+    const result = await apiClient.destroy(apiEndpoint, token);
+
+    if (result) {
+      removeSessionData();
+      navigate("/users/signin");
+      toast.success("アカウントが削除されました");
+      return;
+    }
+
+    toast.error("アカウントの削除に失敗しました");
   };
 
   return (

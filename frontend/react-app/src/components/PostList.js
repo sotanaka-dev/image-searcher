@@ -4,11 +4,7 @@ import SelectFolders from "./SelectFolders";
 import ConfirmationModal from "../components/ConfirmationModal";
 import { BASE_URL } from "../config/environment";
 import { AuthContext } from "../contexts/AuthContext";
-import {
-  addFavoritesToFolders,
-  removeFavoritesToFolders,
-  removeFavorites,
-} from "../utils/apiClient";
+import * as apiClient from "../utils/apiClient";
 import styles from "../styles/components/PostList.module.scss";
 import formModalStyles from "../styles/components/FormModal.module.scss";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
@@ -153,14 +149,19 @@ function RemoveFavorites({
   const { token } = useContext(AuthContext);
   const apiEndpoint = `${BASE_URL}favorites/destroy_multiple`;
 
-  const handleSuccess = () => {
-    onComplete();
-    reloadFavorites();
-    toast.success("お気に入りから削除しました");
-  };
+  const handleRemoveFavorites = async () => {
+    const result = await apiClient.destroy(apiEndpoint, token, {
+      favorite_ids: selectedIds,
+    });
 
-  const handleRemoveFavorites = () => {
-    removeFavorites(apiEndpoint, token, selectedIds, handleSuccess);
+    if (result) {
+      onComplete();
+      reloadFavorites();
+      toast.success("お気に入りから削除しました");
+      return;
+    }
+
+    toast.error("お気に入りの削除に失敗しました");
   };
 
   return (
@@ -204,14 +205,19 @@ function RemoveToFolder({
   const { token } = useContext(AuthContext);
   const apiEndpoint = `${BASE_URL}folders/${folderId}/remove_favorites`;
 
-  const handleSuccess = () => {
-    onComplete();
-    reloadFavorites();
-    toast.success("フォルダからお気に入りを削除しました");
-  };
-
   const handleRemoveToFolder = async () => {
-    removeFavoritesToFolders(apiEndpoint, token, selectedIds, handleSuccess);
+    const result = await apiClient.destroy(apiEndpoint, token, {
+      favorite_ids: selectedIds,
+    });
+
+    if (result) {
+      onComplete();
+      reloadFavorites();
+      toast.success("フォルダからお気に入りを削除しました");
+      return;
+    }
+
+    toast.error("お気に入りの削除に失敗しました");
   };
 
   return (
@@ -252,20 +258,20 @@ function AddToFolder({ selectedIds, onComplete, isDisabled }) {
     setIsOpen(false);
   };
 
-  const handleSuccess = () => {
+  const handleAddToFolder = async (folderIds) => {
+    const result = await apiClient.post(apiEndpoint, token, {
+      favorite_ids: selectedIds,
+      folder_ids: folderIds,
+    });
+
+    if (result.errors) {
+      toast.error("お気に入りの追加に失敗しました");
+      return;
+    }
+
     onComplete();
     closeModal();
     toast.success("フォルダにお気に入りを追加しました");
-  };
-
-  const handleAddToFolder = async (folderIds) => {
-    addFavoritesToFolders(
-      apiEndpoint,
-      token,
-      selectedIds,
-      folderIds,
-      handleSuccess
-    );
   };
 
   return (
