@@ -65,3 +65,7 @@ export const serviceIcons = {
   Flickr: RiFlickrLine,
   GIPHY: SiGiphy,
 };
+
+export function setServiceIcon(service_name) {
+  return serviceIcons[service_name] || MdHelpOutline;
+}

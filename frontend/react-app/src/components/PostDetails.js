@@ -1,6 +1,12 @@
 import Modal from "react-modal";
 import styles from "../styles/components/PostDetails.module.scss";
-import { MdLink, MdArrowBack, RiTwitterLine, LiaLine } from "./Icon";
+import {
+  setServiceIcon,
+  MdLink,
+  MdArrowBack,
+  RiTwitterLine,
+  LiaLine,
+} from "./Icon";
 
 import FavoriteToggle from "./FavoriteToggle";
 
@@ -12,6 +18,8 @@ export default function PostDetails({
   closeModal,
   onFavoriteRemoved,
 }) {
+  const ServiceIcon = setServiceIcon(post?.service_name);
+
   return (
     <Modal
       isOpen={modalIsOpen}
@@ -23,8 +31,16 @@ export default function PostDetails({
       {post ? (
         <>
           <img className={styles.image} src={post.image} alt={post.title} />
+
           <div className={styles.footGroup}>
-            <h2 className={styles.title}>{post.title}</h2>
+            <div className={styles.heading}>
+              <span className={styles.serviceIcon}>
+                <ServiceIcon />
+              </span>
+
+              <h2 className={styles.title}>{post.title}</h2>
+            </div>
+
             <div className={styles.actions}>
               <MdArrowBack className={styles.icon} onClick={closeModal} />
 
