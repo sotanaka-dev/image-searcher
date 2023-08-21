@@ -62,8 +62,8 @@ class FavoritesController < ApplicationController
     favorites.map do |favorite|
       service = service_name_to_class(favorite.service.name).new
       post_data = service.get_single_post(favorite.post_id)
-      post_data[:post] = post_data[:post].merge({ id: favorite.id }) if post_data[:post]
-      post_data[:post] || nil
+      post_data[:post]&.merge!(id: favorite.id)
+      post_data[:post]
     end.compact
   end
 end
