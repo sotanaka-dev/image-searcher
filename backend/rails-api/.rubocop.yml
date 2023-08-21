@@ -72,3 +72,7 @@ Layout/TrailingWhitespace:
 Lint/EmptyBlock:
   Exclude:
     - "test/factories/*"
+
+Rails/SkipsModelValidations:
+  AllowedMethods:
+    - "insert_all"
