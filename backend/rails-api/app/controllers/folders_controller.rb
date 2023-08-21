@@ -60,7 +60,7 @@ class FoldersController < ApplicationController
   private
 
   def set_folder
-    @folder = Folder.find(params[:id])
+    @folder = @current_user.folders.find(params[:id])
   end
 
   def folder_params
