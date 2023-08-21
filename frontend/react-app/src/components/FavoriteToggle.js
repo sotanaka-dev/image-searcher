@@ -35,7 +35,7 @@ export default function FavoriteToggle({ post, onFavoriteRemoved }) {
       const result = await apiClient.destroy(apiEndpoint, token);
 
       if (!result) {
-        toast.success("お気に入りの削除に失敗しました");
+        toast.error("お気に入りの削除に失敗しました");
         return;
       }
 
@@ -50,7 +50,7 @@ export default function FavoriteToggle({ post, onFavoriteRemoved }) {
       });
 
       if (result.errors) {
-        toast.success("お気に入りの追加に失敗しました");
+        toast.error("お気に入りの追加に失敗しました");
         return;
       }
 
