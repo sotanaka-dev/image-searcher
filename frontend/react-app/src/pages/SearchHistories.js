@@ -25,8 +25,6 @@ export default function SearchHistories() {
 
       setSearchHistories(grouped);
     }
-
-    console.log(result);
   }, [token, apiEndpoint]);
 
   useEffect(() => {
