@@ -18,7 +18,7 @@ class FoldersController < ApplicationController
   end
 
   def create
-    folder = @current_user.folders.build(folder_params)
+    folder = @current_user.folders.new(folder_params)
     if folder.save
       render json: { folder: }, status: :created
     else
@@ -35,51 +35,32 @@ class FoldersController < ApplicationController
   end
 
   def destroy
-    if @folder.destroy
-      head :no_content
-    else
-      render json: {}, status: :unprocessable_entity
-    end
+    @folder.destroy!
+    head :no_content
   end
 
   def add_favorites
     folder_ids = favorites_params[:folder_ids]
     favorite_ids = favorites_params[:favorite_ids]
 
-    begin
-      ActiveRecord::Base.transaction do
-        folder_ids.each do |folder_id|
-          favorite_ids.each do |favorite_id|
-            FolderFavorite.find_or_create_by!(folder_id:, favorite_id:)
-          end
-        end
-      end
-      render json: {}, status: :ok
-    rescue ActiveRecord::RecordInvalid
-      render json: {}, status: :unprocessable_entity
-    end
+    # productでfolder_idsとfavorite_idsの全ての組み合わせを生成し、mapでハッシュ形式に変換
+    relations = folder_ids.product(favorite_ids).map { |folder_id, favorite_id| { folder_id:, favorite_id: } }
+    FolderFavorite.insert_all(relations)
+
+    render json: {}, status: :ok
   end
 
   def remove_favorites
     favorite_ids = favorites_params[:favorite_ids]
+    FolderFavorite.where(folder_id: @folder.id, favorite_id: favorite_ids).destroy_all
 
-    begin
-      ActiveRecord::Base.transaction do
-        favorite_ids.each do |favorite_id|
-          relation = FolderFavorite.find_by(folder_id: @folder.id, favorite_id:)
-          relation&.destroy!
-        end
-      end
-      render json: {}, status: :ok
-    rescue ActiveRecord::RecordInvalid
-      render json: {}, status: :unprocessable_entity
-    end
+    head :no_content
   end
 
   private
 
   def set_folder
-    @folder = Folder.find(params[:id])
+    @folder = @current_user.folders.find(params[:id])
   end
 
   def folder_params

@@ -25,7 +25,7 @@ export default function Search() {
 
   const { token } = useContext(AuthContext);
 
-  const fetchData = async (keyword) => {
+  const handleSearch = async (keyword) => {
     if (keyword !== "") {
       if (!token) {
         navigate("/users/signin");
@@ -59,10 +59,11 @@ export default function Search() {
           setSelectedServices={setSelectedServices}
         />
         <SearchInput
-          onKeywordSubmit={fetchData}
+          onKeywordSubmit={handleSearch}
           selectedServices={selectedServices}
         />
       </div>
+
       <PostList
         posts={posts}
         selectPost={(post) => {
@@ -71,6 +72,7 @@ export default function Search() {
         }}
         isLoading={isLoading}
       />
+
       <PostDetails
         post={selectedPost}
         modalIsOpen={modalIsOpen}

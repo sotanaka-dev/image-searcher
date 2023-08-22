@@ -6,7 +6,9 @@ Rails.application.routes.draw do
 
   get '/healthcheck', to: proc { [200, {}, ['']] }
 
-  resources :users, except: [:update, :destroy] do
+  post '/users/signin', to: 'authentication#sign_in'
+
+  resources :users, only: [:create] do
     collection do
       patch 'username', to: 'users#update_username'
       patch 'password', to: 'users#update_password'
@@ -14,7 +16,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :favorites do
+  get '/search', to: 'search#search'
+
+  resources :search_histories, only: [:index, :create, :destroy]
+
+  resources :favorites, only: [:index, :create, :destroy] do
     collection do
       get 'exists'
       get 'folder/:id', to: 'favorites#favorites_by_folder'
@@ -22,16 +28,10 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :folders do
+  resources :folders, only: [:index, :show, :create, :update, :destroy] do
     collection do
       post 'add_favorites'
       delete ':id/remove_favorites', to: 'folders#remove_favorites'
     end
   end
-
-  resources :search_histories, only: [:index, :create, :destroy]
-
-  post '/users/signin', to: 'authentication#sign_in'
-
-  get '/search', to: 'search#search'
 end

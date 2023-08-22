@@ -18,12 +18,8 @@ class SearchHistoriesController < ApplicationController
 
   def destroy
     search_history = @current_user.search_histories.find(params[:id])
-
-    if search_history.destroy
-      head :no_content
-    else
-      head :internal_server_error
-    end
+    search_history.destroy!
+    head :no_content
   end
 
   private
