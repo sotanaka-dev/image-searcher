@@ -1,0 +1,26 @@
+@import "../utilities";
+
+.wrap {
+  display: flex;
+  align-items: center;
+  column-gap: 24px;
+  margin-bottom: 36px;
+  font-size: 1.6rem;
+
+  @include mediaQuery(md) {
+    column-gap: 18px;
+  }
+
+  .goBack {
+    color: $gray;
+    transition: 0.1s;
+
+    &:hover {
+      color: $dark_gray;
+    }
+  }
+
+  .title {
+    font-weight: bold;
+  }
+}

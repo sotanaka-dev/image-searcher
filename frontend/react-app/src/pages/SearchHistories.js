@@ -3,6 +3,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import { BASE_URL } from "../config/environment";
 import * as apiClient from "../utils/apiClient";
 import PageTransition from "../styles/PageTransition";
+import PageHeader from "../components/PageHeader";
 import styles from "../styles/pages/SearchHistories.module.scss";
 import { MdClose, MdHistory } from "../components/Icon";
 import { toast } from "react-toastify";
@@ -44,38 +45,42 @@ export default function SearchHistories() {
   };
 
   return (
-    <PageTransition className={styles.wrap}>
-      {Object.keys(searchHistories).map((date) => (
-        <div key={date} className={styles.dailyHistory}>
-          <h2 className={styles.date}>
-            <MdHistory />
-            &nbsp;{date}
-          </h2>
+    <PageTransition>
+      <PageHeader title="検索履歴" />
 
-          <ul className={styles.historyList}>
-            {searchHistories[date].map((history) => (
-              <li key={history.id} className={styles.history}>
-                <p>{history.keyword}</p>
-
-                <div className={styles.rightGroup}>
-                  <p>
-                    {new Date(history.created_at).toLocaleTimeString("ja-JP", {
-                      timeZone: "Asia/Tokyo",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </p>
-
-                  <MdClose
-                    className={styles.closeIcon}
-                    onClick={() => deleteSearchHistory(history.id)}
-                  />
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+      <div className={styles.wrap}>
+        {Object.keys(searchHistories).map((date) => (
+          <div key={date} className={styles.dailyHistory}>
+            <h2 className={styles.date}>
+              <MdHistory />
+              &nbsp;{date}
+            </h2>
+            <ul className={styles.historyList}>
+              {searchHistories[date].map((history) => (
+                <li key={history.id} className={styles.history}>
+                  <p>{history.keyword}</p>
+                  <div className={styles.rightGroup}>
+                    <p>
+                      {new Date(history.created_at).toLocaleTimeString(
+                        "ja-JP",
+                        {
+                          timeZone: "Asia/Tokyo",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        }
+                      )}
+                    </p>
+                    <MdClose
+                      className={styles.closeIcon}
+                      onClick={() => deleteSearchHistory(history.id)}
+                    />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
     </PageTransition>
   );
 }

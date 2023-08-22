@@ -3,6 +3,7 @@ import { BASE_URL } from "../config/environment";
 import { AuthContext } from "../contexts/AuthContext";
 import PostList from "../components/PostList";
 import PostDetails from "../components/PostDetails";
+import PageHeader from "../components/PageHeader";
 import * as apiClient from "../utils/apiClient";
 import PageTransition from "../styles/PageTransition";
 
@@ -32,6 +33,8 @@ export default function AllFavorites() {
 
   return (
     <PageTransition>
+      <PageHeader title="全てのお気に入り" />
+
       <PostList
         posts={posts}
         selectPost={(post) => {
