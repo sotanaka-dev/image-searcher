@@ -9,8 +9,7 @@ import styles from "../styles/components/PostList.module.scss";
 import formModalStyles from "../styles/components/FormModal.module.scss";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import {
-  serviceIcons,
-  MdHelpOutline,
+  setServiceIcon,
   MdCheck,
   MdOutlineCreateNewFolder,
   MdOutlineFolderOff,
@@ -43,10 +42,6 @@ export default function PostList({
     setIsSelectMode(false);
     setSelectedIds([]);
   };
-
-  function setServiceIcon(service_name) {
-    return serviceIcons[service_name] || MdHelpOutline;
-  }
 
   return (
     <div>

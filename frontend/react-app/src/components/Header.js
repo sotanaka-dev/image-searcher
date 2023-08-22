@@ -6,13 +6,14 @@ function Header() {
   return (
     <header className={styles.wrap}>
       <div className={styles.innerWrap}>
-        <Link to="/search">
+        <Link to="/">
           <img
             src={`${process.env.PUBLIC_URL}/header_logo.png`}
             alt="Logo"
             className={styles.logo}
           />
         </Link>
+
         <div>
           <HamburgerMenu />
         </div>

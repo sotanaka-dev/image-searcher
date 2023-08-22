@@ -21,6 +21,7 @@
     height: 250px;
     outline: none;
     overflow: auto;
+    border: solid 4px #fff;
     border-radius: 12px;
     background-color: white;
 
@@ -36,19 +37,18 @@
     .btnWrap {
       flex: 1;
       display: flex;
+      column-gap: 4px;
 
       .btn {
         width: 50%;
-        border-top: solid 2px $light-gray;
+        border-radius: 4px;
+        background-color: $dark_gray;
         text-align: center;
+        color: $light;
         transition: 0.1s;
 
         &:hover {
-          background-color: $light-gray;
-        }
-
-        &:first-child {
-          border-right: solid 2px $light-gray;
+          background-color: rgba($dark_gray, 0.8);
         }
       }
     }

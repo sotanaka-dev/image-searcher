@@ -4,6 +4,7 @@ import Modal from "react-modal";
 import { AuthContext } from "../contexts/AuthContext";
 import { BASE_URL } from "../config/environment";
 import ConfirmationModal from "../components/ConfirmationModal";
+import PageHeader from "../components/PageHeader";
 import { toast } from "react-toastify";
 import * as apiClient from "../utils/apiClient";
 import styles from "../styles/pages/MyPage.module.scss";
@@ -19,11 +20,15 @@ import PageTransition from "../styles/PageTransition";
 
 export default function MyPage() {
   return (
-    <PageTransition className={styles.wrap}>
-      <UpdateUsername />
-      <UpdatePassword />
-      <SignOut />
-      <DeleteAccount />
+    <PageTransition>
+      <PageHeader title="マイページ" />
+
+      <div className={styles.wrap}>
+        <UpdateUsername />
+        <UpdatePassword />
+        <SignOut />
+        <DeleteAccount />
+      </div>
     </PageTransition>
   );
 }

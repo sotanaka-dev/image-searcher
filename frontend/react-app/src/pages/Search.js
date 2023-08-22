@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/pages/Search.module.scss";
 import PostDetails from "../components/PostDetails";
+import PageHeader from "../components/PageHeader";
 import { AuthContext } from "../contexts/AuthContext";
 import { BASE_URL } from "../config/environment";
 import PostList from "../components/PostList";
@@ -50,6 +51,8 @@ export default function Search() {
 
   return (
     <PageTransition>
+      <PageHeader title="検索" />
+
       <div className={styles.headGroup}>
         <SelectSns
           selectedServices={selectedServices}

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Folders from "../components/Folders";
+import PageHeader from "../components/PageHeader";
 import PageTransition from "../styles/PageTransition";
 import foldersStyles from "../styles/components/Folders.module.scss";
 import { motion } from "framer-motion";
@@ -7,6 +8,8 @@ import { motion } from "framer-motion";
 export default function Favorites() {
   return (
     <PageTransition>
+      <PageHeader title="お気に入り" />
+
       <div className={foldersStyles.foldersWrap}>
         <div className={foldersStyles.headGroup}></div>
 

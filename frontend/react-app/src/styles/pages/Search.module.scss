@@ -42,11 +42,10 @@
       padding-right: 60px;
       padding: 18px 84px 18px 36px;
       outline: none;
-      border: solid 3px $dark-gray;
-      border-radius: 12px;
+      border: solid 2px $dark-gray;
+      border-radius: 6px;
       background-color: #fff;
       letter-spacing: 0.2rem;
-      transition: 0.1s;
 
       @include mediaQuery(md) {
         padding: 12px 24px;
@@ -64,7 +63,7 @@
       height: 100%;
       width: 70px;
       outline: none;
-      border-radius: 0 12px 12px 0;
+      border-radius: 0 6px 6px 0;
       background-color: $dark-gray;
       cursor: pointer;
       transition: 0.1s;
