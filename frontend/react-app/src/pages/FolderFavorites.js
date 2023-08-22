@@ -34,10 +34,17 @@ export default function FolderFavorites() {
 
   const reloadFavorites = useCallback(async () => {
     const apiEndpoint = `${BASE_URL}favorites/folder/${id}`;
+
     setIsLoading(true);
-    const data = await apiClient.get(apiEndpoint, token);
-    setPosts(data || []);
+    const result = await apiClient.get(apiEndpoint, token);
     setIsLoading(false);
+
+    if (result) {
+      setPosts(result.posts);
+      return;
+    }
+
+    toast.error("お気に入りの取得に失敗しました");
   }, [id, token]);
 
   useEffect(() => {
