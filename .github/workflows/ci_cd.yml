@@ -64,7 +64,6 @@ jobs:
       AWS_PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY }}
       HOSTNAME_API_1: ${{ secrets.HOSTNAME_API_1 }}
       HOSTNAME_API_2: ${{ secrets.HOSTNAME_API_2 }}
-      HOSTNAME_BASTION: ${{ secrets.HOSTNAME_BASTION }}
       USER_NAME: ${{ secrets.USER_NAME }}
 
     steps:
@@ -82,32 +81,24 @@ jobs:
         with:
           args: --acl public-read --delete
 
-      - name: Deploy API to Private Server 1
+      - name: Deploy Rails API to EC2 1
         run: |
           echo "$AWS_PRIVATE_KEY" > private_key && chmod 600 private_key
-          scp -o StrictHostKeyChecking=no -i private_key private_key ${USER_NAME}@${HOSTNAME_BASTION}:~/private_key
-          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME_BASTION} "
-            ssh -o StrictHostKeyChecking=no -i ~/private_key ${USER_NAME}@${HOSTNAME_API_1} '
-              cd /home/ec2-user/image-searcher/backend &&
-              git fetch --all &&
-              git reset --hard origin/main &&
-              sudo docker compose -f docker-compose-prod.yml down &&
-              sudo docker compose -f docker-compose-prod.yml up -d --build
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME_API_1} '
+            cd /home/ec2-user/image-searcher/backend &&
+            git fetch --all &&
+            git reset --hard origin/main &&
+            sudo docker compose -f docker-compose-prod.yml down &&
+            sudo docker compose -f docker-compose-prod.yml up -d --build
             '
-            rm ~/private_key
-          "
 
-      - name: Deploy API to Private Server 2
+      - name: Deploy Rails API to EC2 2
         run: |
           echo "$AWS_PRIVATE_KEY" > private_key && chmod 600 private_key
-          scp -o StrictHostKeyChecking=no -i private_key private_key ${USER_NAME}@${HOSTNAME_BASTION}:~/private_key
-          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME_BASTION} "
-            ssh -o StrictHostKeyChecking=no -i ~/private_key ${USER_NAME}@${HOSTNAME_API_2} '
-              cd /home/ec2-user/image-searcher/backend &&
-              git fetch --all &&
-              git reset --hard origin/main &&
-              sudo docker compose -f docker-compose-prod.yml down &&
-              sudo docker compose -f docker-compose-prod.yml up -d --build
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME_API_2} '
+            cd /home/ec2-user/image-searcher/backend &&
+            git fetch --all &&
+            git reset --hard origin/main &&
+            sudo docker compose -f docker-compose-prod.yml down &&
+            sudo docker compose -f docker-compose-prod.yml up -d --build
             '
-            rm ~/private_key
-          "
