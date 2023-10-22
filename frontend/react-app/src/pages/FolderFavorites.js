@@ -3,12 +3,10 @@ import { BASE_URL } from "../config/environment";
 import { AuthContext } from "../contexts/AuthContext";
 import PostList from "../components/PostList";
 import PostDetails from "../components/PostDetails";
-import Folders from "../components/Folders";
 import PageHeader from "../components/PageHeader";
 import { useParams } from "react-router-dom";
 import * as apiClient from "../utils/apiClient";
 import styles from "../styles/pages/FolderFavorites.module.scss";
-import foldersStyles from "../styles/components/Folders.module.scss";
 import PageTransition from "../styles/PageTransition";
 import { toast } from "react-toastify";
 
@@ -81,10 +79,6 @@ export default function FolderFavorites() {
           }}
           onFavoriteRemoved={handleFavoriteRemoved}
         />
-        <div className={foldersStyles.foldersWrap}>
-          <div className={foldersStyles.headGroup}></div>
-          <Folders parentId={id} />
-        </div>
       </div>
     </PageTransition>
   );
