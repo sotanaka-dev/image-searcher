@@ -3,13 +3,7 @@ class FoldersController < ApplicationController
   before_action :set_folder, except: [:index, :create, :add_favorites]
 
   def index
-    folders = if params[:parent_id].present?
-                @current_user.folders.where(parent_id: params[:parent_id])
-              elsif params[:all] == 'true'
-                @current_user.folders
-              else
-                @current_user.folders.where(parent_id: nil)
-              end
+    folders = @current_user.folders
     render json: { folders: folders.as_json(methods: :favorites_count) }, status: :ok
   end
 
@@ -64,7 +58,7 @@ class FoldersController < ApplicationController
   end
 
   def folder_params
-    params.require(:folder).permit(:name, :parent_id)
+    params.require(:folder).permit(:name)
   end
 
   def favorites_params

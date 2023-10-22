@@ -295,7 +295,11 @@ function AddToFolder({ selectedIds, onComplete, isDisabled }) {
         overlayClassName={formModalStyles.overlay}
       >
         <div className={formModalStyles.form}>
-          <SelectFolders onFolderSelect={handleAddToFolder} mode="multi" />
+          <SelectFolders
+            onFolderSelect={handleAddToFolder}
+            mode="multi"
+            btnText="選択したフォルダに追加"
+          />
         </div>
       </Modal>
     </>

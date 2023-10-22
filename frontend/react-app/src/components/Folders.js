@@ -5,7 +5,6 @@ import { AuthContext } from "../contexts/AuthContext";
 import Modal from "react-modal";
 import ConfirmationModal from "../components/ConfirmationModal";
 import * as apiClient from "../utils/apiClient";
-import SelectFolders from "./SelectFolders";
 import styles from "../styles/components/Folders.module.scss";
 import formModalStyles from "../styles/components/FormModal.module.scss";
 import {
@@ -14,17 +13,14 @@ import {
   MdOutlineEdit,
   MdFavoriteBorder,
   MdErrorOutline,
-  MdOutlineDriveFileMove,
 } from "../components/Icon";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 
-export default function Folders({ parentId = null }) {
+export default function Folders() {
   const [folders, setFolders] = useState([]);
   const { token } = useContext(AuthContext);
-  const apiEndpoint = `${BASE_URL}folders${
-    parentId !== null ? `?parent_id=${parentId}` : ""
-  }`;
+  const apiEndpoint = `${BASE_URL}folders`;
 
   const reloadFolders = useCallback(async () => {
     const result = await apiClient.get(apiEndpoint, token);
@@ -68,18 +64,17 @@ export default function Folders({ parentId = null }) {
               id={folder.id}
               folderName={folder.name}
             />
-            <MoveFolder reloadFolders={reloadFolders} id={folder.id} />
             <DeleteFolder reloadFolders={reloadFolders} id={folder.id} />
           </div>
         </motion.div>
       ))}
 
-      <AddFolder reloadFolders={reloadFolders} parentId={parentId} />
+      <AddFolder reloadFolders={reloadFolders} />
     </>
   );
 }
 
-function AddFolder({ reloadFolders, parentId }) {
+function AddFolder({ reloadFolders }) {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [folderName, setFolderName] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
@@ -96,7 +91,7 @@ function AddFolder({ reloadFolders, parentId }) {
     e.preventDefault();
 
     const result = await apiClient.post(apiEndpoint, token, {
-      folder: { name: folderName, parent_id: parentId },
+      folder: { name: folderName },
     });
 
     if (result.errors) {
@@ -249,53 +244,6 @@ function DeleteFolder({ reloadFolders, id }) {
         confirmText="削除"
         cancelText="キャンセル"
       />
-    </>
-  );
-}
-
-function MoveFolder({ reloadFolders, id }) {
-  const [modalIsOpen, setIsOpen] = useState(false);
-  const { token } = useContext(AuthContext);
-  const apiEndpoint = `${BASE_URL}folders/${id}`;
-
-  const closeModal = () => {
-    setIsOpen(false);
-  };
-
-  const handleMoveFolder = async ([parentId]) => {
-    const result = await apiClient.patch(apiEndpoint, token, {
-      folder: { parent_id: parentId },
-    });
-
-    if (result.errors) {
-      toast.error("フォルダの移動に失敗しました");
-      return;
-    }
-
-    reloadFolders();
-    closeModal();
-    toast.success("フォルダを移動しました");
-  };
-
-  return (
-    <>
-      <MdOutlineDriveFileMove onClick={() => setIsOpen(true)} />
-
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        contentLabel="Move Folder"
-        className={formModalStyles.modal}
-        overlayClassName={formModalStyles.overlay}
-      >
-        <div className={formModalStyles.form}>
-          <SelectFolders
-            onFolderSelect={handleMoveFolder}
-            mode="single"
-            movingFolderId={id}
-          />
-        </div>
-      </Modal>
     </>
   );
 }
